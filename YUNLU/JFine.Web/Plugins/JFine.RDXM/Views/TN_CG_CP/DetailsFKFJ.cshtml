@@ -1,0 +1,139 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2018-08-03 17:14:25
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        gridList()
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_FK_MX/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formInitialize(data);
+                }
+            });
+        }
+        //gridList();
+        refreshGrid();
+    });
+
+
+    //表格处理
+    function gridList() {
+        var BindId = $("#Bindid").val();
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            height: 500,
+            postData: { queryJson: "@ViewBag.Id" },
+
+            url: "",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 100, align: 'left', hidden: true },
+
+					{ label: "", name: "BindId", width: 100, align: 'left', hidden: true },
+
+                    { label: "路径", name: "Url", width: 100, align: 'left', hidden: true },
+
+					{ label: "单据号", name: "OrderNo", width: 150, align: 'left', hidden: true },
+
+					{ label: "序号", name: "SerialNumber", width: 100, align: 'left', hidden: true },
+
+					{
+					    label: "附件名称", name: "AccessoryName", width: 200, align: 'left',
+					    formatter: function (cellvalue, options, rowObject) {
+					        return '<a id="FJ" target="_blank" href="' + rowObject.Url + '">' + rowObject.AccessoryName + '</a>';
+					    }
+					},
+
+					{ label: "附件类别", name: "AccessoryType", width: 100, align: 'left' },
+
+					{ label: "上传时间", name: "UploadTime", width: 100, align: 'left' },
+
+					{ label: "文件类型", name: "FileType", width: 100, align: 'left', hidden: true }
+
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+    }
+    var uploadEID = "";
+    function addProduct() {
+        var code = $("#CPCode").html();
+        $.modalOpen({
+            id: "Form",
+            title: "上传设备附件",
+            url: "/TN_XM/TN_FJ/Form?Code=" + code + "&keyValue=" + keyValue,
+            width: "750px",
+            height: "450px",
+            btn: null
+        });
+    }
+
+    function editProduct() {
+        $("#myModal").modal({ backdrop: 'static', keyboard: false });
+        $('#myModal').modal('show');
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $("#CPId").val(keyValue);
+            $.ajax({
+                url: "/TN_XM/TN_FJ/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#formCP").formSerialize(data);
+                }
+            });
+        }
+    }
+    function deleteProduct() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_FJ/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+
+    function refreshGrid() {
+        var code = $("#CPCode").html();
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        $("#gridList").setGridParam({ url: "/TN_XM/TN_FJ/GetGridJson?queryJson=" + JSON.stringify(queryJson) }).trigger("reloadGrid");
+    }
+</script>
+
+<form id="form1">
+    @*<div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+    </div>*@
+    <div class="gridPanel">
+        <table id="gridList"></table>
+        <div id="gridPager"></div>
+    </div>
+</form>
+
+
+
+

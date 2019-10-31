@@ -1,0 +1,61 @@
+﻿using JFine.Busines.SystemManage;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using JFine.Web.Base.MVC.Handler;
+using JFine.Code.Online;
+using System.Text;
+using JFine.Domain.Models.SystemManage;
+
+namespace JFine.Web.Controllers
+{
+    [HandlerLogin]
+    public class HomeController : Controller
+    {
+        [HttpGet]
+        public ActionResult Index(string token)
+        {
+            SysManageBLL sysManageBll = new SysManageBLL();
+            UserBLL userBll = new UserBLL();
+            if (sysManageBll.VerificationToken(token))
+            {
+                var current = OnlineUser.Operator.GetCurrent();
+                StringBuilder sqlBlamerWhere = new StringBuilder();
+                sqlBlamerWhere.Append("  and RoleCode like '%10004%' and Id = '" + current.UserId + "'");
+                List<UserExpand> blamerList = userBll.GetUserList(sqlBlamerWhere).ToList();
+                ViewBag.model2 = "/Home/Default_Graph";
+                //ViewBag.model2 = blamerList.Count == 0 ? "/Home/Default2" : "/Home/Default";
+                //ViewBag.model3 = blamerList.Count == 0 ? "display:none;" : "";
+
+                return View();
+            }
+            else
+            {
+                return Redirect("/Login/Index");
+            }
+
+        }
+        [HttpGet]
+        public ActionResult Default()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult Default_Graph()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult About()
+        {
+            return View();
+        }
+         [HttpGet]
+        public ActionResult Default2()
+        {
+            return View();
+        }
+    }
+}

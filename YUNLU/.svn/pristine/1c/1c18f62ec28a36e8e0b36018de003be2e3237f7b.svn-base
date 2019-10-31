@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JFine.Web", "JFine.Web\JFine.Web.csproj", "{0E3E4D64-46DD-4248-857E-B4A8A9755F46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 Presentation 表现层", "2 Presentation 表现层", "{9CD4B1C2-0C30-4C7C-9523-5DD11955518C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JFine.Web.Base", "JFine.Web.Base\JFine.Web.Base.csproj", "{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Plugins 插件库", "1 Plugins 插件库", "{D1F51040-8F05-4671-B3D6-EC9AD285D6E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JFine.Plugins.Test", "JFine.Plugins.Test\JFine.Plugins.Test.csproj", "{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 Generator 代码生成器", "3 Generator 代码生成器", "{254C3E02-3FA5-45E6-ADDC-B63432AA9608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JFine.Generator", "JFine.Generator\JFine.Generator.csproj", "{6300429C-5642-4B98-86AB-794CB57A2FB1}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		Test|Any CPU = Test|Any CPU
+		Test|x86 = Test|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Test|Any CPU.Build.0 = Release|Any CPU
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46}.Test|x86.ActiveCfg = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Test|Any CPU.Build.0 = Release|Any CPU
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E}.Test|x86.ActiveCfg = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Release|x86.ActiveCfg = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Test|Any CPU.Build.0 = Release|Any CPU
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A}.Test|x86.ActiveCfg = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Test|Any CPU.Build.0 = Release|Any CPU
+		{6300429C-5642-4B98-86AB-794CB57A2FB1}.Test|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0E3E4D64-46DD-4248-857E-B4A8A9755F46} = {9CD4B1C2-0C30-4C7C-9523-5DD11955518C}
+		{D0B4C1E9-F9BF-4D8E-81C9-FFDD2C06EC5E} = {9CD4B1C2-0C30-4C7C-9523-5DD11955518C}
+		{3CBFB37F-B082-44B9-9FC8-B7F4E152406A} = {D1F51040-8F05-4671-B3D6-EC9AD285D6E7}
+		{6300429C-5642-4B98-86AB-794CB57A2FB1} = {254C3E02-3FA5-45E6-ADDC-B63432AA9608}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
+		SolutionGuid = {6FA3C8B7-6F01-4ABA-9E3E-897D5BACF059}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,161 @@
+﻿
+ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2019-05-09 17:10:33
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var ex_code = "";
+    $(function () {
+	    initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TNRD_Supplier/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    //校验数据
+    function initValidate(ex_code) {
+        $("#form1").formValidate({
+            rules: {
+                CusCode: {
+                    //远程校验编码是否存在
+                    remote: {
+                        //depends: function (element) {
+                        //    return element.value !== ex_code;
+                        //},
+                        url: '/WMS/WMS_Customer/ValidateCodeExists',
+                        type: 'post',
+                        data: {
+                            "code": function () {
+                                return $("input[name='CusCode']").val();
+
+                            }
+                        }
+                    }
+                },
+            },
+            messages: {
+                CusCode: {
+                    remote: '用户已存在'
+
+                }
+            },
+        })
+    }
+	//初始化组件
+    function initControl() {
+        //$("#CategoryName").bindSelect({
+        //    url: "/SysManage/ItemsDetail/GetSelectJson?code=Customer_Category",
+        //    id: "id",
+        //    text: "text",
+        //    change: function (data) {
+        //        if (data) {
+        //            $("#CategoryCode").val(data.id);
+        //        }
+
+        //    }
+        //});
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TNRD_Supplier/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+            @*<li ><a href="#">扩展信息</a></li>*@
+        </ul>
+        <div style="margin: 10px 10px 10px 10px;">
+            <table class="form">
+
+                <tr>
+                    <th class="formTitle">供应商编码</th>
+                    <td class="formValue">
+                        <input id="SupCode" name="SupCode" type="text" class="form-control required" placeholder="请输入" />
+                    </td>
+                    <th class="formTitle">供应商名称</th>
+                    <td class="formValue">
+                        <input id="SupName" name="SupName" type="text"
+                               class="form-control required " placeholder="请输入" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">是否锁定</th>
+                    <td class="formValue">
+                        <select id="Status" name="Status" class="form-control">
+                            <option value="0">是</option>
+                            <option value="1" selected="selected">否</option>
+                        </select>
+                    </td>
+                    <th class="formTitle">类别</th>
+                    <td class="formValue">
+                        <input id="CategoryName" name="CategoryName" type="text"
+                               class="form-control  " placeholder="请输入" />
+                        @*<select id="CategoryName" name="CategoryName" class="form-control required "></select>*@
+                        <ipput id="CategoryCode" name="CategoryCode" type="hidden">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">地址</th>
+                    <td class="formValue">
+                        <input id="Address" name="Address" type="text"
+                               class="form-control  " placeholder="请输入" />
+                    </td>
+                    <th class="formTitle">联系人</th>
+                    <td class="formValue">
+                        <input id="ContactMan" name="ContactMan" type="text"
+                               class="form-control  " placeholder="请输入" />
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <th class="formTitle">联系电话</th>
+                    <td class="formValue">
+                        <input id="Phone" name="Phone" type="text"
+                               class="form-control  " placeholder="请输入" />
+                    </td>
+                    <th class="formTitle">邮箱</th>
+                    <td class="formValue">
+                        <input id="Email" name="Email" type="text"
+                               class="form-control email required " placeholder="请输入" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">备注</th>
+                    <td class="formValue">
+                        <input id="Remark" name="Remark" type="text"
+                               class="form-control " placeholder="请输入" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+

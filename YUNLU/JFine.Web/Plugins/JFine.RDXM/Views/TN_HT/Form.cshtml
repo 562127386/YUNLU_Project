@@ -1,0 +1,578 @@
+﻿
+@*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-08-03 17:18:32
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        //gridList();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_HT/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    //var RulesCode = data.Code.slice(0,8);
+                    //var Code1 = data.Code.slice(8,10);
+                    //var Code2 = data.Code.slice(11);
+                    //$("#Code1").val(Code1);
+                    //$("#Code2").val(Code2);
+                }
+            });
+        }
+    });
+
+    //初始化组件
+    function initControl() {
+        //var myDate = new Date();
+        //var year = myDate.getFullYear();
+        //var month = ("0" + (myDate.getMonth() + 1)).slice(-2);
+        //$("#Code2").val(year + month);
+        $("#ProjectName").bindSelect({
+            url: "/TN_XM/TN_HT/GetTreeSelectJson",
+            defaultContent: "<option value='0'>请选择</option>",
+            search: true,
+            change: function () {
+                var option = $("#ProjectName option:selected").text(); //获取选中的项
+
+                $.ajax({
+                    url: "/TN_XM/TN_HT/GetCode",
+                    type: "post",
+                    data: { "name": option },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.length == 0) {
+                            $("#ProjectNo").val("");
+                        } else {
+                            var value = msg[0].Code;
+                            var rcode = msg[0].RulesCode;
+                            $("#ProjectNo").val(rcode+"-"+value);
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+
+        //付款方式
+        //$("#PayType").bindSelect({
+        //    url: "/SysManage/ItemsDetail/GetSelectJson",
+        //    id: "text",
+        //    param: { Code: "ZF" }
+        //});
+
+
+        //资金来源
+        $("#FundSource").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "ZJ" }
+        });
+
+        //甲方公司
+        //$("#AName").bindSelect({
+        //    url: "/SysManage/ItemsDetail/GetSelectJson",
+        //    id: "text",
+        //    param: { Code: "gs" },
+        //    change: function (data) {
+        //        $.ajax({
+        //            url: "/TN_XM/TN_XM/GetCompanyId",
+        //            type: "post",
+        //            data: { "Name": data.text },
+        //            dataType: "json",
+        //            success: function (msg) {
+        //                var CId = msg[0].Id;
+        //                if (msg.length == 0) {
+        //                    $.modalAlert("未获取公司信息，请重新录入或尝试与管理员联系！", "error");
+        //                } else {
+        //                    if (msg[0].ParentName == "0") {
+        //                        $.modalAlert("未获取公司信息，请重新录入或尝试与管理员联系！", "error");
+        //                    } else {
+        //                        $("#ACode").val(CId);
+        //                    }
+        //                }
+        //            }
+        //        });
+        //    }
+        //});
+    }
+
+    //表格处理
+    function gridList() {
+        var BindId = $("#Bindid").val();
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            height: 500,
+            postData: { queryJson: "@ViewBag.Id" },
+
+            url: "/TN_XM/TN_CP/GetGridJson",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: "", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备分类", name: "Classify", width: 90, align: 'left' },
+
+					{ label: "设备名称", name: "Name", width: 100, align: 'left' },
+
+					{ label: "数量", name: "Quantity", width: 90, align: 'left' },
+
+					{ label: "单位", name: "Unit", width: 60, align: 'left' },
+
+					{ label: "产品规格及型号", name: "Type", width: 150, align: 'left' },
+
+					{ label: "制造厂家名称", name: "MakeName", width: 150, align: 'left' },
+
+					{ label: "出厂单价", name: "Price", width: 100, align: 'left' },
+
+					{ label: "每一品目出厂价", name: "ItemPrice", width: 100, align: 'left' },
+
+					{ label: "每一品目应缴税费", name: "ItemTax", width: 100, align: 'left' },
+
+					{ label: "每一品目含税价格", name: "IncludTax", width: 100, align: 'left' },
+
+					{ label: "货物描述", name: "Remark", width: 150, align: 'left' },
+                    { label: "项目现场", name: "Scene", width: 150, align: 'left' },
+                    { label: "交货时间", name: "DeliveryTime", width: 150, align: 'left' }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+    }
+
+    function submitForm() {
+        //var RulesCode = $("#RulesCode").val();
+        //var code1 = $("#Code1").val();
+        //var code2 = $("#Code2").val();
+        //$("#Code").val(RulesCode+"-"+code1+"-"+code2);
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_HT/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+    }
+    function submitCpForm() {
+        if (!$('#formCP').formValid()) {
+            return false;
+        }
+        var postData = $("#formCP").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_CP/SaveForm?keyValue="+$("#CPId").val(),
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+                $("input[name='res']").click();
+                $("#CPId").val("");
+
+                $('#myModal').modal('hide');
+
+            }
+        })
+    }
+	//关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+    function addProduct() {
+        $("#myModal").modal({ backdrop: 'static', keyboard: false });
+        $('#myModal').modal('show');
+        $("input[name='res']").click();
+        $("#CPId").val("");
+    }
+    function addProduct() {
+        $("#myModal").modal({ backdrop: 'static', keyboard: false });
+        $('#myModal').modal('show');
+    }
+    function editProduct() {
+        $("#myModal").modal({ backdrop: 'static', keyboard: false });
+        $('#myModal').modal('show');
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $("#CPId").val(keyValue);
+            $.ajax({
+                url: "/TN_XM/TN_CP/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#formCP").formSerialize(data);
+                }
+            });
+        }
+    }
+    function deleteProduct() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_CP/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+   
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">合同信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">								  	
+					 	  	
+								<tr>
+                                    <th class="formTitle" hidden> 项目编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="ProjectNo" name="ProjectNo" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>  	
+                                    <th class="formTitle"> 事项名称</th>
+                                    <td class="formValue">
+                                        <select id="ProjectName" name="ProjectName" type="text"
+                                               class="form-control  required" placeholder="请输入" />
+                                    </td>
+                                    <th class="formTitle"> 合同名称</th>
+                                    <td class="formValue">
+                                        <input id="Name" name="Name" type="text"
+                                               class="form-control  required" placeholder="请输入合同名称" />
+                                    </td>
+								</tr>
+					 	  	
+                                <tr >
+                                    <th class="formTitle"> 合同编码</th>
+                                    <td class="formValue">
+                                        @*<input id="RulesCode" name="RulesCode" type="text" value="QEG-ADB" readonly style=" width :120px !important;"
+                                               class="form-control  required" placeholder="请输入合同编码" />____
+                                        <input id="Code1" name="Cod1" type="text" style=" width :120px !important;" maxlength="2"
+                                               class="form-control  required" placeholder="请输入合同编码" />____
+                                        <input id="Code2" name="Code2" type="text" style=" width :120px !important;"
+                                               class="form-control  required" placeholder="请输入合同编码" />
+                                        <input id="Code" name="Code" type="hidden" />*@
+                                        <input id="Code" name="Code" type="text"
+                                               class="form-control  required" placeholder="请输入合同编号" />
+                                    </td>
+                                    <th class="formTitle"> 合同金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="Amount" name="Amount" type="text"
+                                               class="form-control FloatPrecision required" placeholder="请输入合同金额" />
+                                    </td>
+                                </tr>  	
+					 	  	
+					 	  	
+								<tr >
+                                    <th class="formTitle" hidden> 甲方编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="ACode" name="ACode" type="text" readonly
+                                               class="form-control  " placeholder="请输入甲方编码" />
+                                    </td>  
+                                    <th class="formTitle"> 甲方名称</th>
+                                    <td class="formValue">
+                                        <input id="AName" name="AName" type="text"
+                                                class="form-control required " placeholder="请输入甲方名称" />
+                                    </td>
+                                    <th class="formTitle"> 乙方名称</th>
+                                    <td class="formValue">
+                                        <input id="BName" name="BName" type="text"
+                                               class="form-control  required" placeholder="请输入乙方名称" />
+                                    </td>
+								</tr>
+
+					 	  	
+                                <tr hidden>
+                                    <th class="formTitle"> 乙方编码</th>
+                                    <td class="formValue">
+                                        <input id="BCode" name="BCode" type="text"
+                                               class="form-control  " placeholder="请输入乙方编码" />
+                                    </td>
+
+                                </tr>    	
+
+								<tr>
+									<th class="formTitle"> 签订日期</th>
+									<td class="formValue">
+										<input id="SignDate" name="SignDate" type="text"
+										 class="form-control Wdate " onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="请输入签订日期" />
+									</td>
+                                    <th class="formTitle"> 签订地点</th>
+                                    <td class="formValue">
+                                        <input id="SignPlace" name="SignPlace" type="text"
+                                               class="form-control  " placeholder="请输入签订地点" />
+                                    </td>
+								</tr>
+
+					 	  	
+								<tr>
+
+                                    <th class="formTitle"> 资金来源</th>
+                                    <td class="formValue">
+                                        <select id="FundSource" name="FundSource" type="text"
+                                                class="form-control  " placeholder="请输入资金来源" />
+                                        <!--	<input id="FundSource" name="FundSource" type="text"
+                                             class="form-control  required"  placeholder="请输入资金来源" />  -->
+                                    </td>
+								</tr>
+
+					 	  	
+								<tr hidden>
+                                    <th class="formTitle"> 支付方式</th>
+                                    <td class="formValue">
+                                        <!--                <input id="PayType" name="PayType" type="text"
+                                                  class="form-control  required" placeholder="请输入支付方式" />  -->
+                                        <select id="PayType" name="PayType" type="text"
+                                                class="form-control  " placeholder="请输入支付方式" />
+                                        @*<option value='0'>请选择</option>
+                                                <option value='1'>新能源付款</option>
+                                                <option value='2'>泰能热电付款</option>
+                                                <option value='3'>新能源挂账</option>
+                                            </select>*@
+                                    </td>
+
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 合同文本</th>
+									<td class="formValue" colspan="3">
+										<textarea id="DEC" name="DEC" type="text" rows="3"
+										 class="form-control  "  placeholder="请输入合同文本" ></textarea>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 备注</th>
+									<td class="formValue" colspan="3">
+										<input id="Remark" name="Remark" type="text"
+										 class="form-control  "  placeholder="请输入备注" />
+									</td>
+								</tr>
+					   
+							</table>
+                            
+                            <!-- 产品明细 -->
+                            @*<div class="btn-group" id="h1">
+                                <a class="btn btn-info dropdown-text" onclick="addProduct()"><i class="fa fa-plus"></i>新增</a>
+                                <a class="btn btn-success dropdown-text" onclick="editProduct()"><i class="fa fa-edit"></i>编辑</a>
+                                <a class="btn btn-warning dropdown-text"onclick="deleteProduct()"><i class="fa fa-minus"></i>删除</a>
+
+                            </div>
+                            <div class="gridPanel">
+                                <table id="gridList"></table>
+                                <div id="gridPager"></div>
+                            </div>*@
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+
+
+@*<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    产品信息
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form id="formCP">
+                    <table class="form" style="margin-bottom: 10px;">
+
+                        <tr>
+                            <th class="formTitle"> 设备分类</th>
+                            <td class="formValue">
+                                <input type="hidden" id="BindId" name="BindId" value="@ViewBag.Id" />
+                                <input type="hidden" id="CPId" name="CPId"  />
+                                <input id="Classify" name="Classify" type="text"
+                                       class="form-control  required" placeholder="请输入设备分类" />
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th class="formTitle"> 设备名称</th>
+                            <td class="formValue">
+                                <input id="Name" name="Name" type="text"
+                                       class="form-control  required" placeholder="请输入设备名称" />
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+                            <th class="formTitle"> 数量</th>
+                            <td class="formValue">
+                                <input id="Quantity" name="Quantity" type="text"
+                                       class="form-control FloatPrecision required" placeholder="请输入数量" />
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+                            <th class="formTitle"> 单位</th>
+                            <td class="formValue">
+                                <input id="Unit" name="Unit" type="text"
+                                       class="form-control  required" placeholder="请输入单位" />
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th class="formTitle"> 产品规格及型号</th>
+                            <td class="formValue">
+                                <input id="Type" name="Type" type="text"
+                                       class="form-control  required" placeholder="请输入产品规格及型号" />
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+                            <th class="formTitle"> 制造厂家名称</th>
+                            <td class="formValue">
+                                <input id="MakeName" name="MakeName" type="text"
+                                       class="form-control  required" placeholder="请输入制造厂家名称" />
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <th class="formTitle"> 出厂单价</th>
+                            <td class="formValue">
+                                <input id="Price" name="Price" type="text"
+                                       class="form-control FloatPrecision   required" placeholder="请输入出厂单价" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="formTitle"> 每一品目出厂价</th>
+                            <td class="formValue">
+                                <input id="ItemPrice" name="ItemPrice" type="text"
+                                       class="form-control FloatPrecision required" placeholder="请输入每一品目出厂价" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle"> 每一品目应缴税费</th>
+                            <td class="formValue">
+                                <input id="ItemTax" name="ItemTax" type="text"
+                                       class="form-control FloatPrecision  required" placeholder="请输入每一品目应缴税费" />
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle"> 每一品目含税价格</th>
+                            <td class="formValue">
+                                <input id="IncludTax" name="IncludTax" type="text"
+                                       class="form-control FloatPrecision required" placeholder="请输入每一品目含税价格" />
+
+                            </td>
+                        </tr>
+                       
+
+                        <tr>
+                            <th class="formTitle"> 货物描述</th>
+                            <td class="formValue">
+                                <input id="Remark" name="Remark" type="text"
+                                       class="form-control" placeholder="请输入货物描述" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle"> 项目现场</th>
+                            <td class="formValue">
+                                <input id="Scene" name="Scene" type="text"
+                                       class="form-control" placeholder="请输入项目现场" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="formTitle"> 交货时间</th>
+                            <td class="formValue">
+                                <input id="res" name="res" type="reset" style="display:none;" /> 
+                                <input id="DeliveryTime" name="DeliveryTime" type="text"
+                                       class="form-control required" placeholder="请输入交货时间" />
+                            </td>
+                        </tr>
+
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitCpForm()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->*@

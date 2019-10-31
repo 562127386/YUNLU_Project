@@ -1,0 +1,215 @@
+﻿@*------------------------------------------------------------------------------
+     *     此代码由T4模板自动生成
+    <<<<<<< .mine
+     *	   生成时间 2018-08-21 16:03:41
+    =======
+     *	   生成时间 2018-08-15 16:32:34
+    >>>>>>> .r6
+     *     ©为之团队
+     *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    $(function () {
+        $('#layout').layout();
+        treeView();
+        gridList();
+    })
+    function treeView() {
+        $("#itemTree").treeview({
+            url: "/TN_XM/TN_XMBase/GetTreeJson2",
+            onnodeclick: function (item) {
+                $("#txt_keyword").val('');
+                $('#btn_search').trigger("click");
+            }
+        });
+        $("#itemTree").css({ "overflow": "hidden" });
+    }
+
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TN_CP/GetGridJson3",
+            height: $(window).height() - 138,
+            colModel: [
+
+					{ label: " 主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: " BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+                    { label: "事项名称", name: "ProjectName", width: 200, align: 'left' },
+
+                    { label: "合同编号", name: "HTNo", width: 90, align: 'left' },
+
+                    { label: "合同名称", name: "HTName", width: 150, align: 'left' },
+
+                    { label: "设备编号", name: "CPCode", width: 150, align: 'left' },
+
+					{ label: "设备分类", name: "Classify", width: 150, align: 'left' },
+
+					{ label: "设备名称", name: "Name", width: 150, align: 'left' },
+
+					{ label: "数量", name: "Quantity", width: 90, align: 'left' },
+
+					{ label: "单位", name: "Unit", width: 60, align: 'left' },
+
+					{ label: "产品规格及型号", name: "Type", width: 150, align: 'left' },
+
+					{ label: "制造厂家名称", name: "MakeName", width: 150, align: 'left' },
+
+					{ label: "出厂单价", name: "Price", width: 100, align: 'left' },
+
+					{ label: "每一品目出厂价", name: "ItemPrice", width: 100, align: 'left' },
+
+					{ label: "每一品目应缴税费", name: "ItemTax", width: 100, align: 'left' },
+
+					{ label: "每一品目含税价格", name: "IncludTax", width: 100, align: 'left' },
+
+					{ label: "货物描述", name: "Remark", width: 150, align: 'left' },
+
+                    { label: "项目现场", name: "Scene", width: 150, align: 'left' },
+
+                    { label: "交货时间", name: "DeliveryTime", width: 150, align: 'left' },
+
+                    { label: "入库时间", name: "StorageTime", width: 150, align: 'left' },
+
+                    { label: "出库时间", name: "OutboundTime", width: 150, align: 'left' }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            //var queryJson = {
+            //    Code: $("#itemTree").getCurrentNode().id,
+            //    keyword: $("#txt_keyword").val()
+            //}
+            var Id = $("#itemTree").getCurrentNode();
+            if (Id != undefined) {
+                var queryJson = {
+                    Code: $("#itemTree").getCurrentNode().id,
+                    keyword: $("#txt_keyword").val()
+                }
+            } else {
+                var queryJson = {
+                    keyword: $("#txt_keyword").val()
+                }
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+
+    function btn_add() {
+
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        top.$.jfinetab.addTabContent("/TN_XM/TN_CP/Form", "项目信息--新增", parentId + "_add", parentId);
+
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        var ProjectName = $("#gridList").jqGridRowValue().ProjectName;
+        var HTName = $("#gridList").jqGridRowValue().HTName;
+        if ($.checkedArray(keyValue)) {
+
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CP/Form?keyValue=" + keyValue + "&ProjectName=" + ProjectName + "&HTName =" + HTName, "项目信息--修改", parentId + "_edit", parentId);
+
+        }
+
+    }
+    function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_CP/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                    //location.reload();
+                }
+            });
+        }
+
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CP/Details?keyValue=" + keyValue, "基本项目--查看", parentId + "_details", parentId);
+        }
+    }
+
+    //添加附件
+    function btn_addfj() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CP/DetailsFJ?keyValue=" + keyValue, "上传附件", parentId + "_details", parentId);
+        }
+
+    }
+
+
+    function refreshGrid() {
+        $("#gridList").trigger("reloadGrid");
+    }
+</script>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div id="itemTree"></div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="topPanel">
+            <div class="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+                <div class="btn-group">
+                    @*<a id="JF-add"  class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建</a>
+                        <a id="JF-edit" class="btn btn-primary dropdown-text" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改</a>
+                        <a id="JF-delete" class="btn btn-primary dropdown-text"  onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                        <a id="JF-Details" class="btn btn-primary dropdown-text"  onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a>*@
+                    @*<a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_addfj()"><i class="fa fa-plus"></i>添加附件</a>*@
+                </div>
+                <div id="toolbar" class="btn-group">
+                </div>
+                <script>$('#toolbar').authorizeButton()</script>
+            </div>
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="名称" style="width: 200px;">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="编号" style="width: 200px;">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="项目名称" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>

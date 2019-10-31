@@ -1,0 +1,262 @@
+﻿@*------------------------------------------------------------------------------
+     *     此代码由T4模板自动生成
+    <<<<<<< .mine
+     *	   生成时间 2018-08-21 16:03:38
+    =======
+     *	   生成时间 2018-08-15 16:32:33
+    >>>>>>> .r6
+     *     ©为之团队
+     *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+            //initControl();
+            if (!!keyValue) {
+                $.ajax({
+                    url: "/TN_XM/TN_HT/GetFormJson",
+                    data: { keyValue: keyValue },
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        //$("#form1").formSerialize(data);
+                        //alert(data["Code"]);
+                        $("#BindId").val(data["Id"]);
+                        $("#HTCode").val(data["Code"]);
+                        $("#HTName").val(data["Name"]);
+                        $("#AName").val(data["AName"]);
+                        $("#Amount").val(data["Amount"]);
+                        $("#PaymentCompanyId").val(data["BCode"]);
+                        $("#PaymentCompany").val(data["BName"]);
+                        $("#paidAmount").val(data["paidAmount"]);
+                        $("#unpaidAmount").val(data["unpaidAmount"]);
+                    }
+                });
+            }
+              //付款方式
+            $("#PayType").bindSelect({
+                url: "/SysManage/ItemsDetail/GetSelectJson",
+                id: "text",
+                param: { Code: "ZF" }
+            });
+    });
+    function submitForm() {
+        var pay = $("#PaymentAmount").val();
+        var  unp  = $("#unpaidAmount").val();
+        if (parseFloat(pay) > parseFloat(unp) || parseFloat(pay) < 0) {
+            $.modalAlert("付款金额不能大于未付金额，请重新填写！", "error");
+            return false;
+        }
+ 
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_FK_MX/SaveForm",
+            param: postData,
+            success: function () {
+                
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    @*<input type="hidden" id="Id" name="Id" value="" />*@
+    @*<input type="hidden" id="BindId" name="BindId" value="" />*@
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">国内配套合同付款</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            @*<div class="btn-group">
+                                            <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                            <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                        </div>*@
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr hidden>
+                                    <th class="formTitle" hidden> 主键</th>
+                                    <td class="formValue" hidden>
+                                        <input id="Id" name="Id" type="text"
+                                               class="form-control  required" placeholder="请输入主键" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle" hidden> BindId</th>
+                                    <td class="formValue" hidden>
+                                        <input id="BindId" name="BindId" type="text"
+                                               class="form-control  required" placeholder="请输入BINDID" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 合同编码</th>
+                                    <td class="formValue">
+                                        <input id="HTCode" name="HTCode" type="text" readonly
+                                               class="form-control  required" placeholder="请输入合同编码" />
+                                    </td>
+                                    <th class="formTitle"> 合同名称</th>
+                                    <td class="formValue">
+                                        <input id="HTName" name="HTName" type="text" readonly
+                                               class="form-control  required" placeholder="请输入合同名称" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 甲方公司</th>
+                                    <td class="formValue">
+                                        <input id="AName" name="AName" type="text" readonly
+                                               class="form-control  required" placeholder="请输入甲方公司" />
+                                    </td>
+
+                                    <th class="formTitle"> 乙方公司</th>
+                                    <td class="formValue">
+                                        <input id="PaymentCompany" name="PaymentCompany" type="text" readonly
+                                               class="form-control  required" placeholder="请输入乙方公司" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 合同金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="Amount" name="Amount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入合同金额" />
+                                    </td>
+                                    <th class="formTitle"> 已付金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="paidAmount" name="paidAmount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入已付金额" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 未付金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="unpaidAmount" name="unpaidAmount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入未付金额" />
+                                    </td>
+                                    <th class="formTitle"> 付款金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="PaymentAmount" name="PaymentAmount" type="text"
+                                               class="form-control FloatPrecision  required" placeholder="请输入付款金额" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 付款公司编号</th>
+                                    <td class="formValue" hidden>
+                                        <input id="PaymentCompanyId" name="PaymentCompanyId" type="text"
+                                               class="form-control  " placeholder="请输入付款公司编号" />
+                                    </td>
+                                    <th class="formTitle" > 付款日期</th>
+                                    <td class="formValue" >
+                                        <input id="PaidDate" name="PaidDate" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd '})" placeholder="请输入付款日期" />
+                                    </td>
+                                    <th class="formTitle" > 付款类型</th>
+                                    <td class="formValue" >
+                                        <select id="PayType" name="PayType" type="text"
+                                                class="form-control  required" placeholder="请输入付款类型" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" > 凭证号</th>
+                                    <td class="formValue" >
+                                        <input id="CredentialsNumber" name="CredentialsNumber" type="text"
+                                               class="form-control  required" placeholder="请输入凭证号" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle"> 合同类型</th>
+                                    <td class="formValue">
+                                        <input id="HTType" name="HTType" type="text" value="国内配套合同"
+                                               class="form-control  required" placeholder="请输入凭证号" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle" hidden> 创建日期</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateDate" name="CreateDate" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入创建日期" />
+                                    </td>
+                                    <th class="formTitle" hidden> 创建用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateUserName" name="CreateUserName" type="text"
+                                               class="form-control  " placeholder="请输入创建用户名称" />
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <th class="formTitle" hidden> 创建用户账户</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateUserId" name="CreateUserId" type="text"
+                                               class="form-control  " placeholder="请输入创建用户账户" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 最后修改时间</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateDate" name="UpdateDate" type="text"
+                                               class="form-control  " onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入最后修改时间" />
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateUserId" name="UpdateUserId" type="text"
+                                               class="form-control  " placeholder="请输入最后修改用户" />
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateUserName" name="UpdateUserName" type="text"
+                                               class="form-control  " placeholder="请输入最后修改用户名称" />
+                                    </td>
+                                </tr>
+
+
+                </table>
+                </div>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

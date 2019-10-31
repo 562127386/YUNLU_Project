@@ -1,0 +1,12 @@
+﻿{
+    "PluginName": "RDXM",
+    "FriendlyName": "热电项目管理",
+    "Group": "RDXM",
+    "Version": "1.0",
+    "SupportedVersions": ["3.0"],
+    "Author": "sj",
+    "Sort": 1,
+    "PluginFileName": "JFine.Plugins.RDXM.dll",
+    "Description": "热电项目管理",
+    "LimitedToCustomerRoles": []
+}

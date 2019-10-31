@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repositories>
+  <repository path="..\JFine.Data\packages.config" />
+  <repository path="..\JFine.Infrastructure\packages.config" />
+  <repository path="..\JFine.Job\packages.config" />
+  <repository path="..\JFine.Plugins.Credit\packages.config" />
+  <repository path="..\JFine.Plugins.RDXM\packages.config" />
+  <repository path="..\JFine.Plugins.Test\packages.config" />
+  <repository path="..\JFine.Web.Base\packages.config" />
+  <repository path="..\JFine.Web\packages.config" />
+  <repository path="..\Senparc.Weixin.MP.MvcExtension\Senparc.Weixin.MP.MvcExtension\packages.config" />
+  <repository path="..\Senparc.Weixin\Senparc.Weixin\packages.config" />
+</repositories>

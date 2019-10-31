@@ -1,0 +1,534 @@
+﻿@*------------------------------------------------------------------------------
+     *     此代码由T4模板自动生成
+    <<<<<<< .mine
+     *	   生成时间 2018-08-21 16:03:38
+    =======
+     *	   生成时间 2018-08-15 16:32:33
+    >>>>>>> .r6
+     *     ©为之团队
+     *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var lastsel;
+    var column;
+    $(function () {
+        //initControl();
+        gridList();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_HT_CG/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //$("#form1").formSerialize(data);
+                    //alert(data["Code"]);
+                    $("#BindId").val(data["Id"]);
+                    $("#HTCode").val(data["Code"]);
+                    $("#HTName").val(data["Name"]);
+                    $("#AName").val(data["CGOrganization"]);//采购组织
+                    $("#Amount").val(data["Amount"]);
+                    $("#PaymentCompanyId").val(data["CPpackage"]);//设备包
+                    $("#PaymentCompany").val(data["Supplier"]);
+                    $("#paidAmount").val(data["paidAmount"]);
+                    $("#unpaidAmount").val(data["unpaidAmount"]);
+                }
+            });
+        }
+        ////付款方式
+        //$("#PayType").bindSelect({
+        //    url: "/SysManage/ItemsDetail/GetSelectJson",
+        //    id: "text",
+        //    param: { Code: "ZF" }
+        //});
+        //付款类型
+        $("#PayType").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "cgfklx" }
+        });
+    });
+
+    //设备付款子表
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "",
+            height: $(window).height() - 180,
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: "BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目编码", name: "ProjectNo", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目名称", name: "ProjectName", width: 150, align: 'left' },
+
+                    { label: "采购合同编号", name: "CGCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "采购合同", name: "CGName", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备包", name: "CPpackage", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备分类", name: "Classify", width: 150, align: 'left' },
+
+					{ label: "设备编码", name: "CPCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备名称", name: "Name", width: 150, align: 'left' },
+
+					{ label: "规格及型号", name: "Specifications", width: 150, align: 'left', hidden: true },
+
+					{ label: "型号", name: "Model", width: 150, align: 'left', hidden: true },
+
+                    { label: "付款数量", name: "Quantity", width: 150, align: 'left', editable: true, editrules: { required: true, integer: false }, edittype: "text" },
+
+                    { label: "未付数量", name: "UnQuantity", width: 150, align: 'left'},
+
+                    { label: "已付款数量", name: "PayQuantity", width: 150, align: 'left' },
+
+					{ label: "单位", name: "Unit", width: 150, align: 'left' },
+
+                    { label: "税率", name: "Rate", width: 150, align: 'left', hidden: true },
+
+					{ label: "税额", name: "Tax", width: 150, align: 'left', hidden: true },
+
+                    { label: "出厂价格（元）", name: "TaxPrice", width: 150, align: 'left' },
+
+                    { label: "每一品目出厂价", name: "NoTaxTotal", width: 150, align: 'left', hidden: true },
+
+					{ label: "每一品目应交税费", name: "NoTaxPrice", width: 150, align: 'left', hidden: true },
+
+                    {
+                        label: "付款金额（元）", name: "TaxTotal", width: 150, align: 'left'
+
+                    },
+
+					{ label: "设备状态", name: "EquipmentState", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货单位", name: "ReceivingUnit", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货地址", name: "ShippingAddress", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货地点", name: "PlaceOfReceipt", width: 150, align: 'left', hidden: true },
+
+					{ label: "财务组织", name: "Financial", width: 150, align: 'left', hidden: true },
+
+					{ label: "客户", name: "Customer", width: 150, align: 'left', hidden: true },
+
+					{ label: "扣税类别", name: "TaxCategory", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税率", name: "InvalidTaxRate", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税额", name: "InvalidTaxPrice", width: 150, align: 'left', hidden: true },
+
+					{ label: "计成本金额", name: "TotalCost", width: 150, align: 'left', hidden: true },
+
+					{ label: "备注", name: "Remark", width: 150, align: 'left', hidden: true },
+
+					{ label: "入库时间", name: "StorageTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "出库时间", name: "OutboundTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建日期", name: "CreateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户账户", name: "CreateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户名称", name: "CreateUserName", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改时间", name: "UpdateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户", name: "UpdateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户名称", name: "UpdateUserName", width: 150, align: 'left', hidden: true },
+
+            ],
+            rowNum: 6000,
+            //pager: "#gridPager",
+            sortname: 'CreateDate asc',
+            //multiselect: true,
+            viewrecords: true,
+            cellEdit: true,
+            cellsubmit: "clientArray",
+            //onSelectRow: function (rowid, iRow, iCol, e) {
+            //    //$gridList.editRow(false);
+            //    //$gridList.editRow(rowid, true);
+            //    //var rowDatas = $("#tablename").jqGrid("getRowData");
+            //    //$gridList_team.jqGrid('saveRow', lastrow_team, false, 'clientArray')
+            //    if (rowid && rowid !== lastsel) {
+            //        $gridList.jqGrid('saveRow', lastsel, false, 'clientArray');
+            //        var rowData = $gridList.jqGrid("getRowData", lastsel);
+            //        var cpsum = 0;
+            //        cpsum = parseFloat(rowData.Quantity) * 0.8 * (parseFloat(rowData.TaxPrice) + parseFloat(rowData.TaxPrice) * parseFloat(rowData.Rate) / 100);
+            //        var per = cpsum.toFixed(2);
+            //        $gridList.jqGrid("setCell", lastsel, "TaxTotal", per);
+            //        $gridList.jqGrid('restoreRow', lastsel);
+            //        $gridList.jqGrid('editRow', rowid, true);
+            //        lastsel = rowid;
+            //    }
+
+            //},
+            afterEditCell: function (rowid, name, val, iRow, iCol) {
+                lastsel = rowid;
+                column = iCol;
+                var rowData = $gridList.jqGrid("getRowData", rowid);
+                var id = iRow + "_" + name;
+                if (name == "Quantity") {
+                    $("#" + id).keyup(function (e) {
+                        var Quantity = $(this).val();
+                        if (parseFloat(Quantity) > parseFloat(rowData.UnQuantity)) {
+                            $(this).val(rowData.UnQuantity);
+                            $.modalAlert("付款数量不能大于未付数量，请重新填写！", "error");
+                        }
+                        cpsum = parseFloat(Quantity) * 0.8 * (parseFloat(rowData.TaxPrice) + parseFloat(rowData.TaxPrice) * parseFloat(rowData.Rate) / 100);
+                        var per = cpsum.toFixed(2);
+                        $gridList.jqGrid("setRowData", rowid, { "TaxTotal": per });
+                        var sum = 0;
+                        var rowDatas = $gridList.jqGrid("getRowData");
+                        for (var r in rowDatas) {
+                            if (rowDatas[r].TaxTotal != "" && rowDatas[r].TaxTotal != undefined && rowDatas[r].TaxTotal != null && rowid != parseInt(r) + 1) {
+                                sum += parseFloat(rowDatas[r].TaxTotal);
+                            }
+                        }
+                        sum += parseFloat(per);
+                        $("#PaymentAmount").val(sum.toFixed(2));
+                    });
+                }
+            }
+
+        });
+    }
+    
+    //保存设备付款表单
+    function CPSave() {
+        var $gridList = $("#gridList");
+        //var keyValue = $gridList.jqGridRowValue().Id;
+        var keyValue = $gridList.jqGrid('getGridParam', 'selrow');
+        $gridList.jqGrid('saveRow', keyValue, false, 'clientArray');
+        var rowData = $gridList.jqGrid("getRowData", lastsel);
+        var cpsum = 0;
+        cpsum = parseFloat(rowData.Quantity)* 0.8 * (parseFloat(rowData.TaxPrice) + parseFloat(rowData.TaxPrice) * parseFloat(rowData.Rate));
+        $gridList.jqGrid("setCell", lastsel, "TaxTotal", cpsum);
+        $gridList.jqGrid('restoreRow', keyValue);
+        var sum = 0;
+        var rowDatas = $gridList.jqGrid("getRowData");
+        for (var r in rowDatas) {
+            if (rowDatas[r].TaxTotal != "" && rowDatas[r].TaxTotal != undefined && rowDatas[r].TaxTotal != null) {
+                sum += parseFloat(rowDatas[r].Quantity) * 0.8 * (parseFloat(rowDatas[r].TaxPrice) + parseFloat(rowDatas[r].TaxPrice) * parseFloat(rowDatas[r].Rate) / 100);
+            }
+        }
+        $("#PaymentAmount").val(sum.toFixed(2));
+    }
+
+    //选择付款设备
+    function CPPayment() {
+        //$.modalOpen({
+        //    id: "Items",
+        //    title: "设备付款",
+        //    url: "/TN_XM/TN_CG_CP/Index3",
+        //    width: "1000px",
+        //    height: "1200px",
+        //    callBack: function (iframeId) {
+        //        top.frames[iframeId].submitForm();
+        //        $.reload();
+        //        //var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+        //        //top.$.jfinetab.RefreshTabFromId(parentTabId);
+        //        //top.$.jfinetab.reload();
+        //    }
+        //});
+        $.modalOpen({
+            id: "Index4",
+            title: "设备付款明细",
+            url: "/TN_XM/TN_CG_CP/Index4?keyValue=" + keyValue,
+            width: "800px",
+            height: "550px",
+            //btn: null,
+            //btn: ['确认'],
+            btnclass: ['btn btn-primary btnclose', 'btn btn-danger'],
+            callBack: function (iframeId) {
+                //top.frames[iframeId].submitForm();
+                var Data = top.frames[iframeId].submitForm();
+                var sum = 0;
+                for (var r in Data) {
+                    var i = $("#gridList").jqGrid("getDataIDs");
+                    $("#gridList").jqGrid("addRowData", i.length + 1, Data[r], i.length + 1);
+                }
+                var rowDatas = $("#gridList").jqGrid("getRowData");
+                for (var r in rowDatas) {
+                    if (rowDatas[r].TaxTotal != "" && rowDatas[r].TaxTotal != undefined && rowDatas[r].TaxTotal != null) {
+                        sum += parseFloat(rowDatas[r].Quantity) * 0.8 * (parseFloat(rowDatas[r].TaxPrice) + parseFloat(rowDatas[r].TaxPrice) * parseFloat(rowDatas[r].Rate) / 100);
+                    }
+                }
+                $("#PaymentAmount").val(sum.toFixed(2))
+                //location.reload();
+                //var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                //top.$.jfinetab.RefreshTabFromId(parentTabId);
+                //top.$.jfinetab.reload();
+            }
+        });
+    }
+
+    //删除设备
+    function CPdelete() {
+        var $gridList = $("#gridList");
+        //$gridList.jqGrid("endEditRows");
+        $gridList.jqGrid('saveCell', lastsel, column);
+        var ids = $gridList.jqGrid('getGridParam', 'selrow');
+        if ($.checkedArray(ids)) {
+            $("#gridList").jqGrid("delRowData", ids);
+            var sum = 0;
+            var rowDatas = $gridList.jqGrid("getRowData");
+            for (var r in rowDatas) {
+                if (rowDatas[r].TaxTotal != "" && rowDatas[r].TaxTotal != undefined && rowDatas[r].TaxTotal != null) {
+                    sum += parseFloat(rowDatas[r].Quantity) * 0.8 * (parseFloat(rowDatas[r].TaxPrice) + parseFloat(rowDatas[r].TaxPrice) * parseFloat(rowDatas[r].Rate) / 100);
+                }
+            }
+            $("#PaymentAmount").val(sum.toFixed(2));
+        }
+    }
+
+
+    function submitForm() {
+        var $gridList = $("#gridList");
+        $gridList.jqGrid('saveCell', lastsel, column);
+        var pay = $("#PaymentAmount").val();
+        var unp = $("#unpaidAmount").val();
+        if (parseFloat(pay) > parseFloat(unp) || parseFloat(pay) < 0) {
+            $.modalAlert("付款金额不能大于未付金额，请重新填写！", "error");
+            return false;
+        }
+
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        var data = $("#gridList").jqGrid("getRowData");
+        postData.items = JSON.stringify(data);
+        $.submitForm({
+            url: "/TN_XM/TN_FK_MX/SaveForm2",
+            param: postData,
+            success: function () {
+
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    @*<input type="hidden" id="Id" name="Id" value="" />*@
+    @*<input type="hidden" id="BindId" name="BindId" value="" />*@
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">采购合同设备付款</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            @*<div class="btn-group">
+                                                    <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                    <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                                </div>*@
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr hidden>
+                                    <th class="formTitle" hidden> 主键</th>
+                                    <td class="formValue" hidden>
+                                        <input id="Id" name="Id" type="text"
+                                               class="form-control  required" placeholder="请输入主键" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle" hidden> BindId</th>
+                                    <td class="formValue" hidden>
+                                        <input id="BindId" name="BindId" type="text"
+                                               class="form-control  required" placeholder="请输入BINDID" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 合同编码</th>
+                                    <td class="formValue">
+                                        <input id="HTCode" name="HTCode" type="text" readonly
+                                               class="form-control  required" placeholder="请输入合同编码" />
+                                    </td>
+                                    <th class="formTitle"> 合同名称</th>
+                                    <td class="formValue">
+                                        <input id="HTName" name="HTName" type="text" readonly
+                                               class="form-control  required" placeholder="请输入合同名称" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle"> 采购组织</th>
+                                    <td class="formValue">
+                                        <input id="AName" name="AName" type="text" readonly
+                                               class="form-control  required" placeholder="请输入采购组织" />
+                                    </td>
+
+                                    <th class="formTitle"> 供应商</th>
+                                    <td class="formValue">
+                                        <input id="PaymentCompany" name="PaymentCompany" type="text" readonly
+                                               class="form-control  required" placeholder="请输入供应商" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 合同金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="Amount" name="Amount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入合同金额" />
+                                    </td>
+                                    <th class="formTitle"> 已付金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="paidAmount" name="paidAmount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入已付金额" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 未付金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="unpaidAmount" name="unpaidAmount" type="text" readonly
+                                               class="form-control FloatPrecision required" placeholder="请输入未付金额" />
+                                    </td>
+                                    <th class="formTitle"> 合同付款类型</th>
+                                    <td class="formValue">
+                                        <select id="PayType" name="PayType" type="text" 
+                                               class="form-control  required " placeholder="请输入付款类型" />
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 付款公司编号</th>
+                                    <td class="formValue" hidden>
+                                        <input id="PaymentCompanyId" name="PaymentCompanyId" type="text"
+                                               class="form-control  " placeholder="请输入付款公司编号" />
+                                    </td>
+                                    <th class="formTitle"> 付款日期</th>
+                                    <td class="formValue">
+                                        <input id="PaidDate" name="PaidDate" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="请输入付款日期" />
+                                    </td>
+                                    <th class="formTitle"> 付款金额（元）</th>
+                                    <td class="formValue">
+                                        <input id="PaymentAmount" name="PaymentAmount" type="text"
+                                               class="form-control FloatPrecision  required" placeholder="请输入付款金额" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 凭证号</th>
+                                    <td class="formValue">
+                                        <input id="CredentialsNumber" name="CredentialsNumber" type="text"
+                                               class="form-control  required" placeholder="请输入凭证号" />
+                                    </td>
+                                    <th class="formTitle"> 付款批次</th>
+                                    <td class="formValue">
+                                        <input id="FKNumber" name="FKNumber" type="text"
+                                               class="form-control  required" placeholder="请输入付款批次" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"></th>
+                                    <td class="formValue">
+                                        <a class="btn btn-info dropdown-text" onclick="CPPayment()"><i class="fa fa-send"></i>选择设备付款</a>
+                                    </td>
+                                    <th class="formTitle"></th>
+                                    <td class="formValue">
+                                        <a class="btn btn-info dropdown-text" onclick="CPdelete()"><i class="fa fa-send"></i>删除设备</a>
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle"> 合同类型</th>
+                                    <td class="formValue">
+                                        <input id="HTType" name="HTType" type="text" value="采购合同"
+                                               class="form-control  required" placeholder="请输入凭证号" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle" hidden> 创建日期</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateDate" name="CreateDate" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入创建日期" />
+                                    </td>
+                                    <th class="formTitle" hidden> 创建用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateUserName" name="CreateUserName" type="text"
+                                               class="form-control  " placeholder="请输入创建用户名称" />
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <th class="formTitle" hidden> 创建用户账户</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CreateUserId" name="CreateUserId" type="text"
+                                               class="form-control  " placeholder="请输入创建用户账户" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 最后修改时间</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateDate" name="UpdateDate" type="text"
+                                               class="form-control  " onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入最后修改时间" />
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateUserId" name="UpdateUserId" type="text"
+                                               class="form-control  " placeholder="请输入最后修改用户" />
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <input id="UpdateUserName" name="UpdateUserName" type="text"
+                                               class="form-control  " placeholder="请输入最后修改用户名称" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="gridPanel">
+                                <table id="gridList"></table>
+                                <div id="gridPager"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

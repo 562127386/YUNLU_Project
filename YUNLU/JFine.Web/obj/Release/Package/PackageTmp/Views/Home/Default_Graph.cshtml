@@ -1,0 +1,347 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Graph.cshtml";
+}
+
+<style>
+    #copyrightcontent {
+        height: 30px;
+        line-height: 29px;
+        overflow: hidden;
+        position: absolute;
+        top: 100%;
+        margin-top: -30px;
+        width: 100%;
+        background-color: #fff;
+        border: 1px solid #e6e6e6;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .dashboard-stats {
+        float: left;
+        width: 20%;
+    }
+
+    .dashboard-stats-item {
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+        cursor: pointer;
+        height: 105px;
+        margin-right: 25px;
+        margin-bottom: 10px;
+        padding: 20px 20px;
+    }
+
+        .dashboard-stats-item .m-top-none {
+            margin-top: 2px;
+        }
+
+        .dashboard-stats-item h2 {
+            font-size: 35px;
+            font-family: inherit;
+            line-height: 1.1;
+            font-weight: 500;
+        }
+
+        .dashboard-stats-item h5 {
+            font-size: 14px;
+            font-family: inherit;
+            margin-top: 3px;
+            line-height: 1.1;
+        }
+
+
+        .dashboard-stats-item .stat-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            opacity: .3;
+        }
+
+    .dashboard-stats i.fa.stats-icon {
+        width: 50px;
+        padding: 20px;
+        font-size: 50px;
+        text-align: center;
+        color: #fff;
+        height: 50px;
+        border-radius: 10px;
+    }
+
+    .panel-default {
+        border: none;
+        border-radius: 0px;
+        margin-bottom: 0px;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+    }
+
+        .panel-default > .panel-heading {
+            color: #777;
+            background-color: #fff;
+            border-color: #e6e6e6;
+            padding: 10px 10px;
+        }
+
+        .panel-default > .panel-body {
+            padding: 10px;
+            padding-bottom: 0px;
+        }
+
+            .panel-default > .panel-body ul {
+                overflow: hidden;
+                padding: 0;
+                margin: 0px;
+                margin-top: -5px;
+            }
+
+                .panel-default > .panel-body ul li {
+                    line-height: 27px;
+                    list-style-type: none;
+                    /*white-space: nowrap;*/
+                    text-overflow: ellipsis;
+                }
+
+                    .panel-default > .panel-body ul li .time {
+                        color: #a1a1a1;
+                        float: right;
+                        padding-right: 5px;
+                    }
+
+    #gridList {
+        background-color: white;
+    }
+
+    .ui-jqgrid .table-bordered th {
+        background-color: white;
+    }
+
+    .ui-jqgrid .ui-jqgrid-bdiv {
+        overflow-x: hidden;
+    }
+
+    /*.ui-jqgrid .table-bordered td {
+            border: 1px solid #d7d7d7;
+            border-left: 0px dashed #ddd !important;
+        }
+        .ui-jqgrid .table-bordered th {
+            border-left: 0px dashed #ddd;
+        }
+        .table-bordered > thead > tr > th {
+            border: 0px solid #ddd;
+        }*/
+
+    .btn {
+        padding: 3px 6px;
+    }
+</style>
+
+<script>
+    $(function () {
+        CustomerFeedback_Graph();
+        MaterialDefective_Graph();
+        MaterialDamageRate();
+    })
+    //客户投诉
+    function CustomerFeedback_Graph() {
+        var chart = Highcharts.chart('container', {
+            chart: {
+                zoomType: 'xy'
+            },
+            title: {
+                text: '客诉汇总'
+            },
+            credits: false,
+            //subtitle: {
+            //    text: '数据来源: WorldClimate.com'
+            //},
+            xAxis: [{
+                categories: ['一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                crosshair: true
+            }],
+            yAxis: [{ // Primary yAxis
+                labels: {
+                    //format: '{value}°C',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'IT目标',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'IT实际',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+                opposite: true
+            }
+            ],
+            tooltip: {
+                shared: true
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                x: 120,
+                verticalAlign: 'top',
+                y: 100,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            series: [{
+                name: 'IT实际',
+                type: 'column',
+                yAxis: 1,
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                tooltip: {
+                    valueSuffix: ''
+                }
+            }, {
+                name: 'IT目标',
+                type: 'spline',
+                data: [32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32],
+                tooltip: {
+                    valueSuffix: ''
+                }
+            }]
+        });
+    }
+    //原材料不良趋势
+    function MaterialDefective_Graph() {
+        var chart = Highcharts.chart('container_defective', {
+            chart: {
+                type: 'line'
+            },
+            credits: false,
+            title: {
+                text: '原材料不良趋势'
+            },
+            //subtitle: {
+            //    text: '数据来源: WorldClimate.com'
+            //},
+            xAxis: {
+                categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            },
+            yAxis: {
+                title: {
+                    //text: '气温 (°C)'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true
+                    },
+                    // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: '目标',
+                data: [7.0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+            }, {
+                name: '实际',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9]
+            }]
+        });
+
+    }
+    //不良率
+    function MaterialDamageRate() {
+        var chart = Highcharts.chart('container_damageRate', {
+            chart: {
+                type: 'line'
+            },
+            credits: false,
+            title: {
+                text: '不良率'
+            },
+            //subtitle: {
+            //    text: '数据来源: WorldClimate.com'
+            //},
+            xAxis: {
+                categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+            },
+            yAxis: {
+                labels: {
+                    format: '{value}%',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    //text: '气温 (°C)'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true
+                    },
+                    // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                format: '{value}%',
+                name: '入库不良率',
+                data: [0.04, 0.03, 0.04, 0.08, 0.09, 0.05]
+            }, {
+                format: '{value}%',
+                name: '上线不良率',
+                data: [0.08, 0.02, 0.05, 0.09, 0.09, 0.04]
+
+            }]
+        });
+    }
+
+
+</script>
+
+<div id="areascontent">
+    <div class="rows" style="overflow: hidden;">
+        <div style="float: left; width:100%; margin-right: 1%;">
+            <div style="height: 400px; border: 1px solid #e6e6e6; background-color: #fff;">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><i class="fa fa-thumbs-o-up fa-lg" style="padding-right: 5px;"></i>客诉汇总图表</div>
+                    <div id="container" style="min-width:400px;height:300px"></div>
+                </div>
+            </div>
+
+            <div style="height: 400px; border: 1px solid #e6e6e6; background-color: #fff;">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><i class="fa fa-thumbs-o-up fa-lg" style="padding-right: 5px;"></i>原材料不良趋势</div>
+                    <div id="container_defective" style="min-width:400px;height:300px"></div>
+                </div>
+            </div>
+            <div style="height: 400px; border: 1px solid #e6e6e6; background-color: #fff;">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><i class="fa fa-thumbs-o-up fa-lg" style="padding-right: 5px;"></i>不良率</div>
+                    <div id="container_damageRate" style="min-width:400px;height:300px"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html style="overflow: hidden;">
+<head>
+    <title>青岛能源集团有限公司</title>
+    <link href="~/Content/css/framework-font.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery/jquery-2.0.3.min.js"></script>
+    <script src="~/Content/js/bootstrap/bootstrap.min.js"></script>
+    <link href="~/Content/js/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Content/js/dialog/dialog.js"></script>
+    <script src="~/Content/js/cookie/jquery.cookie.js"></script>
+    <link href="~/Content/css/framework-index.css" rel="stylesheet" />
+    <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+    <script src="~/Content/js/jsonsql/jsonsql.js"></script>
+    <link href="~/Content/css/framework-ui.css?v=1.0.4" rel="stylesheet" />
+    <script src="~/Content/js/common/framework-ui.js?v=1.0.2"></script>
+    <script src="~/Content/js/common/framework-clientdata.js?v=1.0.1"></script>
+    <script src="~/Content/js/validate/jquery.validate.min.js"></script>
+    <script src="~/Content/js/md5/jquery.md5.js"></script>
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini @(JFine.Code.Online.OnlineUser.Operator.GetCurrent().IsLeader? "sidebar-collapse":"" )" style="overflow:hidden;">
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
+        <img src="/Content/images/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div class="wrapper" style="overflow: hidden;">
+        <!--头部信息-->
+        <header class="main-header">
+            <a href="#" target="_blank" class="logo">
+                <span class="logo-mini">青能</span>
+                <span class="logo-lg" style="font-size: 20px !important; "><img src="~/Content/images/qnlogo.png" width="150px" height="40px" /></span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a class="sidebar-toggle" id="downloadLink">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu" id="header-nav">
+                    <ul class="nav navbar-nav">
+                        <!--                      <li class="dropdown messages-menu">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-envelope-o "></i>
+                                                        <span class="label label-success">4</span>
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown notifications-menu">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-bell-o"></i>
+                                                        <span class="label label-warning">10</span>
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown tasks-menu">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-flag-o"></i>
+                                                        <span class="label label-danger">9</span>
+                                                    </a>
+                                                </li>   -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="~/Content/images/samples/scarlet-159.png" class="user-image" alt="User Image" />
+                                <span class="hidden-xs">@JFine.Code.Online.OnlineUser.Operator.GetCurrent().Account</span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a class="menuItem" data-id="userInfo" href="/SysManage/User/Info2?keyValue=@JFine.Code.Online.OnlineUser.Operator.GetCurrent().UserId"><i class="fa fa-user"></i>个人信息</a></li>
+                                <li><a href="javascript:void();"><i class="fa fa-inbox"></i>我的信箱</a></li>
+                                <li><a href="javascript:void();" onclick="modifyPW()"><i class="fa fa-edit"></i>修改密码</a></li>
+                                <li><a href="javascript:void();"><i class="fa fa-paint-brush"></i>皮肤设置</a></li>
+                                <li><a href="javascript:void();" onclick="layer.msg('锁屏');"><i class="fa fa-lock"></i>锁屏</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/Login/OutLogin"><i class="ace-icon fa fa-power-off"></i>安全退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!--左边导航-->
+        <div class="main-sidebar">
+            <div class="sidebar">
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="~/Content/images/samples/scarlet-159.png" class="img-circle" alt="User Image" />
+                    </div>
+                    <div class="pull-left info">
+                        <p>@JFine.Code.Online.OnlineUser.Operator.GetCurrent().Account;@JFine.Code.Online.OnlineUser.Operator.GetCurrent().UserName</p>
+                        <a><i class="fa fa-circle text-success"></i>在线</a>
+                    </div>
+                </div>
+                <ul class="sidebar-menu" id="sidebar-menu">
+                    <!--<li class="header">导航菜单</li>-->
+                </ul>
+            </div>
+        </div>
+        <!--中间内容-->
+        <div id="content-wrapper" class="content-wrapper">
+            <div class="content-tabs">
+                <button class="roll-nav roll-left tabLeft">
+                    <i class="fa fa-backward"></i>
+                </button>
+                <nav class="page-tabs menuTabs">
+                    <div class="page-tabs-content" style="margin-left: 0px;">
+                        <a href="javascript:;" class="menuTab active" data-id="@ViewBag.model2"> 欢迎首页</a>
+                        <a href="javascript:;" class="menuTab" data-id="/TN_XM/TN_XMBase/Details" style="padding-right: 15px; @ViewBag.model3">项目流程事记</a>
+                    </div>
+                </nav>
+                <button class="roll-nav roll-right tabRight">
+                    <i class="fa fa-forward" style="margin-left: 3px;"></i>
+                </button>
+                <div class="btn-group roll-nav roll-right">
+                    <button class="dropdown tabClose" data-toggle="dropdown">
+                        页签操作<i class="fa fa-caret-down" style="padding-left: 3px;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="tabReload" href="javascript:void();">刷新当前</a></li>
+                        <li><a class="tabCloseCurrent" href="javascript:void();">关闭当前</a></li>
+                        <li><a class="tabCloseAll" href="javascript:void();">全部关闭</a></li>
+                        <li><a class="tabCloseOther" href="javascript:void();">除此之外全部关闭</a></li>
+                    </ul>
+                </div>
+                <button class="roll-nav roll-right fullscreen"><i class="fa fa-arrows-alt"></i></button>
+            </div>
+            <div class="content-iframe" style="overflow: hidden;">
+                <div class="mainContent" id="content-main" style="margin: 10px; margin-bottom: 0px; padding: 0;">
+                    <iframe class="JFine_iframe" width="100%" height="100%" src="@ViewBag.model2" frameborder="0" data-id="@ViewBag.model2"></iframe>
+                    <iframe class="JFine_iframe" width="100%" height="100%" src="/TN_XM/TN_XMBase/Details" frameborder="0" data-id="/TN_XM/TN_XMBase/Details"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loadingPage" style="display: none;">
+        <div class="loading-shade"></div>
+        <div class="loading-content" onclick="$.loading(false)">数据加载中，请稍后…</div>
+    </div>
+
+    <!--模态修改密码-->
+    <div class="modal inmodal" id="modifyModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content animated bounceInRight">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+                    </button>
+                    <h4 class="modal-title">修改密码信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <form id="form2">
+                            <table class="form">
+                                <tr>
+                                    <th class="formTitle">原始密码</th>
+                                    <td class="formValue">
+                                        <input id="oldPW" name="oldPW" type="password" class="form-control required" placeholder="请输入原始密码" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle">新密码</th>
+                                    <td class="formValue">
+                                        <input id="newPW" name="newPW" type="password" class="form-control required" placeholder="请输入新密码" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle">重复新密码</th>
+                                    <td class="formValue">
+                                        <input id="reNewPW" name="reNewPW" type="password" class="form-control required" placeholder="请再次输入新密码" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="modify_comfirm()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            document.getElementById("downloadLink").click()
+        });
+
+        //修改密码
+        function modifyPW() {
+            $("#modifyModal").modal('show');
+        }
+
+        //确定修改密码
+        function modify_comfirm() {
+            if ($('#form2').formValid()) {
+                var oldPW = $("#oldPW").val();
+                var newPW = $("#newPW").val();
+                var reNewPW = $("#reNewPW").val();
+                if (newPW == reNewPW) {
+                    para = {};
+                    para.oldPW = $.md5($.trim(oldPW));
+                    para.newPW = $.md5($.trim(newPW));
+                    para.__RequestVerificationToken = $('[name=__RequestVerificationToken]').val();
+                    $.post('/SysManage/User/ModifyPassword', para, function (msg) {
+                        var result = JSON.parse(msg);
+                        if ("success" == result.state) {
+                            $.modalAlert("操作成功！", "success");
+                            $("#oldPW").val("");
+                            $("#newPW").val("");
+                            $("#reNewPW").val("");
+                            $("#modifyModal").modal('hide');
+                        } else {
+                            $.modalAlert(result.message, "error");
+                        }
+
+                    });
+                } else {
+                    $.modalAlert("两次密码不一致，请修改！", "warning");
+                }
+
+            }
+        }
+    </script>
+
+    <script src="~/Content/js/common/index.js?v=1.0.5"></script>
+    <script src="~/Content/js/common/indextab.js?v=1.0.8"></script>
+    <script src="~/Content/js/loading/pace.min.js"></script>
+    @Html.AntiForgeryToken()
+</body>
+</html>

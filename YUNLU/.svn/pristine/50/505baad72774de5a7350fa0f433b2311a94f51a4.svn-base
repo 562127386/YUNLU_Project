@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<connectionStrings>
+  <!--<add name="SqlServerDbContext" connectionString="Server=.;Initial Catalog=RD_XM1;User ID=sa;Password=MEGATRON" providerName="System.Data.SqlClient" />-->
+  <add name="SqlServerDbContext" connectionString="Server=139.129.29.4;Initial Catalog=YUNLU;User ID=sa;Password=sasql2016" providerName="System.Data.SqlClient" />
+  <!--<add name="MySqlDbContext" connectionString="Data Source=192.168.0.126;port=3306;Initial Catalog=JFine;user id=jfine;password=11111;charset=utf8" providerName="MySql.Data.MySqlClient"/>-->
+  <!--<add name="OracleDbContext" connectionString="User Id=111111;Password=111111;PERSIST SECURITY INFO=True;Data Source=JFine"  providerName="Oracle.ManagedDataAccess.Client"/>-->
+</connectionStrings>

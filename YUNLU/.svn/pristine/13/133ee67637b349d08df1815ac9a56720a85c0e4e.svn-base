@@ -1,0 +1,216 @@
+﻿@*<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="logisticsInvoicePrint.aspx.cs" Inherits="RM.Web.Bus.logisticsCost.logisticsInvoiceNew.logisticsInvoicePrint" %>*@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>多经开票通知</title>
+    <link href="~/Content/js/default.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/print.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery.jqprint-0.3.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/jquery.jqprint.css" rel="stylesheet" type="text/css" />
+    <script>
+
+        function btn_print() {
+            $("#print").jqprint();
+        }
+
+        function btn_Adjunct() {
+            var keyValue = $("#Id").val();
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/Details?keyValue=" + keyValue, "设备管理--查看", parentId + "_view", parentId);
+        }
+    </script>
+    <style type="text/css">
+        /*span {
+            background-color: #ffcc00;
+            display: -moz-inline-box;
+            display: inline-block;
+            width: 150px;
+        }*/
+        .form-control {
+            width: 100%;
+            border-top: transparent !important;
+            border-left: transparent !important;
+            border-right: transparent !important;
+            border-bottom: transparent !important;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <input id="Id" value="@ViewBag.model.Id" hidden />
+        <div style="position: absolute; top: 22px; right: 8px;">
+            <a onclick="btn_print()" href="javascript:void(0)"><span class="icon icon-print">&nbsp;</span>打印</a>
+
+            <a onclick="btn_Adjunct()" href="javascript:void(0)"><span class="icon icon-print">&nbsp;</span>图片</a>
+        </div>
+        <div class="print-box" style="padding:5px;">
+            <div id="print">
+                <div style="font-size: 22px;text-align: center; line-height: 50px;">
+                    <br>亚行<span>@ViewBag.model.ProjectName</span>项目验收款支付证明
+                </div>
+                @*<div class="print-info">
+                    <table class="form">
+                        <tr>
+                            <th class="formTitle" style="">设备名称：</th>
+                            <td class="formValue" style="">
+                                <input type="text" style="width:98%;" class="form-control " value="" />
+                            </td>
+                            <th class="formTitle" style="">业务单号：</th>
+                            <td class="formValue">
+                                <input type="text" style="width:98%;" class="form-control " value="" />
+                            </td>
+                            <th class="formTitle" style="">制单日期：</th>
+                            <td class="formValue" style="width:110px;">
+                                <input type="text" style="width:98%;" class="form-control " value="" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>*@
+                <div class="print-table">
+                    <table border="1">
+                        <tbody>
+                            <tr>
+                                <td style="width:100px;" rowspan="2" colspan="2">设备名称</td>
+                                <td style="width:300px;" rowspan="2" colspan="4">
+                                    <input type="text" class="form-control" id="F_FullName" value="@ViewBag.model.Name" />
+                                </td>
+                                <td style="width:100px;" colspan="2">设备编号</td>
+                                <td style="width:300px;" colspan="4">
+                                    <input type="text" class="form-control" id="F_FullName" value="@ViewBag.model.CPCode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">合同编号</td>
+                                <td style="width:300px;" colspan="4">
+                                    <input type="text" class="form-control" id="F_FullName" value="@ViewBag.model.CGCode" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">供货单位</td>
+                                <td style="width:700px;" colspan="10">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">设备投运时间</td>
+                                <td style="width: 300px;" colspan="4">
+                                    <input type="text" class="form-control" id="F_FullName" value="@ViewBag.model.OutboundTime" />
+                                </td>
+                                <td style="width:100px;" colspan="2">投运至今时间</td>
+                                <td style="width: 300px;" colspan="4">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">设备运行情况</td>
+                                <td style="width:700px;" colspan="10">
+                                    <input type="text" class="form-control" id="F_FullName" value="@ViewBag.model.EquipmentState" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">部门</td>
+                                <td style="width:100px;" colspan="5">意见</td>
+                                <td style="width:100px;" colspan="5">签名</td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">使用单位经办部门</td>
+                                <td style="width:100px;" colspan="5">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                                <td style="width:100px;" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">使用单位负责人</td>
+                                <td style="width:100px;" colspan="5">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                                <td style="width:100px;" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">集团亚行项目办</td>
+                                <td style="width:100px;" colspan="5">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                                <td style="width:100px;" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">集团战略投资部</td>
+                                <td style="width:100px;" colspan="5">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                                <td style="width:100px;" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            </tr>
+                            <tr>
+                                <td style="width:100px;" colspan="2">集团分管领导</td>
+                                <td style="width:100px;" colspan="5">
+                                    <input type="text" class="form-control" id="F_FullName" value="" />
+                                </td>
+                                <td style="width:100px;" colspan="5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            </tr>
+
+                            @*<tr>
+                                <td style="width:100px;" rowspan="2">地址、电话</td>
+                                <td style="width:450px;" rowspan="2" colspan="4">
+                                </td>
+                                <td style="width:100px;" rowspan="2">开户行及账号</td>
+                                <td style="width:200px;" colspan="2">
+                                </td>
+                            </tr>*@
+                            @*<tr>
+                                <td style="width:100px;">合同编号</td>
+                                <td style="width:120px;">费用名称</td>
+                                <td style="width:120px;">规格</td>
+                                <td style="width:60px;">单位</td>
+                                <td style="width:60px;">数量</td>
+                                <td style="width:100px;">单价</td>
+                                <td style="width:120px;">金额 </td>
+                                <td style="width:80px;">货币</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+                <div class="print-info">
+                    <table class="form">
+                        <tr>
+
+                            @*<th class="formTitle" style="">业务员：</th>
+                            <td class="formValue">
+                                <input type="text" class="form-control " value="" />
+                            </td>
+                            <th class="formTitle" style="">业务处：</th>
+                            <td class="formValue">
+                                <input type="text" class="form-control " value="" />
+                            </td>*@
+                        </tr>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+</body>
+</html>

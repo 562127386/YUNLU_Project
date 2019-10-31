@@ -1,0 +1,306 @@
+﻿
+@*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-08-03 17:14:25
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        gridList()
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_HT/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formInitialize(data);
+                }
+            });
+        }
+        //gridList();
+        //refreshGrid();
+    });
+
+
+    //表格处理
+    function gridList() {
+        var BindId = $("#Bindid").val();
+        var $gridList = $("#gridList");
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        $gridList.dataGrid({
+            height: 220,
+            postData: { queryJson: JSON.stringify(queryJson) },
+
+            url: "/TN_XM/TN_FJ/GetGridJson",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 100, align: 'left', hidden: true },
+
+					{ label: "", name: "BindId", width: 100, align: 'left', hidden: true },
+
+					{ label: "单据号", name: "OrderNo", width: 100, align: 'left' },
+
+					{ label: "序号", name: "SerialNumber", width: 200, align: 'left', hidden: true },
+
+					{
+						label: "附件名称", name: "AccessoryName", width: 200, align: 'left',
+						formatter: function (cellvalue, options, rowObject) {
+						    return '<a id="FJ" target="_blank" href="' + rowObject.Url + '">' + rowObject.AccessoryName + '</a>';
+						}
+					},
+
+					{ label: "附件类别", name: "AccessoryType", width: 100, align: 'left' },
+
+					{ label: "路径", name: "Url", width: 100, align: 'left', hidden: true },
+
+					{ label: "上传时间", name: "UploadTime", width: 100, align: 'left' },
+
+					{ label: "文件类型", name: "FileType", width: 100, align: 'left', hidden: true }
+
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+    }
+    var uploadEID = "";
+    function addProduct() {
+        var code = $("#Code").html();
+        $.modalOpen({
+            id: "Form",
+            title: "上传合同附件",
+            url: "/TN_XM/TN_FJ/Form?Code="+code +"&keyValue=" + keyValue,
+            width: "750px",
+            height: "450px",
+            btn: null
+        });
+    }
+
+    function editProduct() {
+        $("#myModal").modal({ backdrop: 'static', keyboard: false });
+        $('#myModal').modal('show');
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $("#CPId").val(keyValue);
+            $.ajax({
+                url: "/TN_XM/TN_FJ/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#formCP").formSerialize(data);
+                }
+            });
+        }
+    }
+    function deleteProduct() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_FJ/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+
+    function refreshGrid() {
+        var code = $("#Code").html();
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        $("#gridList").setGridParam({ url: "/TN_XM/TN_FJ/GetGridJson?queryJson=" + JSON.stringify(queryJson) }).trigger("reloadGrid");
+    }
+
+
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">合同信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form">
+
+
+                                <tr>
+                                    <th class="formTitle">项目编码</th>
+                                    <td class="formValue">
+                                        <div id="ProjectNo" name="ProjectNo"></div>
+                                    </td>
+                                    <th class="formTitle">项目名称</th>
+                                    <td class="formValue">
+                                        <div id="ProjectName" name="ProjectName"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 合同编码</th>
+                                    <td class="formValue">
+                                        <div id="Code" name="Code"></div>
+                                    </td>
+                                    <th class="formTitle"> 合同名称</th>
+                                    <td class="formValue">
+                                        <div id="Name" name="Name"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 甲方编码</th>
+                                    <td class="formValue">
+                                        <div id="ACode" name="ACode"></div>
+                                    </td>
+                                    <th class="formTitle"> 甲方名称</th>
+                                    <td class="formValue">
+                                        <div id="AName" name="AName"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 乙方编码</th>
+                                    <td class="formValue">
+                                        <div id="BCode" name="BCode"></div>
+                                    </td>
+                                    <th class="formTitle"> 乙方名称</th>
+                                    <td class="formValue">
+                                        <div id="BName" name="BName"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 签订日期</th>
+                                    <td class="formValue">
+                                        <div id="SignDate" name="SignDate"></div>
+                                    </td>
+                                    <th class="formTitle"> 签订地点</th>
+                                    <td class="formValue">
+                                        <div id="SignPlace" name="SignPlace"></div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 合同金额</th>
+                                    <td class="formValue">
+                                        <div id="Amount" name="Amount"></div>
+                                    </td>
+                                    <th class="formTitle"> 支付方式</th>
+                                    <td class="formValue">
+                                        <div id="PayType" name="PayType"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 资金来源</th>
+                                    <td class="formValue">
+                                        <div id="FundSource" name="FundSource"></div>
+                                    </td>
+                                    <th class="formTitle"> 合同文本</th>
+                                    <td class="formValue">
+                                        <div id="DEC" name="DEC"></div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 备注</th>
+                                    <td class="formValue">
+                                        <div id="Remark" name="Remark"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 创建日期</th>
+                                    <td class="formValue">
+                                        <div id="CreateDate" name="CreateDate"></div>
+                                    </td>
+                                    <th class="formTitle" hidden> 创建用户账户</th>
+                                    <td class="formValue" hidden>
+                                        <div id="CreateUserId" name="CreateUserId"></div>
+                                    </td>
+                                    <th class="formTitle"> 创建用户名称</th>
+                                    <td class="formValue">
+                                        <div id="CreateUserName" name="CreateUserName"></div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 最后修改时间</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateDate" name="UpdateDate"></div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle" hidden> 最后修改用户</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateUserId" name="UpdateUserId"></div>
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateUserName" name="UpdateUserName"></div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- 附件信息 -->
+                            <div class="btn-group" id="h1">
+                                <a class="btn btn-info dropdown-text" onclick="addProduct()"><i class="fa fa-plus"></i>新增</a>
+                                @*<a class="btn btn-success dropdown-text" onclick="editProduct()"><i class="fa fa-edit"></i>编辑</a>*@
+                                <a class="btn btn-warning dropdown-text" onclick="deleteProduct()"><i class="fa fa-minus"></i>删除</a>
+
+                            </div>
+                            <div class="gridPanel">
+                                <table id="gridList"></table>
+                                <div id="gridPager"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

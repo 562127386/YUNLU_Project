@@ -1,0 +1,399 @@
+﻿
+@*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-08-03 17:14:25
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var list = [];
+    var state;
+    $(function () {
+        if (!!keyValue) {
+            gridList();
+            $.ajax({
+                url: "/TN_XM/TN_XM/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formInitialize(data);
+                    var code = data.RulesCode + "-" + data.Code;
+                    $("#Code1").html(code);
+                    state = data.ProjectState;
+                }
+            });
+        }
+        //refreshGrid();
+		$.ajax({
+			url: "/SysManage/ItemsDetail/GetSelectJson",
+			type: "get",
+			data: { Code: "XMJD" },
+			dataType: "json",
+            success: function (msg) {
+				for (var i in msg) {
+                    $("#Process").append("<li><a  onclick='Process(this)'>" + msg[i].text + "</a></li>");
+                    list.push(msg[i].text);
+				}
+
+			},
+			error: function () {
+
+			}
+		});
+
+    });
+
+
+    //表格处理
+    function gridList() {
+        var BindId = $("#Bindid").val();
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            height: 280,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "/TN_XM/TN_FJ/GetGridJson",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 100, align: 'left', hidden: true },
+
+					{ label: "", name: "BindId", width: 100, align: 'left', hidden: true },
+
+					{ label: "项目节点", name: "Process", width: 150, align: 'left' },
+
+                    { label: "合同Id", name: "HTId", width: 150, align: 'left', hidden: true },
+
+                    //{ label: "关联信息", name: "HTName", width: 150, align: 'left' },
+
+                    { label: "单据号", name: "OrderNo", width: 150, align: 'left' },
+
+					{ label: "序号", name: "SerialNumber", width: 100, align: 'left', hidden: true },
+
+					{
+						label: "附件名称", name: "AccessoryName", width: 200, align: 'left',
+						formatter: function (cellvalue, options, rowObject) {
+						    return '<a id="FJ"  target="_blank" href="' + rowObject.Url + '">' + rowObject.AccessoryName + '</a>';
+						}
+					},
+
+					{ label: "附件类别", name: "AccessoryType", width: 300, align: 'left' },
+
+					{ label: "路径", name: "Url", width: 100, align: 'left', hidden: true },
+
+					{ label: "上传时间", name: "UploadTime", width: 100, align: 'left' },
+
+					{ label: "文件类型", name: "FileType", width: 100, align: 'left', hidden: true }
+
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+
+    }
+    var uploadEID = "";
+    function addProduct() {
+        var code = $("#Code1").html();
+        $.modalOpen({
+            id: "Form",
+            title: "上传项目附件",
+            url: "/TN_XM/TN_FJ/XMForm?Code=" + code + "&keyValue=" + keyValue + "&list=" + list + "&state=" + state,
+            width: "750px",
+            height: "450px",
+            btn: null
+        });
+
+
+    }
+
+    function editProduct() {
+        //$("#myModal").modal({ backdrop: 'static', keyboard: false });
+        //$('#myModal').modal('show');
+        //var keyValue = $("#gridList").jqGridRowValue().Id;
+        //if ($.checkedArray(keyValue)) {
+        //    $("#CPId").val(keyValue);
+        //    $.ajax({
+        //        url: "/TN_XM/TN_FJ/GetFormJson",
+        //        data: { keyValue: keyValue },
+        //        dataType: "json",
+        //        async: false,
+        //        success: function (data) {
+        //            $("#formCP").formSerialize(data);
+        //        }
+        //    });
+        //}
+		var code = $("#Code1").html();
+		$.modalOpen({
+			id: "Form",
+            title: "上传项目附件",
+            url: "/TN_XM/TN_FJ/Form?Code=" + code + "&keyValue=" + keyValue,
+			width: "750px",
+			height: "450px",
+			btn: null
+		});
+    }
+    function deleteProduct() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_FJ/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+
+	function Process(th) {
+        var key = $("#gridList").jqGridRowValue().Id;
+		if ($.checkedArray(key)) {
+			//var postData = {};
+
+			//postData.ProjectState = th.text;
+			//$.submitForm({
+			//    url: "/TN_XM/TN_XM/SaveForm?keyValue=" + keyValue,
+			//    param: postData
+			//    //success: function () {
+
+			//    //}
+			//})
+
+			var postData1 = {};
+			postData1.Process = th.text;
+            $.submitForm({
+                url: "/TN_XM/TN_FJ/SaveForm?keyValue=" + key,
+                param: postData1,
+                success: function () {
+                    $("#gridList").trigger("reloadGrid");
+                }
+            });
+            var postData2 = {};
+            var a = list.indexOf(state);
+            var b = list.indexOf(th.text);
+            if (a < b) {
+                postData2.ProjectState = th.text;
+                $.submitForm({
+                    url: "/TN_XM/TN_XM/SaveForm?keyValue=" + keyValue,
+                    param: postData2
+                });
+            }
+		}
+
+
+	}
+
+    function refreshGrid() {
+        var code = $("#Code1").html();
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        $("#gridList").setGridParam({ url: "/TN_XM/TN_FJ/GetGridJson?queryJson=" + JSON.stringify(queryJson) }).trigger("reloadGrid");
+    }
+</script>
+
+<form id="form1">
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">项目信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form">
+								  	
+								<tr>
+                                    <th class="formTitle" hidden> 主键</th>
+                                    <td class="formValue" hidden>
+                                        <div id="Id" name="Id"></div>
+                                    </td>
+                                    <th class="formTitle" hidden> BindId</th>
+                                    <td class="formValue" hidden>
+                                        <div id="BindId" name="BindId"></div>
+                                    </td>
+								</tr>
+					 	 
+					 	  	
+								<tr>
+                                    <th class="formTitle" hidden> 主项目编码</th>
+                                    <td class="formValue" hidden>
+                                        <div id="BaseCode" name="BaseCode"></div>
+                                    </td>
+                                    <th class="formTitle"> 主项目名称</th>
+                                    <td class="formValue">
+                                        <div id="BaseName" name="BaseName"></div>
+                                    </td>
+                                    <th class="formTitle"> 子项目名称</th>
+                                    <td class="formValue">
+                                        <div id="BaseSubName" name="BaseSubName"></div>
+                                    </td>
+                                    <th class="formTitle" hidden> 一级项目编码</th>
+                                    <td class="formValue" hidden>
+                                        <div id="BaseSubCode" name="BaseSubCode"></div>
+
+                                    </td>
+								</tr>
+					 	  	
+								<tr>
+                                    <th class="formTitle"> 项目编码</th>
+                                    <td class="formValue">
+                                        <div id="Code1" name="Code1"></div>
+                                    </td>
+                                    <th class="formTitle"> 项目实施内容</th>
+                                    <td class="formValue">
+                                        <div id="Name" name="Name"></div>
+                                    </td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 开始时间</th>
+									<td class="formValue">
+										<div id="BeginDate" name="BeginDate" ></div>
+									</td>
+                                    <th class="formTitle"> 结束时间</th>
+                                    <td class="formValue">
+                                        <div id="EndDate" name="EndDate"></div>
+                                    </td>
+								</tr>
+					 	  	
+								<tr>
+                                    <th class="formTitle"> 设备包</th>
+                                    <td class="formValue">
+                                        <div id="CPpackage" name="CPpackage"></div>
+                                    </td>
+									<th class="formTitle"> 项目描述</th>
+									<td class="formValue">
+										<div id="DEC" name="DEC" ></div>
+									</td>
+                                   
+								</tr>
+					 	  	
+								<tr>
+                                    <th class="formTitle"> 项目负责人</th>
+                                    <td class="formValue">
+                                        <div id="Principal" name="Principal"></div>
+                                    </td>
+									<th class="formTitle"> 项目负责人电话</th>
+									<td class="formValue">
+										<div id="Phone" name="Phone" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 施工单位</th>
+									<td class="formValue">
+										<div id="ConstructionUnit" name="ConstructionUnit" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 施工单位负责人</th>
+									<td class="formValue">
+										<div id="CPrincipal" name="CPrincipal" ></div>
+									</td>
+                                    <th class="formTitle"> 施工单位负责人电话</th>
+                                    <td class="formValue">
+                                        <div id="CPhone" name="CPhone"></div>
+                                    </td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 备注</th>
+									<td class="formValue">
+										<div id="Remark" name="Remark" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+                                    <th class="formTitle" hidden> 创建用户账户</th>
+                                    <td class="formValue" hidden>
+                                        <div id="CreateUserId" name="CreateUserId"></div>
+                                    </td>
+                                    <th class="formTitle"> 创建用户名称</th>
+                                    <td class="formValue">
+                                        <div id="CreateUserName" name="CreateUserName"></div>
+                                    </td>
+									<th class="formTitle"> 创建日期</th>
+									<td class="formValue">
+										<div id="CreateDate" name="CreateDate" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+                                    <th class="formTitle" hidden> 最后修改时间</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateDate" name="UpdateDate"></div>
+
+                                    </td>
+								</tr>
+
+								<tr>
+                                    <th class="formTitle" hidden> 最后修改用户</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateUserId" name="UpdateUserId"></div>
+                                    </td>
+                                    <th class="formTitle" hidden> 最后修改用户名称</th>
+                                    <td class="formValue" hidden>
+                                        <div id="UpdateUserName" name="UpdateUserName"></div>
+                                    </td>
+								</tr>
+					    
+							</table>
+
+                            <!-- 附件信息 -->
+							<div class="btn-group" id="h1">
+								<a class="btn btn-info dropdown-text" onclick="addProduct()"><i class="fa fa-plus"></i>新增</a>
+								@*<a class="btn btn-success dropdown-text" onclick="editProduct()"><i class="fa fa-edit"></i>节点变更</a>*@
+								<a class="btn btn-warning dropdown-text" onclick="deleteProduct()"><i class="fa fa-minus"></i>删除</a>
+								<button id="ProjectState" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="ProjectState()">
+									节点变更
+									<span class=" caret">
+									</span>
+								</button>
+								<ul id="Process" class="dropdown-menu" role="menu" style="right:0"></ul>
+							</div>
+                            <div class="gridPanel">
+                                <table id="gridList"></table>
+                                <div id="gridPager"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

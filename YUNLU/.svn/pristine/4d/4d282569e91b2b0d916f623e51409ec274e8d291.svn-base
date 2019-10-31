@@ -1,0 +1,224 @@
+﻿@*------------------------------------------------------------------------------
+     *     此代码由T4模板自动生成
+    <<<<<<< .mine
+     *	   生成时间 2018-08-21 16:03:38
+    =======
+     *	   生成时间 2018-08-15 16:32:33
+    >>>>>>> .r6
+     *     ©为之团队
+     *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        //initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_HT/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //$("#form1").formSerialize(data);
+
+                }
+            });
+        }
+
+    });
+    function submitForm() {
+        $("#HTNo").val($("#Code").val());
+        $("#HTName").val($("#Name").val());
+        if (!$('#formCP').formValid()) {
+            return false;
+        }
+        var postData = $("#formCP").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_CP/SaveForm?keyValue=" + $("#CPId").val(),
+            param: postData,
+            success: function () {
+                //$("#gridList").trigger("reloadGrid");
+                refreshGrid();
+                $("input[name='res']").click();
+                $("#CPId").val("");
+
+                $('#myModal').modal('hide');
+
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <input type="hidden" id="BindId" name="BindId" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">合同付款</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            @*<div class="btn-group">
+                                                    <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                    <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                                </div>*@
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr>
+                                    <th class="formTitle" hidden> 合同名称</th>
+                                    <td class="formValue" hidden>
+                                        <input id="HTName" name="HTName" type="text" readonly
+                                               class="form-control  " placeholder="请输入" />
+                                    </td>
+                                    <th class="formTitle" hidden> 合同编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="HTNo" name="HTNo" type="text" value="@ViewBag.Code" readonly
+                                               class="form-control  " placeholder="请输入合同编码" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 设备名称</th>
+                                    <td class="formValue">
+                                        <input id="Name" name="Name" type="text"
+                                               class="form-control  " placeholder="请输入设备名称" />
+                                    </td>
+                                    <th class="formTitle"> 设备分类</th>
+                                    <td class="formValue">
+                                        <input type="hidden" id="BindId" name="BindId" value="@ViewBag.Id" />
+                                        <input type="hidden" id="CPId" name="CPId" />
+                                        <input id="Classify" name="Classify" type="text"
+                                               class="form-control  " placeholder="请输入设备分类" />
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 数量</th>
+                                    <td class="formValue">
+                                        <input id="Quantity" name="Quantity" type="text"
+                                               class="form-control FloatPrecision " placeholder="请输入数量" />
+                                    </td>
+                                    <th class="formTitle"> 单位</th>
+                                    <td class="formValue">
+                                        <input id="Unit" name="Unit" type="text"
+                                               class="form-control  " placeholder="请输入单位" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 产品规格及型号</th>
+                                    <td class="formValue">
+                                        <input id="Type" name="Type" type="text"
+                                               class="form-control  " placeholder="请输入产品规格及型号" />
+                                    </td>
+                                    <th class="formTitle"> 制造厂家名称</th>
+                                    <td class="formValue">
+                                        <input id="MakeName" name="MakeName" type="text"
+                                               class="form-control  " placeholder="请输入制造厂家名称" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 出厂单价</th>
+                                    <td class="formValue">
+                                        <input id="Price" name="Price" type="text"
+                                               class="form-control FloatPrecision   " placeholder="请输入出厂单价" />
+                                    </td>
+                                    <th class="formTitle"> 每一品目出厂价</th>
+                                    <td class="formValue">
+                                        <input id="ItemPrice" name="ItemPrice" type="text"
+                                               class="form-control FloatPrecision " placeholder="请输入每一品目出厂价" />
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 每一品目应缴税费</th>
+                                    <td class="formValue">
+                                        <input id="ItemTax" name="ItemTax" type="text"
+                                               class="form-control FloatPrecision  " placeholder="请输入每一品目应缴税费" />
+
+                                    </td>
+                                    <th class="formTitle"> 每一品目含税价格</th>
+                                    <td class="formValue">
+                                        <input id="IncludTax" name="IncludTax" type="text"
+                                               class="form-control FloatPrecision " placeholder="请输入每一品目含税价格" />
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 货物描述</th>
+                                    <td class="formValue">
+                                        <input id="Remark" name="Remark" type="text"
+                                               class="form-control" placeholder="请输入货物描述" />
+                                    </td>
+                                    <th class="formTitle"> 项目现场</th>
+                                    <td class="formValue">
+                                        <input id="Scene" name="Scene" type="text"
+                                               class="form-control" placeholder="请输入项目现场" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 交货时间</th>
+                                    <td class="formValue">
+                                        <input id="res" name="res" type="reset" style="display:none;" />
+                                        <input id="DeliveryTime" name="DeliveryTime" type="text"
+                                               class="form-control Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入交货时间" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 入库时间</th>
+                                    <td class="formValue">
+                                        <input id="res" name="res" type="reset" style="display:none;" />
+                                        <input id="StorageTime" name="StorageTime" type="text"
+                                               class="form-control Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入交货时间" />
+                                    </td>
+                                    <th class="formTitle"> 出库时间</th>
+                                    <td class="formValue">
+                                        <input id="res" name="res" type="reset" style="display:none;" />
+                                        <input id="OutboundTime" name="OutboundTime" type="text"
+                                               class="form-control Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入交货时间" />
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

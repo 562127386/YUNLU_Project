@@ -1,0 +1,185 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2019-07-17 16:43:09
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/YL_Manage/YL_AlterNotify/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+
+    //初始化组件
+    function initControl() {
+        //初始化工作
+
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/YL_AlterNotify/YL_AlterNotify/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+    }
+    //关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">变更通知台账</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr>
+                                    <th class="formTitle"> 变更单编号</th>
+                                    <td class="formValue">
+                                        <input id="OrderNum" name="OrderNum" type="text"
+                                               class="form-control  required" placeholder="自动生成" readonly="readonly" />
+                                    </td>
+                                    <th class="formTitle"> 变更日期</th>
+                                    <td class="formValue">
+                                        <input id="Alter_Date" name="Alter_Date" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入变更日期" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 变更前内容</th>
+                                    <td class="formValue" colspan="4">
+                                        <textarea id="Atler_Before" name="Atler_Before" type="text"
+                                               class="form-control  required"></textarea>
+                                        @*<input id="Atler_Before" name="Atler_Before" type="text"
+                                               class="form-control  required" placeholder="请输入变更前内容" />*@
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 变更后内容</th>
+                                    <td class="formValue" colspan="4">
+                                        <textarea id="Alter_After" name="Alter_After" type="text"
+                                               class="form-control  required"></textarea>
+                                        @*<input id="Alter_After" name="Alter_After" type="text"
+                                               class="form-control  required" placeholder="请输入变更后内容" />*@
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 成品库存</th>
+                                    <td class="formValue">
+                                        <input id="Yield_Stock" name="Yield_Stock" type="text"
+                                               class="form-control isNumber required" placeholder="请输入成品库存" />
+                                    </td>
+                                    <th class="formTitle"> 半成品库存</th>
+                                    <td class="formValue">
+                                        <input id="Semi_Stock" name="Semi_Stock" type="text"
+                                               class="form-control isNumber required" placeholder="请输入半成品库存" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle"> 原材料库存</th>
+                                    <td class="formValue">
+                                        <input id="Raw_Stock" name="Raw_Stock" type="text"
+                                               class="form-control isNumber required" placeholder="请输入原材料库存" />
+                                    </td>
+                                    <th class="formTitle"> 供应商库存</th>
+                                    <td class="formValue">
+                                        <input id="Supplier_Stock" name="Supplier_Stock" type="text"
+                                               class="form-control isNumber required" placeholder="请输入供应商库存" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle"> 型号</th>
+                                    <td class="formValue">
+                                        <input id="Model" name="Model" type="text"
+                                               class="form-control  required" placeholder="请输入型号" />
+                                    </td>
+                                    <th class="formTitle"> 部门</th>
+                                    <td class="formValue">
+                                        <input id="Dept" name="Dept" type="text"
+                                               class="form-control  required" placeholder="请输入部门" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 变更进度</th>
+                                    <td class="formValue">
+                                        <input id="Alter_Schedule" name="Alter_Schedule" type="text"
+                                               class="form-control  required" placeholder="请输入变更进度" />
+                                    </td>
+                                    <th class="formTitle"> 变更原因</th>
+                                    <td class="formValue">
+                                        <input id="Alter_Cause" name="Alter_Cause" type="text"
+                                               class="form-control  required" placeholder="请输入变更原因" />
+                                    </td>
+                                </tr>
+
+                         
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+

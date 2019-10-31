@@ -1,0 +1,173 @@
+﻿ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2019-07-17 16:43:08
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+     var keyValue = $.request("keyValue");
+    $(function () {
+        $.ajax({
+            url: "/YL_Manage/YL_AlterNotify/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                  $("#form1").formInitialize(data);
+            }
+        });
+    });
+</script>
+
+<form id="form1">
+    <div style="margin: 10px 10px 10px 10px;">
+        <table class="form">
+			  	
+			<tr>
+                <th class="formTitle"> 主键</th>
+                <td class="formValue">
+                    <div id="Id" name="Id" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 绑定Id</th>
+                <td class="formValue">
+                    <div id="BindId" name="BindId" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更单编号</th>
+                <td class="formValue">
+                    <div id="OrderNum" name="OrderNum" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 型号</th>
+                <td class="formValue">
+                    <div id="Model" name="Model" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更日期</th>
+                <td class="formValue">
+                    <div id="Alter_Date" name="Alter_Date" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更前内容</th>
+                <td class="formValue">
+                    <div id="Atler_Before" name="Atler_Before" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更后内容</th>
+                <td class="formValue">
+                    <div id="Alter_After" name="Alter_After" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 成品库存</th>
+                <td class="formValue">
+                    <div id="Yield_Stock" name="Yield_Stock" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 半成品库存</th>
+                <td class="formValue">
+                    <div id="Semi_Stock" name="Semi_Stock" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 原材料库存</th>
+                <td class="formValue">
+                    <div id="Raw_Stock" name="Raw_Stock" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 供应商库存</th>
+                <td class="formValue">
+                    <div id="Supplier_Stock" name="Supplier_Stock" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更进度</th>
+                <td class="formValue">
+                    <div id="Alter_Schedule" name="Alter_Schedule" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 部门</th>
+                <td class="formValue">
+                    <div id="Dept" name="Dept" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 变更原因</th>
+                <td class="formValue">
+                    <div id="Alter_Cause" name="Alter_Cause" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 创建时间</th>
+                <td class="formValue">
+                    <div id="CreateDate" name="CreateDate" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> </th>
+                <td class="formValue">
+                    <div id="CreateUserId" name="CreateUserId" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 创建人</th>
+                <td class="formValue">
+                    <div id="CreateUserName" name="CreateUserName" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 最后修改时间</th>
+                <td class="formValue">
+                    <div id="UpdateDate" name="UpdateDate" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> </th>
+                <td class="formValue">
+                    <div id="UpdateUserId" name="UpdateUserId" ></div>
+                </td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 最后修改人</th>
+                <td class="formValue">
+                    <div id="UpdateUserName" name="UpdateUserName" ></div>
+                </td>
+            </tr>
+   
+        </table>
+    </div>
+</form>
+

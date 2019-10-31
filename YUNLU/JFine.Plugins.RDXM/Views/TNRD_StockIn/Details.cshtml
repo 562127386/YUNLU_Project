@@ -1,0 +1,162 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2019-07-12 15:42:24
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    /**/
+
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        $.ajax({
+            url: "/TN_XM/TNRD_StockIn/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#form1").formInitialize(data);
+            }
+        });
+        gridList();
+    });
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TNRD_StockInD/GetGridJson",
+            height: $(window).height() - 138,
+            postData: { queryJson: JSON.stringify({ BindId: !!keyValue ? keyValue : 'e' }) },
+            colModel: [
+
+                { label: "入库单号", name: "OrderNum", width: 150, align: 'left' },
+
+                { label: "设备编码", name: "PCode", width: 150, align: 'left' },
+
+                { label: "设备名称", name: "PName", width: 150, align: 'left' },
+
+                { label: "规格", name: "Spec", width: 150, align: 'left' },
+
+                { label: "单位", name: "Unit", width: 150, align: 'left' },
+
+                { label: "单价", name: "Price", width: 150, align: 'left' },
+
+                { label: "数量", name: "Quantity", width: 150, align: 'left' },
+
+                { label: "金额", name: "Amount", width: 150, align: 'left' },
+
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            var queryJson = {
+                keyword: $("#txt_keyword").val()
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+    //关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+</script>
+
+<form id="form1">
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">入库单-查看</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form">
+
+                                <tr>
+                                    <th class="formTitle"> </th>
+                                    <td class="formValue">
+                                        <div id="OrderNum" name="OrderNum">入库单号</div>
+                                    </td>
+                                    <th class="formTitle">转让单号</th>
+                                    <td class="formValue">
+                                        <div id="TransactionNum" name="TransactionNum"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle">类别</th>
+                                    <td class="formValue">
+                                        <div id="Category" name="Category"></div>
+                                    </td>
+                                    <th class="formTitle">状态</th>
+                                    <td class="formValue">
+                                        <div id="Status" name="Status"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle">公司编码</th>
+                                    <td class="formValue">
+                                        <div id="FirmCode" name="FirmCode"></div>
+                                    </td>
+                                    <th class="formTitle">公司名称</th>
+                                    <td class="formValue">
+                                        <div id="FirmName" name="FirmName"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle">设备编码</th>
+                                    <td class="formValue">
+                                        <div id="ProjectCode" name="ProjectCode"></div>
+                                    </td>
+                                    <th class="formTitle">设备名称</th>
+                                    <td class="formValue">
+                                        <div id="ProjectName" name="ProjectName"></div>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+
+
+        </table>
+        <div class="gridPanel">
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</form>
+

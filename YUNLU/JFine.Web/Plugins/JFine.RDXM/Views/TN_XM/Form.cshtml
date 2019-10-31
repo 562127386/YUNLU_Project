@@ -1,0 +1,381 @@
+﻿
+@*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-08-03 17:14:25
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var flag = 0;
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_XM/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#ProjectState").val(data.ProjectState).trigger("change");
+                    //$id.val(value).trigger("change");
+                    //$("#BaseSubName").val(data[BaseCode]);
+                }
+            });
+            
+        }
+        
+
+    });
+
+
+    //初始化组件
+    function initControl()
+    {
+       
+        $("#BaseSubCode").bindSelect({
+            url: "/TN_XM/TN_XM/GetTreeSelectJson",
+            //defaultContent: "<option>请选择</option>",
+            id: "id",
+            text: "text",
+            search: true,
+            change: function (data) {
+                // var option = $("#BaseSubName option:selected").text(); //获取选中的项
+                $("#BaseSubName").val(data.text);
+                $.ajax({
+                    url: "/TN_XM/TN_XM/GetCode",
+                    type: "post",
+                    data: { "code": data.id },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.length == 0) {
+                            $("#BaseCode").val("");
+                            $("#BaseName").val("");
+                           // $("#BaseSubCode").val("");
+                        
+                        } else {
+                            if (msg[0].ParentName == "0") {
+                                $("#BaseName").val("");
+                                $("#BaseCode").val("");
+                            } else {
+                                $("#BaseName").val(msg[0].ParentName);
+                                $("#BaseCode").val(msg[0].ParentCode);
+                            }
+                          
+                          
+                            //$("#BaseSubCode").val(msg[0].Code);
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+
+        //项目状态
+        $("#ProjectState").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "XMJD" }
+        });
+
+        //设备包
+        $("#CPpackage").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "cpb" }
+        });
+
+        //所属公司
+        $("#CompanyName").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "gs" },
+            change: function (data) {
+                $.ajax({
+                    url: "/TN_XM/TN_XM/GetCompanyId",
+                    type: "post",
+                    data: { "Name": data.text },
+                    dataType: "json",
+                    success: function (msg) {
+
+                        var CId = msg[0].Id;
+                        var myDate = new Date();
+                        var year = myDate.getFullYear();
+                        var month = ("0" + (myDate.getMonth() + 1)).slice(-2);
+
+                        if (msg.length == 0) {
+                            $.modalAlert("未获取公司信息，请重新录入或尝试与管理员联系！", "error");
+                        } else {
+                            if (msg[0].ParentName == "0") {
+                                $.modalAlert("未获取公司信息，请重新录入或尝试与管理员联系！", "error");
+                            } else {
+                                $("#CompanyId").val(CId);
+                            }
+
+
+                            //$("#BaseSubCode").val(msg[0].Code);
+                        }
+                        if (flag == 1) {
+                            //编码规则
+                            var Rules = "Y";
+                            var RulesCode = [{ "name": "1041951829434437632", "password": "T" },
+                                             { "name": "1041951968756633600", "password": "K" },
+                                             { "name": "1041951900821491712", "password": "XN" },
+                                             { "name": "1041952030224158720", "password": "Q" },
+                                             { "name": "1042223283904319488", "password": "R" }];
+                            for (var r in RulesCode) {
+                                if (RulesCode[r].name == CId) {
+                                    $("#RulesCode").val(Rules + RulesCode[r].password + year + month + "");
+                                }
+                            }
+                        }
+                        flag = 1
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        keyValue = $("#Id").val();
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_XM/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+      
+    }
+	//关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="@ViewBag.Id " />
+    <input type="hidden" id="BindId" name="BindId" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">项目信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr>
+                                    <th class="formTitle" hidden> 子项目编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="BaseSubName" name="BaseSubName" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>
+                                    <th class="formTitle"> 子项目名称</th>
+                                    <td class="formValue">
+                                        <select id="BaseSubCode" name="BaseSubCode" type="text"
+                                                class="form-control  required" placeholder="请输入上级项目名称" />
+                                    </td>
+                                    <th class="formTitle"> 项目实施内容</th>
+                                    <td class="formValue">
+                                        <input id="Name" name="Name" type="text"
+                                               class="form-control  required" placeholder="请输入名称" />
+                                    </td>
+                                </tr>
+
+
+                                <tr hidden>
+                                    <th class="formTitle"> 主项目编码</th>
+                                    <td class="formValue">
+                                        <input id="BaseCode" name="BaseCode" type="text"
+                                               readonly class="form-control   " />
+                                    </td>
+                                    <th class="formTitle"> 主项目名称</th>
+                                    <td class="formValue">
+                                        <input id="BaseName" name="BaseName" type="text"
+                                               readonly class="form-control   " />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 所属公司</th>
+                                    <td class="formValue">
+                                        <select id="CompanyName" name="CompanyName" type="text"
+                                                class="form-control   " />
+                                    </td>
+                                    <th class="formTitle"> 项目状态</th>
+                                    <td class="formValue">
+                                        <select id="ProjectState" name="ProjectState" type="text"
+                                                class="form-control   " />
+                                    </td>
+                                    <th class="formTitle" hidden> 公司编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="CompanyId" name="CompanyId" type="text"
+                                               readonly class="form-control   " />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 项目编码</th>
+                                    <td class="formValue" style=" display: inline-flex !important">
+                                        <input id="RulesCode" name="RulesCode" type="text" value="" style=" width :120px !important;"
+                                               class="form-control  required" placeholder="请输入编码" />___
+                                        <input id="Code" name="Code" type="text" style=" width :120px !important;"
+                                               class="form-control  required" placeholder="请输入编码" />
+                                    </td>
+                                    <th class="formTitle"> 设备包</th>
+                                    <td class="formValue">
+                                        <select id="CPpackage" name="CPpackage" type="text"
+                                                class="form-control   " />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 开始时间</th>
+                                    <td class="formValue">
+                                        <input id="BeginDate" name="BeginDate" type="text"
+                                               class="form-control Wdate " onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="请输入开始时间" />
+                                    </td>
+                                    <th class="formTitle"> 结束时间</th>
+                                    <td class="formValue">
+                                        <input id="EndDate" name="EndDate" type="text"
+                                               class="form-control Wdate " onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="请输入结束时间" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle"> 财政配套资金（元）</th>
+                                    <td class="formValue">
+                                        <input id="FiscalCapital" name="FiscalCapital" type="text"
+                                               class="form-control  FloatPrecision" placeholder="请输入财政配套资金或清洁能源供热补贴申请额度" />
+                                    </td>
+                                    <th class="formTitle"> 已到位额度（元）</th>
+                                    <td class="formValue">
+                                        <input id="ArriveCapital" name="ArriveCapital" type="text"
+                                               class="form-control  FloatPrecision" placeholder="请输入已到位额度" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 项目审计年份</th>
+                                    <td class="formValue">
+                                        <input id="AuditYear" name="AuditYear" type="text"
+                                               class="form-control  FloatPrecision" placeholder="请输入项目审计年份" />
+                                    </td>
+                                    <th class="formTitle"> 备注</th>
+                                    <td class="formValue" >
+                                        <input id="Remark" name="Remark" type="text"
+                                               class="form-control  " placeholder="请输入备注" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 项目描述</th>
+                                    <td class="formValue" colspan="3">
+                                        <textarea id="DEC" name="DEC" type="text" rows="3"
+                                                  class="form-control  " placeholder="请输入项目描述"></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 项目负责人</th>
+                                    <td class="formValue">
+                                        <input id="Principal" name="Principal" type="text"
+                                               class="form-control  " placeholder="请输入项目负责人" />
+                                    </td>
+                                    <th class="formTitle"> 项目负责人电话</th>
+                                    <td class="formValue">
+                                        <input id="Phone" name="Phone" type="text"
+                                               class="form-control  " placeholder="请输入项目负责人电话" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 施工单位</th>
+                                    <td class="formValue" >
+                                        <input id="ConstructionUnit" name="ConstructionUnit" type="text"
+                                               class="form-control  " placeholder="请输入施工单位" />
+                                    </td>
+                                    <th class="formTitle"> 项目地点</th>
+                                    <td class="formValue" >
+                                        <input id="Place" name="Place" type="text"
+                                               class="form-control  " placeholder="请输入项目地点" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 施工单位负责人</th>
+                                    <td class="formValue">
+                                        <input id="CPrincipal" name="CPrincipal" type="text"
+                                               class="form-control  " placeholder="请输入施工单位负责人" />
+                                    </td>
+                                    <th class="formTitle"> 施工单位负责人电话</th>
+                                    <td class="formValue">
+                                        <input id="CPhone" name="CPhone" type="text"
+                                               class="form-control  " placeholder="请输入施工单位负责人电话" />
+                                    </td>
+                                </tr>
+
+                                @*<tr>
+                                    <th class="formTitle"> 备注</th>
+                                    <td class="formValue" colspan="3">
+                                        <input id="Remark" name="Remark" type="text"
+                                               class="form-control  " placeholder="请输入备注" />
+                                    </td>
+                                </tr>*@
+
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

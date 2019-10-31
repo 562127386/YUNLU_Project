@@ -1,0 +1,405 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2019-07-12 15:41:27
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var lastSel;
+    $(function () {
+        initControl();
+        gridList();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TNRD_TransactionProtocol/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    //填充附件链接
+                    var adjunctUrl_A = data.Url.split('|');
+                    var html = '';
+                    for (var i = 0; i < adjunctUrl_A.length; i++) {
+                        html += "<a href='" + adjunctUrl_A[i].split(':')[1] + "' target='_blank'>" + adjunctUrl_A[i].split(':')[0] + "</a>&nbsp;&nbsp;";
+                    }
+                    $("#uploadDiv").prepend(html);
+                }
+            });
+        }
+    });
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TNRD_TransactionProtocol_D/GetGridJson",
+            height: $(window).height() - 138,
+            postData: { queryJson: JSON.stringify({ BindId: !!keyValue ? keyValue : 'e' }) },
+            colModel: [
+
+                {
+                    label: '操作', width: 60, align: 'center', formatter: function (cellvalue, options, rowObject) {
+                        return '<span><a href="javascript:delRow(' + options.rowId + ',\'gridList\')"" title="删除行">-</a></span>';
+                    }
+                },
+
+                { label: "设备编码", name: "PCode", width: 150, align: 'left' },
+
+                { label: "设备名称", name: "PName", width: 150, align: 'left' },
+
+                { label: "单位", name: "Unit", width: 150, align: 'left' },
+
+                { label: "规格", name: "Spec", width: 150, align: 'left' },
+
+                { label: "单价", name: "Price", width: 150, align: 'left', editable: true, editoptions: { readonly: "readonly" } },
+
+                { label: "数量", name: "Quantity", width: 150, align: 'left', editable: true },
+
+                { label: "金额", name: "Amount", width: 150, align: 'left', editable: true, editoptions: { readonly: "readonly" } },
+
+            ],
+            onSelectRow: function (id) {
+                if (id && id !== lastSel) {
+                    $gridList.saveRow(lastSel, true, 'clientArray');
+                    $gridList.restoreRow(lastSel);
+                    $gridList.jqGrid('editRow', id, true, null, null, 'clientArray');
+                    lastSel = id;
+                }
+                //数量金额联动
+                $('#' + id + '_Quantity').change(function () {
+                    var quantity = $(this).val();
+                    if (!/^[0-9]+([.]{1}[0-9]+){0,1}$/.test(quantity)) {
+                        $.modalAlert('产品数量必须为数字', 'error');
+                        $(this).val(0);
+                        quantity = 0;
+                    }
+                    var price = $('#' + id + '_Price').val();
+                    var $amount = $('#' + id + '_Amount');
+                    $amount.val((parseFloat(price) * parseFloat(quantity)).toFixed(2));
+                })
+            },
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+    }
+    //初始化组件
+    function initControl() {
+        //初始化工作
+        $("#ContractCode").bindSelect({
+            url: "/TN_XM/TN_HT_CG/GetSelectJson",
+            change: function (data) {
+                $("#ContractName").val(data.text);
+                //根据合同Id绑定项目
+                $("#ProjectCode").bindSelect({
+                    url: "/TN_XM/TN_CG_CP/GetSelectJson?ContractId=" + data.contractId,
+                    change: function (pro_data) {
+                        $("#ProjectName").val(pro_data.text);
+                        $("#TransactionB_Name").val(pro_data.TransactionB_Name);
+                        $("#TransactionB_Code").val(pro_data.TransactionB_Code);
+                    }
+                });
+            }
+        });
+
+        $("#SignName").click(function () {
+            $.modalOpen({
+                id: "Form",
+                title: "经办人员选择",
+                url: "/SysManage/User/ChooseUser?isSingle=1&flag=operator",
+                width: ($(window).width() * 0.8) + "px",
+                height: ($(window).height() * 0.7) + "px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        });
+
+        //供应商选择组件
+        $("#Supplier").click(function () {
+            $.modalOpen({
+                id: "Form",
+                title: "供应商选择",
+                url: "/TN_XM/TNRD_Supplier/ChooseSupplier?isSingle=1&flag=supplier",
+                width: ($(window).width() * 0.8) + "px",
+                height: ($(window).height() * 0.7) + "px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            })
+        })
+    }
+
+    //人员选择回调
+    function dealSelectedUserFull(selectedUsers, flag) {
+        $("#SignName").val(selectedUsers[0]["value"]);
+        //$("#OperaterName").val(selectedUsers[0]["text"]);
+    }
+
+    //供应商选择回调
+    function dealSelectedSupplier(selectedSuppliers, flag) {
+        $("#Supplier").val(selectedSuppliers[0]["SupName"]);
+        $("#SupplierCode").val(selectedSuppliers[0]["SupCode"]);
+    }
+    //设备选择回调
+    function dealSelectedDevice(selectedDevice, flag) {
+        if (validatePcodeRepeat(selectedDevice)) {
+            for (var i = 0; i < selectedDevice.length; i++) {
+                var newrow = {};
+                newrow.PCode = selectedDevice[i]["DeviceCode"];
+                newrow.PName = selectedDevice[i]["DeviceName"];
+                newrow.Spec = selectedDevice[i]["Spec"];
+                newrow.Unit = selectedDevice[i]["Unit"];
+                newrow.Price = selectedDevice[i]["Price"];
+                newrow.Quantity = selectedDevice[i]["AvailQuantity"];
+                newrow.Amount = selectedDevice[i]["Amount"];
+                //在行号序列中获取最大的编号
+                var Ids = !!$("#gridList").jqGrid('getDataIDs') ? $("#gridList").jqGrid('getDataIDs') : 0;
+                $("#gridList").jqGrid("addRowData", Ids.length, newrow);
+            }
+        }
+    }
+    //设备编码重复校验
+    function validatePcodeRepeat(chooseRows) {
+        var device_rows = $('#gridList').jqGrid("getRowData");
+        for (var i = 0; i < chooseRows.length; i++) {
+            for (var j = 0; j < device_rows.length; j++) {
+                if (chooseRows[i]["DeviceCode"] == device_rows[j]["PCode"]) {
+                    $.modalAlert("产品编码:" + chooseRows[i]["Code"] + "已添加", "error");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    //添加设备
+    function addDevice() {
+        var ProjectName = $("#ProjectName").val();
+        var ContractName = $("#ContractName").val();
+        if (ProjectName == '' || ContractName == '') {
+            $.modalAlert("合同和项目名称不能为空", "error");
+            return false;
+        }
+        //产品选择组件
+        $.modalOpen({
+            id: "Form",
+            title: "设备选择",
+            url: "/TN_XM/TNRD_TransactionProtocol/ChooseDevice?flag=device&ProjectName=" + ProjectName + "&ContractName=" + ContractName,
+            width: ($(window).width() * 0.8) + "px",
+            height: ($(window).height() * 0.7) + "px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        })
+
+    }
+    //删除行
+    function delRow(rowId, tbName) {
+        $("#" + tbName).jqGrid("delRowData", rowId);
+    }
+
+    function uploadFJ() {
+        $.modalOpen({
+            id: "UpLoadForm",
+            title: "上传转让协议附件",
+            url: "/SysCommon/Common/UpLoadMultiBF?modelName=TransactionFJ",
+            width: "600px",
+            height: "600px",
+            btn: null
+        });
+
+    }
+
+    //上传回调
+    function refreshFiles(result) {
+        var adjunctName_A = $("#AdjunctName").val() == '' ? '' : $("#AdjunctName").val()+'|';
+        var adjunctUrl_A = $("#Url").val() == '' ? '' : $("#Url").val() + '|';
+        //$("#uploadDiv a").remove();
+        var html = '';
+        for (var i = 0; i < result.length; i++) {
+            html += "<a href='" + result[i].path + "' target='_blank'>" + result[i].filename_o + "</a>&nbsp;&nbsp;";
+            if (i == result.length - 1) {
+                adjunctName_A += result[i].filename_o;
+                adjunctUrl_A += result[i].filename_o + ':' + result[i].path;
+            }
+            else {
+                adjunctName_A += result[i].filename_o + '|';
+                adjunctUrl_A += result[i].filename_o + ':' + result[i].path + '|';
+            }
+
+        }
+        $("#uploadDiv").prepend(html);
+        $("#AdjunctName").val(adjunctName_A);
+        $("#Url").val(adjunctUrl_A);
+    }
+
+    function submitForm(flag) {
+        var Ids = $("#gridList").jqGrid("getDataIDs");
+        for (var i = 0; i < Ids.length; i++) {
+            $("#gridList").saveRow(Ids[i], true, 'clientArray');
+        }
+        lastSel = null;
+        var subRowData = $("#gridList").jqGrid("getRowData");
+        if (flag == '1') {
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+        }
+        var postData = $("#form1").formSerialize();
+        postData.Status = flag;//0为新建，1为提交
+        postData.subRowData = JSON.stringify(subRowData);
+        $.submitForm({
+            url: "/TN_XM/TNRD_TransactionProtocol/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+    }
+    //关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+
+
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">转让协议</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm(0)"><i class="fa fa-save"></i>保存</a>
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm(1)"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr>
+                                    <th class="formTitle">转让单号</th>
+                                    <td class="formValue">
+                                        <input id="TransactionNum" name="TransactionNum" type="text"
+                                               class="form-control " readonly="readonly" placeholder="自动生成" />
+                                    </td>
+                                    <th class="formTitle">合同名称</th>
+                                    <td class="formValue">
+                                        <select id="ContractCode" name="ContractCode" type="text"
+                                                class="form-control  required" placeholder="请输入"></select>
+                                        @*<input id="ContractName" name="ContractName" type="text"
+                                            class="form-control  required" placeholder="请输入" />*@
+                                        <input id="ContractName" name="ContractName" type="hidden" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle">项目名称</th>
+                                    <td class="formValue">
+                                        <select id="ProjectCode" name="ProjectCode" type="text"
+                                                class="form-control  required" placeholder="请输入" style="height:16px;"></select>
+                                        <input id="ProjectName" name="ProjectName" type="hidden" />
+                                    </td>
+                                    <th class="formTitle">附件</th>
+                                    <td class="formValue">
+                                        <div id="uploadDiv" style="display:inline-block">
+
+                                        </div>
+                                        <div style="display:inline-block">
+                                            <input id="AdjunctName" name="AdjunctName" type="hidden" />
+                                            <input id="Url" name="Url" type="hidden" />
+                                            <a class="btn btn-info dropdown-text" onclick="uploadFJ()"><i class="fa fa-send"></i>上传</a>
+                                        </div>
+
+                                        @*<input id="AdjunctName" name="AdjunctName" type="text"
+                                            class="form-control  required" placeholder="请输入" />*@
+
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle">转让甲方</th>
+                                    <td class="formValue">
+                                        <input id="TransactionA_Name" name="TransactionA_Name" type="text"
+                                               class="form-control  required" placeholder="请输入" readonly="readonly" value="青岛能源集团" />
+                                        <input id="TransactionA_Code" name="TransactionA_Code" type="hidden" value="01" />
+                                    </td>
+                                    <th class="formTitle">转让乙方</th>
+                                    <td class="formValue">
+                                        <input id="TransactionB_Name" name="TransactionB_Name" type="text"
+                                               class="form-control  required" placeholder="请输入" readonly="readonly" />
+                                        <input id="TransactionB_Code" name="TransactionB_Code" type="hidden" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle">供应商</th>
+                                    <td class="formValue">
+                                        <input id="Supplier" name="Supplier" type="text"
+                                               class="form-control  required" placeholder="点击选择" readonly="readonly" />
+                                        <input id="SupplierCode" name="SupplierCode" type="hidden" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle">签订时间</th>
+                                    <td class="formValue">
+                                        <input id="SignDate" name="SignDate" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入" />
+                                    </td>
+                                    <th class="formTitle">经办人</th>
+                                    <td class="formValue">
+                                        <input name="SignName" id="SignName" class="form-control required" readonly="readonly" placeholder="点击选择" />
+                                        @*<input id="SignName" name="SignName" type="text"
+                                            class="form-control  required" placeholder="请输入" />*@
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="gridPanel">
+            <div class="btn-group">
+                <a class="btn btn-info dropdown-text" onclick="addDevice()"><i class="fa fa-plus"></i>添加设备</a>
+            </div>
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</form>
+

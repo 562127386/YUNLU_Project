@@ -1,0 +1,429 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1150C0C6-0D54-4D14-868C-447075498DA1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JFine.Plugins.RDXM</RootNamespace>
+    <AssemblyName>JFine.Plugins.RDXM</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JFine.Busines">
+      <HintPath>..\Libs\JFine.Busines.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Cache">
+      <HintPath>..\Libs\JFine.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Code">
+      <HintPath>..\Libs\JFine.Code.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Common">
+      <HintPath>..\Libs\JFine.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Data">
+      <HintPath>..\Libs\JFine.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Domain">
+      <HintPath>..\Libs\JFine.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Log">
+      <HintPath>..\Libs\JFine.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Sequence, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\JFine.Sequence.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_StockInController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_StockInDController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_StockOutController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_StockOutDController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_SupplierController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_TransactionProtocolController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TNRD_TransactionProtocol_DController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_CG_CPController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_CP_FKMXController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_CP_SLBGController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_FJController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_FK_MXController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_CPJSController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_CPController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_HTController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_HT_CGController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_JSController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_XMBaseController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_XMController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_BB_DYController.cs" />
+    <Compile Include="Areas\TN_XM\Controllers\TN_XM_ZT_LOGController.cs" />
+    <Compile Include="Areas\TN_XM\TN_XMAreaRegistration.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_StockInBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_StockInDBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_StockOutBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_StockOutDBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_SupplierBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_TransactionProtocolBLL.cs" />
+    <Compile Include="Busines\TN_XM\TNRD_TransactionProtocol_DBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_CG_CPBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_CP_FKMXBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_CP_SLBGBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_FJBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_FK_MXBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_CPJSBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_CPBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_HTBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_HT_CGBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_JSBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_XMBaseBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_XMBLL.cs" />
+    <Compile Include="Busines\TN_XM\TN_XM_ZT_LOGBLL.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_StockInDRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_StockInRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_StockOutDRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_StockOutRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_SupplierRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_TransactionProtocolRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITNRD_TransactionProtocol_DRepository.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_StockInDEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_StockInEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_StockOutDEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_StockOutEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_SupplierEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_TransactionProtocolEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TNRD_TransactionProtocol_DEntity.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_StockInDRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_StockInRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_StockOutDRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_StockOutRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_SupplierRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_TransactionProtocolRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TNRD_TransactionProtocol_DRepository.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_StockInDMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_StockInMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_StockOutDMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_StockOutMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_SupplierMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_TransactionProtocolMap.cs" />
+    <Compile Include="Mapping\TN_XM\TNRD_TransactionProtocol_DMap.cs" />
+    <Compile Include="TNConstant.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_CG_CPRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_CP_FKMXRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_CP_SLBGRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_HTRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_HT_CGRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_JSRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_XMBaseRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_XMRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_CPRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_CPJSRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_FK_MXRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_FJRepository.cs" />
+    <Compile Include="Domain\IRepository\TN_XM\ITN_XM_ZT_LOGRepository.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_CG_CPEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_CP_FKMXEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_CP_SLBGEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_FJEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_FK_MXEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_CPJSEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_CPEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_HTEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_HT_CGEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_JSEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_XMBaseEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_XMEntity.cs" />
+    <Compile Include="Domain\Models\TN_XM\TN_XM_ZT_LOGEntity.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_CG_CPRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_CP_FKMXRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_CP_SLBGRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_FJRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_FK_MXRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_CPJSRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_CPRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_HTRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_HT_CGRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_JSRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_XMBaseRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_XMRepository.cs" />
+    <Compile Include="Domain\Repository\TN_XM\TN_XM_ZT_LOGRepository.cs" />
+    <Compile Include="Mapping\TN_XM\TN_CG_CPMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_CP_FKMXMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_CP_SLBGMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_FJMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_FK_MXMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_CPJSMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_CPMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_HTMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_HT_CGMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_JSMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_XMBaseMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_XMMap.cs" />
+    <Compile Include="Mapping\TN_XM\TN_XM_ZT_LOGMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Images\" />
+    <Folder Include="Content\Js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Views\TNRD_StockInD\Details.cshtml" />
+    <None Include="Views\TNRD_StockInD\Details2.cshtml" />
+    <None Include="Views\TNRD_StockInD\Form.cshtml" />
+    <None Include="Views\TNRD_StockInD\Form2.cshtml" />
+    <None Include="Views\TNRD_StockInD\Index.cshtml" />
+    <None Include="Views\TNRD_StockInD\Index2.cshtml" />
+    <None Include="Views\TNRD_StockIn\Details.cshtml" />
+    <None Include="Views\TNRD_StockIn\Details2.cshtml" />
+    <None Include="Views\TNRD_StockIn\Form.cshtml" />
+    <None Include="Views\TNRD_StockIn\Form2.cshtml" />
+    <None Include="Views\TNRD_StockIn\Index.cshtml" />
+    <None Include="Views\TNRD_StockIn\Index2.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Details.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Details2.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Form.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Form2.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Index.cshtml" />
+    <None Include="Views\TNRD_StockOutD\Index2.cshtml" />
+    <None Include="Views\TNRD_StockOut\Details.cshtml" />
+    <None Include="Views\TNRD_StockOut\Details2.cshtml" />
+    <None Include="Views\TNRD_StockOut\Form.cshtml" />
+    <None Include="Views\TNRD_StockOut\Form2.cshtml" />
+    <None Include="Views\TNRD_StockOut\Index.cshtml" />
+    <None Include="Views\TNRD_StockOut\Index2.cshtml" />
+    <None Include="Views\TNRD_Supplier\ChooseSupplier.cshtml" />
+    <None Include="Views\TNRD_Supplier\Details.cshtml" />
+    <None Include="Views\TNRD_Supplier\Details2.cshtml" />
+    <None Include="Views\TNRD_Supplier\Form.cshtml" />
+    <None Include="Views\TNRD_Supplier\Form2.cshtml" />
+    <None Include="Views\TNRD_Supplier\Index.cshtml" />
+    <None Include="Views\TNRD_Supplier\Index2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\ChooseDevice.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Details.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Details2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Form.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Form2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Index.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol\Index2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Details.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Details2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Form.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Form2.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Index.cshtml" />
+    <None Include="Views\TNRD_TransactionProtocol_D\Index2.cshtml" />
+    <None Include="Views\TN_BB_DY\CGJHPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CGHTTZPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\XMBBPrint2.cshtml" />
+    <None Include="Views\TN_BB_DY\XMJDPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\XMHJPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\XMBBPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\XMHTTZPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CPTJPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CGZBPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CGHTTZPrint1.cshtml" />
+    <None Include="Views\TN_BB_DY\CPJSPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CPTZPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\LYBHPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\XMYSPrint.cshtml" />
+    <None Include="Views\TN_BB_DY\CPKPrint.cshtml" />
+    <None Include="Views\TN_CG_CP\AmountSum.cshtml" />
+    <None Include="Views\TN_CG_CP\Details.cshtml" />
+    <None Include="Views\TN_CG_CP\Details2.cshtml" />
+    <None Include="Views\TN_CG_CP\DetailsFKFJ.cshtml" />
+    <None Include="Views\TN_CG_CP\DetailsFJ.cshtml" />
+    <None Include="Views\TN_CG_CP\Form.cshtml" />
+    <None Include="Views\TN_CG_CP\Form4.cshtml" />
+    <None Include="Views\TN_CG_CP\Form2.cshtml" />
+    <None Include="Views\TN_CG_CP\Index.cshtml" />
+    <None Include="Views\TN_CG_CP\Index2.cshtml" />
+    <None Include="Views\TN_CG_CP\Form3.cshtml" />
+    <None Include="Views\TN_CG_CP\Index4.cshtml" />
+    <None Include="Views\TN_CG_CP\Index3.cshtml" />
+    <None Include="Views\TN_CG_CP\ChangeRate.cshtml" />
+    <None Include="Views\TN_CP\Details.cshtml" />
+    <None Include="Views\TN_CP\DetailsFJ.cshtml" />
+    <None Include="Views\TN_CP\Form.cshtml" />
+    <None Include="Views\TN_CP\Form2.cshtml" />
+    <None Include="Views\TN_CP\Index.cshtml" />
+    <None Include="Views\TN_CP\JFineFormView1.cshtml" />
+    <None Include="Views\TN_CP\JFineIndexLayoutView1.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Details.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Details2.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Form.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Form2.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Index.cshtml" />
+    <None Include="Views\TN_CP_FKMX\Index2.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Details.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Details2.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Form.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Form2.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Index.cshtml" />
+    <None Include="Views\TN_CP_SLBG\Index2.cshtml" />
+    <None Include="Views\TN_FJ\BankForm.cshtml" />
+    <None Include="Views\TN_FJ\XMBaseForm.cshtml" />
+    <None Include="Views\TN_FJ\XMForm.cshtml" />
+    <None Include="Views\TN_FJ\JFineDetailsView1.cshtml" />
+    <None Include="Views\TN_FJ\JFineDetailsView2.cshtml" />
+    <None Include="Views\TN_FJ\JFineFormView1.cshtml" />
+    <None Include="Views\TN_FJ\Form.cshtml" />
+    <None Include="Views\TN_FJ\JFineIndexLayoutView1.cshtml" />
+    <None Include="Views\TN_FJ\Index.cshtml" />
+    <None Include="Views\TN_FK_MX\Details.cshtml" />
+    <None Include="Views\TN_FK_MX\Form3.cshtml" />
+    <None Include="Views\TN_FK_MX\Form2.cshtml" />
+    <None Include="Views\TN_FK_MX\Index3.cshtml" />
+    <None Include="Views\TN_FK_MX\Index2.cshtml" />
+    <None Include="Views\TN_HT\AmountSum.cshtml" />
+    <None Include="Views\TN_FK_MX\JFineFormView1.cshtml" />
+    <None Include="Views\TN_FK_MX\Form.cshtml" />
+    <None Include="Views\TN_FK_MX\JFineIndexLayoutView1.cshtml" />
+    <None Include="Views\TN_FK_MX\Index.cshtml" />
+    <None Include="Views\TN_HT\ReceiveDetails.cshtml" />
+    <None Include="Views\TN_HT\ItemHT.cshtml" />
+    <None Include="Views\TN_HT\ReceiveReport.cshtml" />
+    <None Include="Views\TN_HT_CG\Details.cshtml" />
+    <None Include="Views\TN_HT_CG\Details2.cshtml" />
+    <None Include="Views\TN_HT_CG\BankFJ.cshtml" />
+    <None Include="Views\TN_HT_CG\DetailsFJ.cshtml" />
+    <None Include="Views\TN_HT_CG\Form.cshtml" />
+    <None Include="Views\TN_HT_CG\Form2.cshtml" />
+    <None Include="Views\TN_HT_CG\Index.cshtml" />
+    <None Include="Views\TN_HT_CG\Index2.cshtml" />
+    <None Include="Views\TN_JS\JSReport.cshtml" />
+    <None Include="Views\TN_XMBase\Details2.cshtml" />
+    <None Include="Views\TN_XMBase\DetailsFJ.cshtml" />
+    <None Include="Views\TN_XMBase\Form2.cshtml" />
+    <None Include="Views\TN_XMBase\Index3.cshtml" />
+    <None Include="Views\TN_XMBase\Index2.cshtml" />
+    <None Include="Views\TN_XMBase\Project2.cshtml" />
+    <None Include="Views\TN_XMBase\Project.cshtml" />
+    <None Include="Views\TN_HT\Details.cshtml" />
+    <None Include="Views\TN_HT\Form.cshtml" />
+    <None Include="Views\TN_HT\Index.cshtml" />
+    <None Include="Views\TN_HT\JFineDetailsView1.cshtml" />
+    <None Include="Views\TN_HT\JFineFormView1.cshtml" />
+    <None Include="Views\TN_HT\JFineIndexLayoutView1.cshtml" />
+    <None Include="Views\TN_HT\ReceiveForm.cshtml" />
+    <None Include="Views\TN_HT\ReceiveIndex.cshtml" />
+    <None Include="Views\TN_JS\Details.cshtml" />
+    <None Include="Views\TN_JS\Form.cshtml" />
+    <None Include="Views\TN_JS\Index.cshtml" />
+    <None Include="Views\TN_JS\JFineDetailsView1.cshtml" />
+    <None Include="Views\TN_JS\JFineFormView1.cshtml" />
+    <None Include="Views\TN_JS\JFineIndexLayoutView1.cshtml" />
+    <None Include="Views\TN_XMBase\Details.cshtml" />
+    <None Include="Views\TN_XMBase\Form.cshtml" />
+    <None Include="Views\TN_XMBase\Index.cshtml" />
+    <None Include="Views\TN_XMBase\JFineDetailsView1.cshtml" />
+    <None Include="Views\TN_XMBase\JFineFormView1.cshtml" />
+    <None Include="Views\TN_HT\DetailsFJ.cshtml" />
+    <None Include="Views\TN_XMBase\Project3.cshtml" />
+    <None Include="Views\TN_XM\Details2.cshtml" />
+    <None Include="Views\TN_XM\Details.cshtml" />
+    <None Include="Views\TN_XM\DetailsFJ.cshtml" />
+    <None Include="Views\TN_XM\Form.cshtml" />
+    <None Include="Views\TN_XM\ProjectItem.cshtml" />
+    <None Include="Views\TN_XM\Index.cshtml" />
+    <None Include="Views\TN_XM\JFineDetailsView1.cshtml" />
+    <None Include="Views\TN_XM\JFineFormView1.cshtml" />
+    <None Include="Views\TN_XM\JFineIndexLayoutView11.cshtml" />
+    <None Include="Views\TN_XM\Web.config" />
+    <None Include="Views\web.config" />
+    <None Include="插件信息.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JFine.Web.Base\JFine.Web.Base.csproj">
+      <Project>{d0b4c1e9-f9bf-4d8e-81c9-ffdd2c06ec5e}</Project>
+      <Name>JFine.Web.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) $(SolutionDir)\JFine.Web\Plugins\JFine.RDXM
+xcopy /e /r /y $(ProjectDir)\Views $(SolutionDir)\JFine.Web\Plugins\JFine.RDXM\Views
+copy $(ProjectDir)\插件信息.json $(SolutionDir)\JFine.Web\Plugins\JFine.RDXM</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var windowId = $.request("windowId");//window ID
+    var displayTyle = $.request("displayTyle");//展示类型：role/org
+    var orgCode = $.request("orgCode");//组织编码，多个用逗号隔开
+    var roleCode = $.request("roleCode");//角色编码,多个用逗号隔开
+    var isLeader = $.request("isLeader");//是只选择领导：0；1
+    var isSingle = $.request("isSingle");//是否单选：1:是；非1：否
+    var flag = $.request("flag");//标识调用页面的元素：自行赋值
+    var selectedUsers = new Array();
+
+    $(function () {
+        gridList();
+    });
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TNRD_Supplier/GetGridJson",
+            height: $(window).height() - 138,
+            multiselect: true,
+            colModel: [
+
+                { label: '主键', name: 'Id', hidden: true },
+                { label: "供应商编码", name: "SupCode", width: 150, align: 'left' },
+
+                { label: "供应商名称", name: "SupName", width: 150, align: 'left' },
+
+                { label: "状态", name: "Status", width: 150, align: 'left' },
+
+                { label: "类别", name: "CategoryName", width: 150, align: 'left' },
+
+                { label: "地址", name: "Address", width: 150, align: 'left' },
+
+                { label: "联系人", name: "ContactMan", width: 150, align: 'left' },
+
+                { label: "电话", name: "Phone", width: 150, align: 'left' },
+
+                { label: "邮箱", name: "Email", width: 150, align: 'left' },
+
+                { label: "创建日期", name: "CreateDate", width: 150, align: 'left' },
+
+                { label: "创建人", name: "CreateUserName", width: 150, align: 'left' },
+
+                { label: "最后修改日期", name: "UpdateDate", width: 150, align: 'left' },
+
+
+                { label: "最后修改人", name: "UpdateUserName", width: 150, align: 'left' },
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            var queryJson = {
+                keyword: $("#txt_keyword").val()
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+
+    //返回所选人员完整信息
+    function submitForm() {
+
+        backData();
+    }
+
+    //返回完整数据
+    function backData() {
+        var supplierListJson = $("#gridList").jqGridRows();
+        if (supplierListJson != undefined) {
+            if (isSingle == "1") {//单选
+                if (supplierListJson.length != 1) {
+                    $.modalAlert("只能选择一条数据！请重新选择！", "warning");
+                    return;
+                }
+            }
+            //每一个调用该模块的必须实现dealSelectedUserFull(account,name,flag)方法
+            if (windowId == '') {
+                $.currentWindow().dealSelectedSupplier(supplierListJson, flag);
+            } else {
+                top.frames[windowId].dealSelectedSupplier(supplierListJson, flag);
+            }
+            $.modalClose();
+        } else {
+            $.modalAlert("请选择数据！", "warning");
+        }
+
+    }
+
+</script>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-center">
+        <div class="topPanel">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input id="txt_keyword" type="text" class="form-control" placeholder="账户/姓名/手机" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>

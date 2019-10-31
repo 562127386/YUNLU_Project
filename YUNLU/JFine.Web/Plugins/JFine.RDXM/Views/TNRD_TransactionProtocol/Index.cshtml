@@ -1,0 +1,194 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2019-07-12 15:41:28
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TNRD_TransactionProtocol/GetGridJson",
+            height: $(window).height() - 138,
+            colModel: [
+                { label: "主键", name: "Id", hidden: true },
+                {
+                    label: "状态", name: "Status", width: 150, align: 'left', formatter: function (value, row, index) {
+                        if (value == 0) {
+                            return "新建";
+                        }
+                        else if (value == 1) {
+                            return "已提交";
+                        }
+                        else if (value == 2) {
+                            return "撤销"
+                        }
+                    }
+                },
+
+                { label: "转让单号", name: "TransactionNum", width: 150, align: 'left' },
+
+                { label: "合同编码", name: "ContractCode", width: 150, align: 'left' },
+
+                { label: "合同名称", name: "ContractName", width: 150, align: 'left' },
+
+                { label: "项目编码", name: "ProjectCode", width: 150, align: 'left' },
+
+                { label: "项目名称", name: "ProjectName", width: 150, align: 'left' },
+
+                { label: "转让甲方", name: "TransactionA_Name", width: 150, align: 'left' },
+
+                { label: "转让乙方", name: "TransactionB_Name", width: 150, align: 'left' },
+
+                { label: "供应商", name: "Supplier", width: 150, align: 'left' },
+
+                { label: "签订日期", name: "SignDate", width: 150, align: 'left' },
+
+                { label: "签订人", name: "SignName", width: 150, align: 'left' },
+
+                { label: "创建日期", name: "CreateDate", width: 150, align: 'left' },
+
+                { label: "创建人", name: "CreateUserName", width: 150, align: 'left' },
+
+                { label: "最后修改日期", name: "UpdateDate", width: 150, align: 'left' },
+
+                { label: "最后修改人", name: "UpdateUserName", width: 150, align: 'left' },
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            var queryJson = {
+                keyword: $("#txt_keyword").val()
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        //$.modalOpen({
+        //    id: "Form",
+        //    title: "新增转让协议",
+        //    url: "/TN_XM/TNRD_TransactionProtocol/Form",
+        //    width: ($(window).width() * 0.8) + "px",
+        //    height: ($(window).height() * 0.7) + "px",
+        //    callBack: function (iframeId) {
+        //        top.frames[iframeId].submitForm();
+        //    }
+        //});
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        top.$.jfinetab.addTabContent("/TN_XM/TNRD_TransactionProtocol/Form", "转让协议--新增", parentId + "_add", parentId);
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        //     if ($.checkedArray(keyValue))
+        //     {
+        //$.modalOpen({
+        //	id: "Form",
+        //	title: "修改转让协议",
+        //	url: "/TN_XM/TNRD_TransactionProtocol/Form?keyValue=" + keyValue,
+        //	width: ($(window).width() * 0.8) + "px",
+        //	 height: ($(window).height() * 0.7) + "px",
+        //	callBack: function (iframeId) {
+        //		top.frames[iframeId].submitForm();
+        //	}
+        //});
+        //     }
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var Id = $("#gridList").jqGridRowValue().Id;
+        var Status = $("#gridList").jqGridRowValue().Status;
+        if ($.checkedArray(Id)) {
+            if (Status == "已提交") {
+                $.modalAlert("已提交数据不可修改", "error");
+                return;
+            }
+            top.$.jfinetab.addTabContent("/TN_XM/TNRD_TransactionProtocol/Form?keyValue=" + Id, "转让协议--修改", parentId + "_edit", parentId);
+        }
+
+    }
+    function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        var Status = $("#gridList").jqGridRowValue().Status;
+        if ($.checkedArray(keyValue)) {
+            if (Status == "已提交") {
+                $.modalAlert("已提交数据不可删除", "error");
+                return;
+            }
+            $.deleteForm({
+                url: "/TN_XM/TNRD_TransactionProtocol/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+    function btn_details() {
+        //var keyValue = $("#gridList").jqGridRowValue().Id;
+        //if ($.checkedArray(keyValue)) {
+        //    $.modalOpen({
+        //        id: "Details",
+        //        title: "查看转让协议",
+        //        url: "/TN_XM/TNRD_TransactionProtocol/Details?keyValue=" + keyValue,
+        //        width: "550px",
+        //        height: "620px",
+        //        btn: null,
+        //    });
+        //}
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var Id = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(Id)) {
+            top.$.jfinetab.addTabContent("/TN_XM/TNRD_TransactionProtocol/Details?keyValue=" + Id, "转让协议--查看", parentId + "_view", parentId);
+        }
+    }
+    function refreshGrid() {
+        $("#gridList").trigger("reloadGrid");
+    }
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建</a>
+            <a id="JF-edit" class="btn btn-primary dropdown-text" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改</a>
+            <a id="JF-delete" class="btn btn-primary dropdown-text" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            <a id="JF-Details" class="btn btn-primary dropdown-text" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a>
+        </div>
+        <div id="toolbar" class="btn-group">
+        </div>
+        <script>$('#toolbar').authorizeButton()</script>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="名称/编号" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <div id="gridPager"></div>
+</div>
+

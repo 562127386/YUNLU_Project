@@ -1,0 +1,12 @@
+﻿{
+  "PluginName": "YUNLU",
+  "FriendlyName": "YUNLU",
+  "Group": "YUNLU",
+  "Version": "1.0",
+  "SupportedVersions": [ "3.0" ],
+  "Author": "sj",
+  "Sort": 1,
+  "PluginFileName": "JFine.Plugins.YUNLU.dll",
+  "Description": "XXX",
+  "LimitedToCustomerRoles": []
+}

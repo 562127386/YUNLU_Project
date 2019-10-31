@@ -1,0 +1,219 @@
+﻿
+@*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-08-03 17:22:26
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_JS/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+
+    //初始化组件
+    function initControl() {
+    
+        $("#ProjectName").bindSelect({
+            url: "/TN_XM/TN_JS/GetTreeSelectJson",
+            defaultContent: "<option value='0'>请选择</option>",
+            search: true,
+            change: function () {
+                var option = $("#ProjectName option:selected").text(); //获取选中的项
+
+                $.ajax({
+                    url: "/TN_XM/TN_JS/GetCode",
+                    type: "post",
+                    data: { "keyValue": option },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.length == 0) {
+                            $("#ProjectNo").val("");
+                         
+                            $("#HTNo").val("");
+                            $("#SupplierNo").val("");
+                            $("#SupplierName").val("");
+                        } else {
+                            var value = msg[0].Code;
+                            $("#ProjectNo").val( msg[0].ProjectNo);
+                           
+                            $("#HTNo").val(msg[0].Code);
+                            $("#SupplierNo").val(msg[0].BCode);
+                            $("#SupplierName").val(msg[0].BName);
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+    }
+  
+    
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        //alert(postData);
+        $.submitForm({
+            url: "/TN_XM/TN_JS/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+    }
+	//关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <input type="hidden" id="BindId" name="BindId" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">付款单信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            @*<div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>*@
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">								  	
+					 	  	
+								<tr>
+									<th class="formTitle"> 项目编码</th>
+									<td class="formValue">
+                                        <input id="ProjectNo" name="ProjectNo" type="text"
+                                              readonly class="form-control  required" />
+									</td>
+                                    <th class="formTitle"> 项目名称</th>
+                                    <td class="formValue">
+                                        <select id="ProjectName" name="ProjectName" type="text"
+                                               class="form-control  " />
+                                    </td>
+								</tr>
+                                <tr>
+                                    <th class="formTitle" hidden> 支付编码</th>
+                                    <td class="formValue" hidden>
+                                        <input id="PayNo" name="PayNo" type="text" value="@ViewBag.Code" readonly
+                                               class="form-control  " placeholder="请输入支付编码" />
+                                    </td>
+                                    <th class="formTitle"> 合同号</th>
+                                    <td class="formValue">
+                                        <input id="HTNo" name="HTNo" type="text"
+                                               readonly class="form-control  required" placeholder="请输入合同号" />
+                                    </td>
+                                    <th class="formTitle"> 供应商名称</th>
+                                    <td class="formValue">
+                                        <input id="SupplierName" name="SupplierName" type="text"
+                                               class="form-control  " />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 凭证号</th>
+                                    <td class="formValue">
+                                        <input id="VoucherNo" name="VoucherNo" type="text"
+                                               class="form-control  " placeholder="请输入凭证号" />
+                                    </td>
+                                    <th class="formTitle"> 需支付金额</th>
+                                    <td class="formValue">
+                                        <input id="PayAmount" name="PayAmount" type="text"
+                                               class="form-control isNumber " placeholder="请输入支付金额" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 已付金额</th>
+                                    <td class="formValue">
+                                        <input id="paidAmount" name="paidAmount" type="text" 
+                                               class="form-control  " placeholder="请输入支付金额" />
+                                    </td>
+                                    <th class="formTitle"> 未付金额</th>
+                                    <td class="formValue">
+                                        <input id="unpaidAmount" name="unpaidAmount" type="text"
+                                               class="form-control  " placeholder="请输入未支付金额" />
+                                    </td>
+                                </tr>
+
+                                @*<tr>
+                                    <th class="formTitle"> 供应商编码</th>
+                                    <td class="formValue">
+                                        <input id="SupplierNo" name="SupplierNo" type="text"
+                                               class="form-control  "   />
+                                    </td>
+                                    <th class="formTitle"> 供应商名称</th>
+                                    <td class="formValue">
+                                        <input id="SupplierName" name="SupplierName" type="text"
+                                               class="form-control  "   />
+                                    </td>
+                                </tr>*@
+
+					 	  	
+								<tr>
+									<th class="formTitle">备注 </th>
+									<td class="formValue" colspan="3">
+                                        <input id="Remark" name="Remark" type="text"
+                                               class="form-control  " placeholder="请输入备注" />
+									</td>
+								</tr>
+					 
+					   
+							</table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

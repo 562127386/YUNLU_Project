@@ -1,0 +1,262 @@
+﻿
+ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2019-07-17 16:47:09
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        if (!!keyValue) {
+            $.ajax({
+                url: "/YL_IT_InspectRoll/YL_IT_InspectRoll/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formInitialize(data);
+                }
+            });
+        }
+    });
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">小型卷线巡检记录</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                此处可展示业务编码或者状态，自行组织。
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form">
+								  	
+								<tr>
+									<th class="formTitle"> 主键</th>
+									<td class="formValue">
+										<div id="Id" name="Id" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 绑定Id</th>
+									<td class="formValue">
+										<div id="BindId" name="BindId" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 巡检单号</th>
+									<td class="formValue">
+										<div id="OrderNum" name="OrderNum" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 记录时间</th>
+									<td class="formValue">
+										<div id="RecordDate" name="RecordDate" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 记录人</th>
+									<td class="formValue">
+										<div id="RecordMan" name="RecordMan" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 巡检人</th>
+									<td class="formValue">
+										<div id="InspectMan" name="InspectMan" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 人员资质是否合格</th>
+									<td class="formValue">
+										<div id="IsQualify" name="IsQualify" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 设备编号</th>
+									<td class="formValue">
+										<div id="DeviceCode" name="DeviceCode" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 设备状态</th>
+									<td class="formValue">
+										<div id="DeviceStatus" name="DeviceStatus" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 产品型号</th>
+									<td class="formValue">
+										<div id="Model" name="Model" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 模具状态</th>
+									<td class="formValue">
+										<div id="MoldStatus" name="MoldStatus" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 文件是否齐全</th>
+									<td class="formValue">
+										<div id="IsIntact" name="IsIntact" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 线包尺寸标准</th>
+									<td class="formValue">
+										<div id="RollSizeStandard" name="RollSizeStandard" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 线报尺寸实测</th>
+									<td class="formValue">
+										<div id="RollSizeMeasure" name="RollSizeMeasure" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 圈数确认标准</th>
+									<td class="formValue">
+										<div id="CircleStandard" name="CircleStandard" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 圈数确认实测</th>
+									<td class="formValue">
+										<div id="CircleMeasure" name="CircleMeasure" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 出线长度标准</th>
+									<td class="formValue">
+										<div id="ThreadLenStandard" name="ThreadLenStandard" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 出线长度实测</th>
+									<td class="formValue">
+										<div id="ThreadLenMeasure" name="ThreadLenMeasure" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 张力标准</th>
+									<td class="formValue">
+										<div id="TensionStandard" name="TensionStandard" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 张力实测</th>
+									<td class="formValue">
+										<div id="TensionMeasure" name="TensionMeasure" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 结论</th>
+									<td class="formValue">
+										<div id="Conculsion" name="Conculsion" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 创建日期</th>
+									<td class="formValue">
+										<div id="CreateDate" name="CreateDate" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> </th>
+									<td class="formValue">
+										<div id="CreateUserId" name="CreateUserId" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 创建人</th>
+									<td class="formValue">
+										<div id="CreateUserName" name="CreateUserName" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 最后修修改人</th>
+									<td class="formValue">
+										<div id="UpdateDate" name="UpdateDate" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> </th>
+									<td class="formValue">
+										<div id="UpdateUserId" name="UpdateUserId" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 最后修改时间</th>
+									<td class="formValue">
+										<div id="UpdateUserName" name="UpdateUserName" ></div>
+									</td>
+								</tr>
+					    
+							</table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+

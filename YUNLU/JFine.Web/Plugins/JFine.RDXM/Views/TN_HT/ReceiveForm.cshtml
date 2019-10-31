@@ -1,0 +1,244 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2018-08-03 17:22:26
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        //if (!!keyValue) {
+        //    $.ajax({
+        //        url: "/TN_XM/TN_JS/GetFormJson",
+        //        data: { keyValue: keyValue },
+        //        dataType: "json",
+        //        async: false,
+        //        success: function (data) {
+        //            $("#form1").formSerialize(data);
+        //        }
+        //    });
+        //}
+    });
+
+    //初始化组件
+    function initControl() {
+        $("#ProjectName").bindSelect({
+            url: "/TN_XM/TN_JS/GetTreeSelectJson",
+            defaultContent: "<option value='0'>请选择</option>",
+            search: true,
+            change: function () {
+                var option = $("#ProjectName option:selected").text(); //获取选中的项
+
+                $.ajax({
+                    url: "/TN_XM/TN_JS/GetCode",
+                    type: "post",
+                    data: { "keyValue": option },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.length == 0) {
+                            $("input[name='res']").click();
+                        } else {
+                            var value = msg[0].Code;
+                            $("#ProjectNo").val(msg[0].ProjectNo);
+
+                            $("#Contract").val(msg[0].Code);
+                            cpjs(msg[0].Id, msg[0].Code);
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+    }
+
+    function cpjs(BindId) {
+
+        $("#Name").bindSelect({
+            url: "/TN_XM/TN_CPJS/GetTreeSelectJson?keyword=" + BindId,
+            defaultContent: "<option value='0'>请选择</option>",
+            search: true,
+            change: function () {
+                var option = $("#Name option:selected").text(); //获取选中的项
+
+               $.ajax({
+                    url: "/TN_XM/TN_CPJS/GetCode",
+                    type: "post",
+                    data: { "code": BindId, "name": option },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.length == 0) {
+                            $("#Type").val("");
+
+                            $("#Quantity").val("");
+                            $("#ToReceive").val("");
+                        } else {
+                            var value = msg[0].Code;
+                            $("#Type").val(msg[0].Type);
+
+                            $("#Quantity").val(msg[0].Quantity);
+                            $("#ToReceive").val(msg[0].ToReceive);
+                           
+
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        });
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_CPJS/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                var resultPage = top.$.jfinetab.getTabContentFromId(parentTabId);
+                resultPage.refreshGrid();
+                top.$.jfinetab.closeCurrentTab();
+            }
+        })
+    }
+	//关闭Form
+    function closeForm() {
+        top.$.jfinetab.closeCurrentTab();
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <input type="hidden" id="BindId" name="BindId" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">货物接收信息</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick="closeForm()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr>
+                                    <th class="formTitle"> 项目编码</th>
+                                    <td class="formValue">
+                                        <input id="ProjectNo" name="ProjectNo" type="text"
+                                            readonly    class="form-control  required"   />
+                                    </td>
+                                    <th class="formTitle"> 项目名称</th>
+                                    <td class="formValue">
+                                        <select id="ProjectName" name="ProjectName" type="text"
+                                               class="form-control  required"   />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="formTitle"> 合同号</th>
+                                    <td class="formValue">
+                                        <input id="Contract" name="Contract" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>
+                                    <th class="formTitle"> </th>
+                                    <td class="formValue">
+                                        
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 产品规格型号</th>
+                                    <td class="formValue">
+                                        <input id="Type" name="Type" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>
+                                    <th class="formTitle"> 产品名称</th>
+                                    <td class="formValue">
+                                        <select id="Name" name="Name" type="text"
+                                               class="form-control  required" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 合同数量</th>
+                                    <td class="formValue">
+                                        <input id="Quantity" name="Quantity" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>
+                                    <th class="formTitle"> 待接收数量</th>
+                                    <td class="formValue">
+                                        <input id="ToReceive" name="ToReceive" type="text"
+                                               readonly class="form-control  required" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle"> 本次接收数量</th>
+                                    <td class="formValue">
+                                        <input id="ThisReceive" name="ThisReceive" type="text"
+                                               class="form-control  required" placeholder="请输入接收数量" />
+                                    </td>
+                                    <th class="formTitle"> 项目现场</th>
+                                    <td class="formValue">
+                                        <input id="Scene" name="Scene" type="text"
+                                               class="form-control isNumber required" placeholder="请输入项目现场" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th class="formTitle">设备情况 </th>
+                                    <td class="formValue" colspan="3">
+                                        <input id="res" name="res" type="reset" style="display:none;" /> 
+                                        <input id="Remark" name="Remark" type="text"
+                                               class="form-control  required" placeholder="请输入设备情况" />
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

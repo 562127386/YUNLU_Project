@@ -1,0 +1,265 @@
+﻿@*<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="logisticsInvoicePrint.aspx.cs" Inherits="RM.Web.Bus.logisticsCost.logisticsInvoiceNew.logisticsInvoicePrint" %>*@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>多经开票通知</title>
+    <link href="~/Content/js/default.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/print.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery.jqprint-0.3.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/jquery.jqprint.css" rel="stylesheet" type="text/css" />
+    <script>
+
+        function btn_print() {
+            $("#print").jqprint();
+        }
+        var tableToExcel = (function () {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+                template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+                base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) };
+            return function (table, name, filename) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = filename;
+                document.getElementById("dlink").click();
+            }
+        })()
+
+    </script>
+    <style type="text/css">
+        span {
+            background-color: #ffcc00;
+            display: -moz-inline-box;
+            display: inline-block;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div style="position: absolute; top: 22px; right: 8px;">
+            <a onclick="btn_print()" href="javascript:void(0)"><span class="icon icon-print">&nbsp;</span>打印</a>
+            <a id="dlink" style="display:none;"></a>
+            <a onclick="tableToExcel('tables', 'name', 'myfile.xls')" href="javascript:void(0)"><span class="icon icon-print">&nbsp;</span>Excel</a>
+        </div>
+        <div class="print-box" style="padding:5px;">
+            <div id="print">
+                <div style="font-size: 22px;text-align: center; line-height: 50px;">
+                    @ViewBag.model.Rows[0]["Name"]
+                </div>
+                @*<div class="print-info">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle" style="">设备名称：</th>
+                                <td class="formValue" style="">
+                                    <input type="text" style="width:98%;" class="form-control " value="" />
+                                </td>
+                                <th class="formTitle" style="">业务单号：</th>
+                                <td class="formValue">
+                                    <input type="text" style="width:98%;" class="form-control " value="" />
+                                </td>
+                                <th class="formTitle" style="">制单日期：</th>
+                                <td class="formValue" style="width:110px;">
+                                    <input type="text" style="width:98%;" class="form-control " value="" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>*@
+                <div class="print-table">
+                    <table border="1" id="tables">
+                        <tbody>
+                            <tr>
+                                <td style="width: 50px;">类型</td>
+                                <td style="width: 120px;">主项目名称</td>
+                                <td style="width: 120px;">子项目名称</td>
+                                <td style="width: 120px;">项目编码</td>
+                                <td style="width: 120px;" >项目实施内容</td>
+                                <td style="width: 120px; ">所属公司</td>
+                                <td style="width: 120px; ">设备包</td>
+                                <td style="width: 120px;">项目状态</td>
+                                <td style="width: 120px;">项目负责人</td>
+                                <td style="width: 120px;">负责人电话</td>
+                                <td style="width: 120px;">施工单位</td>
+                                <td style="width: 120px;">施工单位负责人</td>
+                                <td style="width: 120px;">施工单位负责人电话</td>
+                                <td style="width: 120px;">项目审计年份</td>
+                            </tr>
+
+                            <tr>
+                                <td>项目信息</td>
+                                <td>@ViewBag.model.Rows[0]["BaseName"]</td>
+                                <td>@ViewBag.model.Rows[0]["BaseSubName"]</td>
+                                <td>@ViewBag.model.Rows[0]["RulesCode"]-@ViewBag.model.Rows[0]["Code"]</td>
+                                <td>@ViewBag.model.Rows[0]["Name"]</td>
+                                <td>@ViewBag.model.Rows[0]["CompanyName"]</td>
+                                <td>@ViewBag.model.Rows[0]["CPpackage"]</td>
+                                <td>@ViewBag.model.Rows[0]["ProjectState"]</td>
+                                <td>@ViewBag.model.Rows[0]["Principal"]</td>
+                                <td>@ViewBag.model.Rows[0]["Phone"]</td>
+                                <td>@ViewBag.model.Rows[0]["ConstructionUnit"]</td>
+                                <td>@ViewBag.model.Rows[0]["CPrincipal"]</td>
+                                <td>@ViewBag.model.Rows[0]["CPhone"]</td>
+                                <td>@ViewBag.model.Rows[0]["AuditYear"]</td>
+                            </tr>
+                                
+                            <tr>
+                                <td style="width: 120px;">类型</td>
+                                <td style="width: 50px;">国内配套合同总额</td>
+                                <td style="width: 120px;">已支付总额</td>
+                                <td style="width: 120px;">未支付总额</td>
+                                <td style="width: 120px;">支付比例</td>
+                                <td style="width: 120px;">亚行设备资金总额</td>
+                                <td style="width: 120px; ">已支付总额</td>
+                                <td style="width: 120px; ">未支付总额</td>
+                                <td style="width: 120px;">支付比例</td>
+                                <td style="width: 120px;">项目总投资</td>
+                                <td style="width: 120px;">配套费或补贴（元）</td>
+                                <td style="width: 120px;">已到位额度</td>
+                                <td style="width: 120px;">项目开始时间</td>
+                                <td style="width: 120px;">项目结束时间</td>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 120px;">项目金额汇总</td>
+                                <td style="width: 50px;">@ViewBag.model.Rows[0]["Amount"]</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["paidAmount"]</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["unpaidAmount"]</td>
+                                @{
+                                    decimal dd = @ViewBag.model.Rows[0]["paidAmount"];
+                                    decimal d2 = @ViewBag.model.Rows[0]["Amount"];
+                                    <td style="width: 120px;">@(d2 == 0 ? "0" : (dd / d2 * 100).ToString("0.00"))%</td>
+                                }
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["TaxTotal"]</td>
+                                <td style="width: 120px; ">@ViewBag.model.Rows[0]["payTaxTotal"]</td>
+                                <td style="width: 120px; ">@(@ViewBag.model.Rows[0]["TaxTotal"] - @ViewBag.model.Rows[0]["payTaxTotal"])</td>
+                                @{
+                                    decimal a = @ViewBag.model.Rows[0]["TaxTotal"];
+                                    decimal b = @ViewBag.model.Rows[0]["payTaxTotal"];
+                                    <td style="width: 120px;">@(a == 0 ? "0" : (b / a * 100).ToString("0.00"))%</td>
+                                }
+                                <td style="width: 120px;">@(@ViewBag.model.Rows[0]["TaxTotal"] + @ViewBag.model.Rows[0]["Amount"])</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["FiscalCapital"]</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["ArriveCapital"]</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["BeginDate"]</td>
+                                <td style="width: 120px;">@ViewBag.model.Rows[0]["EndDate"]</td>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 50px;">序号</td>
+                                <td style="width: 50px;">类型</td>
+                                <td style="width: 50px;" colspan="3">合同名称</td>
+                                @*<td style="width: 60px;" rowspan="2">主项目名称</td>
+        <td style="width: 60px;" rowspan="2">主项目编号</td>
+        <td style="width: 200px;" rowspan="1" colspan="2">项目具体实施内容列表</td>*@
+                                <td style="width: 180px;" colspan="3">项目具体实施内容列表</td>
+                                <td style="width: 60px;"  colspan="2">合同编号</td>
+                                <td style="width: 60px;">合同值（元）</td>
+                                @*<td style="width: 60px;" rowspan="2">国内资金支付（元）</td>*@
+                                @*<td style="width: 60px;" rowspan="2">亚行资金支付（元）</td>*@
+                                <td style="width: 60px;">资金来源</td>
+                                <td style="width: 60px;">国内资金已支付（元）</td>
+                                <td style="width: 60px;">国内资金未支付（元）</td>
+                                @*<td style="width: 60px;" >国内支付比例（%）</td>
+        <td style="width: 60px;" rowspan="2">亚行贷款已支付（元）</td>
+        <td style="width: 60px; " rowspan="2">亚行资金未支付（元）</td>*@
+                            </tr>
+                            @*<tr>
+                                <td style="width: 100px;">子项目编号</td>
+                                <td style="width: 100px;">子项目名称</td>
+                            </tr>*@
+                            @{
+                                for (int i = 0; i < @ViewBag.data2.Rows.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>国内配套合同</td>
+                                        <td colspan="3">@ViewBag.data2.Rows[i]["Name"] </td>
+                                        @*<td>@ViewBag.data2.Rows[i]["BaseName"] </td>
+                                        <td>@ViewBag.data2.Rows[i]["BaseCode"] </td>
+                                        <td>@ViewBag.data2.Rows[i]["BaseSubName"] </td>
+                                        <td>@ViewBag.data2.Rows[i]["BaseSubCode"]</td>*@
+                                        <td colspan="3">@ViewBag.data2.Rows[i]["ProjectName"] </td>
+                                        <td colspan="2">@ViewBag.data2.Rows[i]["Code"] </td>
+                                        <td>@ViewBag.data2.Rows[i]["Amount"] </td>
+                                        @*<td>@ViewBag.data.Rows[i]["Name"] </td>
+                                        <td>@ViewBag.data.Rows[i]["ProjectNo"] </td>*@
+                                        <td>@ViewBag.data2.Rows[i]["FundSource"]</td>
+                                        <td>@ViewBag.data2.Rows[i]["sumAmount"]</td>
+                                        <td>@ViewBag.data2.Rows[i]["unpaidAmount"] </td>
+                                        @*<td>@ViewBag.data.Rows[i]["PayType"]</td>
+                                        <td>@ViewBag.data.Rows[i]["Remark"] </td>*@
+                                    </tr>
+                                }
+
+                            }
+                            @*<tr>
+                                <td style="width: 50px;">序号</td>
+                                <td style="width: 50px;">类型</td>
+                                <td style="width: 120px;">采购包合同名称</td>
+                                <td style="width: 120px;">设备类型</td>
+                                <td style="width: 120px;">设备名称</td>
+                                <td style="width: 120px;" colspan="2">规格及型号</td>
+                                <td style="width: 120px; ">数量</td>
+                                <td style="width: 120px; ">单位</td>
+                                <td style="width: 120px;">税率</td>
+                                <td style="width: 120px;">出厂价格</td>
+                                <td style="width: 120px;">每一品目出厂价</td>
+                                <td style="width: 120px;">每一品目应缴税费</td>
+                                <td style="width: 120px;">每一品目含税价格</td>
+                                <td style="width: 120px;">设备状态</td>
+                            </tr>*@
+
+                            @*@{
+                                for (int i = 0; i < @ViewBag.data3.Rows.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>设备信息</td>
+                                        <td>@ViewBag.data3.Rows[i]["HTName"]</td>
+                                        <td>@ViewBag.data3.Rows[i]["Classify"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["Name"]</td>
+                                        <td colspan="2">@ViewBag.data3.Rows[i]["Specifications"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["Quantity"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["Unit"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["Rate"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["TaxPrice"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["NoTaxTotal"]</td>
+                                        <td>@ViewBag.data3.Rows[i]["NoTaxPrice"] </td>
+                                        <td>@ViewBag.data3.Rows[i]["TaxTotal"]</td>
+                                        <td>@ViewBag.data3.Rows[i]["EquipmentState"] </td>
+                                    </tr>
+                                }
+
+                            }*@
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="print-info">
+                    <table class="form">
+                        <tr>
+
+                            @*<th class="formTitle" style="">业务员：</th>
+                                <td class="formValue">
+                                    <input type="text" class="form-control " value="" />
+                                </td>
+                                <th class="formTitle" style="">业务处：</th>
+                                <td class="formValue">
+                                    <input type="text" class="form-control " value="" />
+                                </td>*@
+                        </tr>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,93 @@
+﻿ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2019-05-09 17:10:32
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+     var keyValue = $.request("keyValue");
+    $(function () {
+        $.ajax({
+            url: "/TN_XM/TNRD_Supplier/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#form1").formInitialize(data);
+                $("input:radio[name='Status']").filter("[value='" + data.Status + "']").prop('checked', true);
+            }
+        });
+    });
+</script>
+
+<form id="form1">
+    <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#">基本信息</a></li>
+            @*<li ><a href="#">扩展信息</a></li>*@
+        </ul>
+        <div style="margin: 10px 10px 10px 10px;">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">供应商编码</th>
+                    <td class="formValue">
+                        <div id="SupCode" name="SupCode"></div>
+
+                    </td>
+                    <th class="formTitle">供应商名称</th>
+                    <td class="formValue">
+                        <div id="SupName" name="SupName"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">是否锁定</th>
+                    <td class="formValue">
+                        <input type="radio" disabled="disabled" name="Status" value="1"> 否
+                        <input type="radio" disabled="disabled" name="Status" value="0"> 是
+                    </td>
+                    <th class="formTitle">类别</th>
+                    <td class="formValue">
+                        <div id="CategoryName" name="CategoryName"> </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">地址</th>
+                    <td class="formValue">
+                        <div id="Address" name="Address"></div>
+                    </td>
+                    <th class="formTitle">联系人</th>
+                    <td class="formValue">
+                        <div id="ContactMan" name="ContactMan"></div>
+
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <th class="formTitle">联系电话</th>
+                    <td class="formValue">
+                        <div id="Phone" name="Phone"></div>
+
+                    </td>
+                    <th class="formTitle">邮箱</th>
+                    <td class="formValue">
+                        <div id="Email" name="Email"></div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">备注</th>
+                    <td class="formValue">
+                        <div id="Remark" name="Remark"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+

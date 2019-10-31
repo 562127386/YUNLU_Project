@@ -1,0 +1,481 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2018-09-20 15:25:56
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        gridList();
+    })
+    //function gridList() {
+    //    var $gridList = $("#gridList");
+    //    $gridList.dataGrid({
+    //        url: "/TN_XM/TN_CG_CP/GetGridJson",
+    //        height: $(window).height() - 138,
+    //        colModel: [
+
+    //                   { label: " 主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+    //                   { label: " BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+    //                   { label: "事项名称", name: "ProjectName", width: 200, align: 'left', hidden: true },
+
+    //                   { label: "设备编号", name: "CPCode", width: 150, align: 'left' },
+
+    //                   { label: "设备分类", name: "Classify", width: 150, align: 'left' },
+
+    //                   { label: "设备名称", name: "Name", width: 150, align: 'left' },
+
+    //                   { label: "数量", name: "Quantity", width: 90, align: 'left' },
+
+    //                   { label: "单位", name: "Unit", width: 60, align: 'left' },
+
+    //                   { label: "产品规格及型号", name: "Type", width: 150, align: 'left' },
+
+    //                   { label: "制造厂家名称", name: "MakeName", width: 150, align: 'left' },
+
+    //                   { label: "出厂单价", name: "Price", width: 100, align: 'left' },
+
+    //                   { label: "每一品目出厂价", name: "ItemPrice", width: 100, align: 'left' },
+
+    //                   { label: "每一品目应缴税费", name: "ItemTax", width: 100, align: 'left' },
+
+    //                   { label: "每一品目含税价格", name: "IncludTax", width: 100, align: 'left' },
+
+    //                   { label: "货物描述", name: "Remark", width: 150, align: 'left' },
+
+    //                   { label: "项目现场", name: "Scene", width: 150, align: 'left' },
+
+    //                   { label: "交货时间", name: "DeliveryTime", width: 150, align: 'left' },
+
+    //                   { label: "入库时间", name: "StorageTime", width: 150, align: 'left' },
+
+    //                   { label: "出库时间", name: "OutboundTime", width: 150, align: 'left' },
+
+    //                   { label: "创建日期", name: "CreateDate", width: 150, align: 'left' },
+	  	
+    //                   { label: "创建用户账户", name: "CreateUserId", width: 150, align: 'left' },
+	  
+    //                   { label: "创建用户名称", name: "CreateUserName", width: 150, align: 'left' },
+	  	
+    //                   { label: "最后修改时间", name: "UpdateDate", width: 150, align: 'left' },
+	  	
+    //                   { label: "最后修改用户", name: "UpdateUserId", width: 150, align: 'left' },
+	  	
+    //                   { label: "最后修改用户名称", name: "UpdateUserName", width: 150, align: 'left' },
+
+    //        ],
+    //        pager: "#gridPager",
+    //        sortname: 'CreateDate desc',
+    //        viewrecord: true
+
+    //    });
+    //    $("#btn_search").click(function () {
+    //        var queryJson = {
+    //            keyword: $("#txt_keyword").val(),
+    //            ProjectName: $("#ProjectName").val(),
+    //            HTName: $("#HTName").val(),
+    //            Name: $("#Name").val()
+    //        }
+    //        $gridList.jqGrid('setGridParam', {
+    //            postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+    //        }).trigger('reloadGrid');
+    //    });
+    //}
+    function gridList() {
+        var $gridList = $("#gridList");
+        var queryJson = {};
+        queryJson.BindId = keyValue;
+        var data = JSON.stringify(queryJson);
+        $gridList.dataGrid({
+            url: "/TN_XM/TN_CG_CP/GetGridJson7",
+            height: $(window).height() - 130,
+            postData: { queryJson: data },
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: "BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目编码", name: "ProjectNo", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目名称", name: "ProjectName", width: 150, align: 'left' },
+
+                    { label: "采购合同编号", name: "CGCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "采购合同", name: "CGName", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备包", name: "CPpackage", width: 150, align: 'left' },
+
+					{ label: "设备分类", name: "Classify", width: 150, align: 'left' },
+
+					{ label: "设备编码", name: "CPCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "设备名称", name: "Name", width: 150, align: 'left' },
+
+					{ label: "规格及型号", name: "Specifications", width: 150, align: 'left', hidden: true },
+
+					{ label: "型号", name: "Model", width: 150, align: 'left', hidden: true },
+
+                    { label: "数量", name: "Quantity", width: 150, align: 'left' },
+
+                    {
+                        label: "未付数量", name: "UnQuantity", width: 150, align: 'left',
+                        formatter: function (cellvalue, options, rowObject)
+                        {
+                            var paid = parseFloat(rowObject.Quantity) - parseFloat(rowObject.PayQuantity);
+                            var per = paid.toFixed(2);
+                            return per;
+                        }
+                    },
+
+                    { label: "已付款数量", name: "PayQuantity", width: 150, align: 'left' },
+
+					{ label: "单位", name: "Unit", width: 150, align: 'left' },
+
+                    { label: "税率", name: "Rate", width: 150, align: 'left'},
+
+					{ label: "税额", name: "Tax", width: 150, align: 'left', hidden: true },
+
+                    { label: "出厂价格", name: "TaxPrice", width: 150, align: 'right'},
+
+                { label: "每一品目出厂价", name: "NoTaxTotal", width: 150, align: 'right', hidden: true },
+
+                { label: "每一品目应交税费", name: "NoTaxPrice", width: 150, align: 'right', hidden: true },
+
+                    {
+                        label: "每一品目含税价格", name: "TaxTotal", width: 150, align: 'right',
+                        formatter: function (cellvalue, options, rowObject) {
+                            var paid = parseFloat(rowObject.Quantity) - parseFloat(rowObject.PayQuantity);
+                            var per = paid.toFixed(2);
+                            var cpsum = 0;
+                            cpsum = per * 0.8 * (parseFloat(rowObject.TaxPrice) + parseFloat(rowObject.TaxPrice) * parseFloat(rowObject.Rate) / 100);
+                            var sum = cpsum.toFixed(2);
+                            return sum;
+                        }
+                    },
+
+					{ label: "设备状态", name: "EquipmentState", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货单位", name: "ReceivingUnit", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货地址", name: "ShippingAddress", width: 150, align: 'left', hidden: true },
+
+					{ label: "收货地点", name: "PlaceOfReceipt", width: 150, align: 'left', hidden: true },
+
+					{ label: "财务组织", name: "Financial", width: 150, align: 'left', hidden: true },
+
+					{ label: "客户", name: "Customer", width: 150, align: 'left', hidden: true },
+
+					{ label: "扣税类别", name: "TaxCategory", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税率", name: "InvalidTaxRate", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税额", name: "InvalidTaxPrice", width: 150, align: 'left', hidden: true },
+
+					{ label: "计成本金额", name: "TotalCost", width: 150, align: 'left', hidden: true },
+
+					{ label: "备注", name: "Remark", width: 150, align: 'left', hidden: true },
+
+					{ label: "入库时间", name: "StorageTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "出库时间", name: "OutboundTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建日期", name: "CreateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户账户", name: "CreateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户名称", name: "CreateUserName", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改时间", name: "UpdateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户", name: "UpdateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户名称", name: "UpdateUserName", width: 150, align: 'left', hidden: true },
+
+            ],
+            rowNum: 6000,
+            //pager: "#gridPager",
+            sortname: 'CreateDate asc',
+            multiselect: true,
+            viewrecords: true
+            //onSelectRow: function (ids) {
+            //    var rowData = $("#gridList").getRowData(ids);
+            //    document.getElementsByClassName("btnclose").click();
+            //    //submitForm(rowData);
+            //}
+
+
+        });
+
+        $("#btn_search").click(function () {
+            var queryJson = {
+                ProjectName: $("#ProjectName").val(),
+                HTName: $("#HTName").val(),
+                Name: $("#Name").val(),
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+
+    //税率变更
+    function btn_ChangeRate() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.modalOpen({
+                id: "Form",
+                title: "税率变更",
+                url: "/TN_XM/TN_CG_CP/ChangeRate?keyValue=" + keyValue,
+                width: ($(window).width() * 0.8) + "px",
+                height: ($(window).height() * 0.7) + "px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                }
+            });
+        }
+        //if ($.checkedArray(keyValue)) {
+        //    top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/ChangeRate?keyValue=" + keyValue, "税率变更", parentId + "_edit", parentId);
+        //}
+    }
+
+    function submitForm() {
+        var ids = $('#gridList').jqGrid('getGridParam', 'selarrrow');
+        var rowDatas = new Array();
+        for (var i in ids) {
+            var rowData = $("#gridList").jqGrid('getRowData', ids[i]);
+            rowDatas[i] = rowData;
+        }
+        $.modalClose();
+        return rowDatas;
+    }
+
+    function btn_CPKPrint() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            top.$.jfinetab.addTabContent("/TN_XM/TN_BB_DY/CPKPrint?keyValue=" + keyValue, "设备卡", parentId + "_edit", parentId);
+        }
+    }
+
+    function btn_XMYSPrint() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            top.$.jfinetab.addTabContent("/TN_XM/TN_BB_DY/XMYSPrint?keyValue=" + keyValue, "验收款", parentId + "_edit", parentId);
+        }
+    }
+
+    function btn_LYBHPrint() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            top.$.jfinetab.addTabContent("/TN_XM/TN_BB_DY/LYBHPrint?keyValue=" + keyValue, "履约保函", parentId + "_edit", parentId);
+        }
+    }
+
+    function btn_CPTZPrint() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        //var queryJson ={
+        //    ProjectName: $("#ProjectName").val(),
+        //    HTName: $("#HTName").val(),
+        //    Name: $("#Name").val()
+        //};
+        var ProjectName = $("#ProjectName").val();
+        var HTName = $("#HTName").val();
+        var Name = $("#Name").val();
+        top.$.jfinetab.addTabContent("/TN_XM/TN_BB_DY/CPTZPrint?ProjectName=" + ProjectName + "&HTName =" + HTName + "&Name=" + Name, "亚行项目设备台账", parentId + "_edit", parentId);
+
+    }
+
+
+    function btn_add() {
+        //$.modalOpen({
+        //    id: "Form",
+        //    title: "新增设备管理",
+        //    url: "/TN_XM/TN_CG_CP/Form",
+        //    width: ($(window).width() * 0.8) + "px",
+        //    height: ($(window).height() * 0.7) + "px",
+        //    callBack: function (iframeId) {
+        //        top.frames[iframeId].submitForm();
+        //    }
+        //});
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/Form4" , "设备管理--新增", parentId + "_add", parentId);
+
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        //if ($.checkedArray(keyValue)) {
+        //    $.modalOpen({
+        //        id: "Form",
+        //        title: "修改设备管理",
+        //        url: "/TN_XM/TN_CG_CP/Form?keyValue=" + keyValue,
+        //        width: ($(window).width() * 0.8) + "px",
+        //        height: ($(window).height() * 0.7) + "px",
+        //        callBack: function (iframeId) {
+        //            top.frames[iframeId].submitForm();
+        //        }
+        //    });
+        //}
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/Form4?keyValue=" + keyValue, "设备管理--修改", parentId + "_edit", parentId);
+        }
+    }
+    function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_CG_CP/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+    //查看
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        //if ($.checkedArray(keyValue))
+        // {
+        //	$.modalOpen({
+        //		id: "Details",
+        //		title: "查看设备管理",
+        //		url: "/TN_XM/TN_CG_CP/Details?keyValue=" + keyValue,
+        //		width: "550px",
+        //		height: "620px",
+        //		btn: null,
+        //	});
+        //  }
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var Id = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(Id)) {
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/Details?keyValue=" + Id, "设备管理--查看", parentId + "_view", parentId);
+        }
+    }
+
+    //添加附件
+    function btn_addfj() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/DetailsFJ?keyValue=" + keyValue, "上传附件", parentId + "_details", parentId);
+        }
+
+    }
+
+    //导入
+    function uploadExcel() {
+        $.modalOpen({
+            id: "UpLoadExcelData",
+            title: "上传设备信息",
+            url: "/SysCommon/Common/UpLoadExcelDataCP",
+            width: "300px",
+            height: "280px",
+            btn: null,
+            callBack: function (iframeId) {
+                //$.currentWindow().$("#gridList").trigger("reloadGrid");
+                //top.frames[iframeId].reload();
+            }
+        });
+
+    }
+
+    //导出报价数据
+    function export_bj() {
+        colNames = $("#gridList").jqGrid('getGridParam', 'colNames')
+        colModel = $("#gridList").jqGrid('getGridParam', 'colModel')
+        var data = {};
+        for (i = 0; i < colNames.length; i++) {
+            var columnHidden = colModel[i].hidden;
+            var columnName = colModel[i].name;
+            if (columnHidden == false && columnName != "rn" && columnName != "subgrid") {
+                data[columnName] = colNames[i];
+            }
+
+        }
+        filename = '设备信息';
+        var Name = $("#Name").val();
+        var HTName = $("#HTName").val();
+        var ProjectName = $("#ProjectName").val();
+        head = JSON.stringify(data);
+        window.open("/SysCommon/Common/downloadQuoteData_sup_CP?head=" + head + "&filename=" + filename + "&Name=" + Name + "&HTName=" + HTName + "&ProjectName=" + ProjectName);
+    }
+
+    function Download() {
+        $("#JF_Download").attr("href", "/Content/Files/NewFolder1/设备信息表.xls");
+    }
+
+</script>
+<div class="ui-layout-center">
+    @*<a class="btn btn-info dropdown-text" onclick="submitForm()" ><i class="fa fa-send"></i>提交</a>*@
+    <div class="topPanel">
+        <div class="search">
+            <table>
+                <tr>
+                    <td>
+                    <td style="padding-left:10px;">
+                        <div class="input-group">
+                            <input id="ProjectName" type="text" class="form-control" placeholder="项目名称" style="width: 200px;">
+                        </div>
+                    </td>
+                    @*<td style="padding-left:10px;">
+                        <div class="input-group">
+                            <input id="HTName" type="text" class="form-control" placeholder="采购合同" style="width: 200px;">
+                        </div>
+                    </td>*@
+                    <td style="padding-left:10px;">
+                        <div class="input-group">
+                            <input id="Name" type="text" class="form-control" placeholder="设备名称" style="width: 200px;">
+                            <span class="input-group-btn">
+                                <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        @*<div class="topPanel" style="border: none;">
+            <div class="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+                <div class="btn-group">
+                    <a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建</a>
+                    <a id="JF-edit" class="btn btn-primary dropdown-text" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改</a>
+                    <a id="JF-delete" class="btn btn-primary dropdown-text" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                    <a id="JF-Details" class="btn btn-primary dropdown-text" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a>
+                    <a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_addfj()"><i class="fa fa-plus"></i>添加附件</a>
+                    <a id="JF-add" class="btn btn-primary dropdown-text" onclick="uploadExcel()"><i class="fa fa-plus"></i>导入</a>
+                    <a id="JF-add" class="btn btn-primary dropdown-text" onclick="export_bj()"><i class="fa fa-plus"></i>导出</a>
+                    <a id="JF_Download" class="btn btn-primary dropdown-text" onclick="Download()"><i class="fa fa-plus"></i>下载模版</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_ChangeRate()"><i class="fa fa-plus"></i>税率变更</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_CPKPrint()"><i class="fa fa-plus"></i>设备卡</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_XMYSPrint()"><i class="fa fa-plus"></i>验收款</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_LYBHPrint()"><i class="fa fa-plus"></i>履约保函</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_CPTZPrint()"><i class="fa fa-plus"></i>设备台账</a>
+                    <a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_CGHTTZPrint()"><i class="fa fa-plus"></i>合同台账</a>
+                </div>
+                <div id="toolbar" class="btn-group">
+                </div>
+                <script>$('#toolbar').authorizeButton()</script>
+                </div>
+        </div>*@
+    <div class="gridPanel">
+        <table id="gridList"></table>
+        <div id="gridPager"></div>
+    </div>
+</div>
+

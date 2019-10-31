@@ -1,0 +1,87 @@
+﻿@*<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="logisticsInvoicePrint.aspx.cs" Inherits="RM.Web.Bus.logisticsCost.logisticsInvoiceNew.logisticsInvoicePrint" %>*@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>多经开票通知</title>
+    <link href="~/Content/js/default.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/print.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/js/jqprint/jquery.jqprint-0.3.js" type="text/javascript"></script>
+    <link href="~/Content/js/jqprint/jquery.jqprint.css" rel="stylesheet" type="text/css" />
+    <script>
+
+        function btn_print() {
+            $("#print").jqprint();
+        }
+    </script>
+    <style type="text/css">
+        span {
+            background-color: #ffcc00;
+            display: -moz-inline-box;
+            display: inline-block;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div style="position: absolute; top: 22px; right: 8px;">
+            <a onclick="btn_print()" href="javascript:void(0)"><span class="icon icon-print">&nbsp;</span>打印</a>
+        </div>
+        <div class="print-box" style="padding:5px;">
+            <div id="print">
+                <div style="font-size: 22px;text-align: center; line-height: 50px;">
+                    附件报表
+                    <div class="print-table">
+                        <table border="1">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50px;" rowspan="2">序号</td>
+                                    <td style="width: 600px;" rowspan="2">二级项目名称</td>
+                                    <td style="width: 600px;" rowspan="2">项目名称</td>
+                                    <td style="width: 120px;" rowspan="2">项目单位</td>
+                                    <td style="width: 120px;" colspan="@ViewBag.dynamicColumn.Columns.Count">相关手续是否办理完结(√/×)</td>
+
+                                </tr>
+                                <tr>
+                                    @for (int i = 0; i < ViewBag.dynamicColumn.Columns.Count; i++)
+                                    {
+
+                                        <td style="width: 120px;">@ViewBag.dynamicColumn.Columns[i]</td>
+                                    }
+                                </tr>
+                                @{
+
+                                    for (int i = 0; i < @ViewBag.model.Rows.Count; i++)
+                                    {
+
+                                        <tr>
+                                            <td>@(i + 1)</td>
+                                            <td>@ViewBag.model.Rows[i]["BaseSubName"] </td>
+                                            <td>@ViewBag.model.Rows[i]["Name"] </td>
+                                            <td>@ViewBag.model.Rows[i]["CompanyName"] </td>
+                                            @for (int j = 0; j < @ViewBag.dynamicColumn.Columns.Count; j++)
+                                            {
+                                                <td>@ViewBag.dynamicColumn.Rows[i][j]</td>
+                                            }
+                                        </tr>
+                                    }
+
+
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </form>
+</body>

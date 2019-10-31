@@ -1,0 +1,323 @@
+﻿@*------------------------------------------------------------------------------
+    *     此代码由T4模板自动生成
+    *	   生成时间 2018-08-03 17:18:33
+    *     ©为之团队
+    *------------------------------------------------------------------------------*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script>
+    $(function () {
+        $('#layout').layout();
+        treeView();
+        gridList();
+    });
+    function treeView() {
+        $("#itemTree").treeview({
+            url: "/TN_XM/TN_XMBase/GetTreeJson2",
+            onnodeclick: function (item) {
+                $("#txt_keyword").val('');
+                $('#btn_search').trigger("click");
+            }
+        });
+        $("#itemTree").css({ "overflow": "hidden" });
+    }
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/TN_XM/TN_HT/GetGridJson",
+            height: $(window).height() - 188,
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: "BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目编码", name: "ProjectNo", width: 150, align: 'left', hidden: true },
+
+                    { label: "项目名称", name: "ProjectName", width: 150, align: 'left' },
+
+					{ label: "合同编码", name: "Code", width: 150, align: 'left' },
+
+					{ label: "合同名称", name: "Name", width: 150, align: 'left' },
+
+					{ label: "合同金额（元）", name: "Amount", width: 150, align: 'right' },
+
+					{ label: "支付方式", name: "PayType", width: 150, align: 'left', hidden: true },
+
+                    { label: "已付金额（元）", name: "paidAmount", width: 150, align: 'right' },
+
+                    { label: "未付金额（元）", name: "unpaidAmount", width: 150, align: 'right' },
+
+                    {
+                        label: "支付比例", name: "PayProportion", width: 150, align: 'right',
+                        formatter: function (cellvalue, options, rowObject)
+                        {
+                            var paid = parseFloat(rowObject.paidAmount) / parseFloat(rowObject.Amount)*100;
+                            var per = paid.toFixed(2);
+                            return per+"%";
+                        }
+                    },
+
+                    { label: "资金来源", name: "FundSource", width: 150, align: 'left' },
+
+            		{ label: "合同文本", name: "DEC", width: 150, align: 'left' },
+
+					{ label: "甲方编码", name: "ACode", width: 150, align: 'left', hidden: true },
+
+					{ label: "甲方名称", name: "AName", width: 150, align: 'left'},
+
+					{ label: "乙方编码", name: "BCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "乙方名称", name: "BName", width: 150, align: 'left' },
+
+					{ label: "签订日期", name: "SignDate", width: 150, align: 'left' },
+
+					{ label: "签订地点", name: "SignPlace", width: 150, align: 'left' },
+
+					{ label: "备注", name: "Remark", width: 150, align: 'left' }
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate asc',
+            viewrecords: true
+        });
+        $("#btn_search").click(function () {
+            //var queryJson = {
+            //    Code: $("#itemTree").getCurrentNode().id,
+            //    keyword: $("#txt_keyword").val()
+            //}
+            var Id = $("#itemTree").getCurrentNode();
+            if (Id != undefined) {
+                var queryJson = {
+                    Code: $("#itemTree").getCurrentNode().id,
+                    keyword: $("#txt_keyword").val()
+                }
+            } else {
+                var queryJson = {
+                    keyword: $("#txt_keyword").val(),
+                    ProjectName: $("#ProjectName").val(),
+                    Name: $("#Name").val(),
+                    SignDate1: $("#SignDate1").val(),
+                    SignDate2: $("#SignDate2").val(),
+                    FundSource: $("#FundSource").val()
+                }
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) }, page: 1
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        top.$.jfinetab.addTabContent("/TN_XM/TN_HT/Form?operation=add", "合同信息--新增", parentId + "_add", parentId);
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_HT/Form?keyValue=" + keyValue, "合同信息--修改", parentId + "_edit", parentId);
+
+        }
+
+    }
+    function btn_delete() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.deleteForm({
+                url: "/TN_XM/TN_HT/DeleteForm",
+                param: { keyValue: keyValue },
+                success: function () {
+                    $.currentWindow().$("#gridList").trigger("reloadGrid");
+                }
+            });
+        }
+
+    }
+    function btn_details() {
+        //var keyValue = $("#gridList").jqGridRowValue().Id;
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_HT/Details?keyValue=" + keyValue, "合同信息--查看", parentId + "_details", parentId);
+        }
+    }
+
+    //合同付款
+    function btn_Items() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.modalOpen({
+                id: "Items",
+                title: "付款",
+                url: "/TN_XM/TN_FK_MX/Form?keyValue=" + keyValue,
+                width: "800px",
+                height: "550px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                    $.reload();
+                    //var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                    //top.$.jfinetab.RefreshTabFromId(parentTabId);
+                    //top.$.jfinetab.reload();
+                }
+            });
+        }
+
+    }
+    //查看付款明细
+    function btn_FKdetails() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        //var HTCode = $("#gridList").jqGridRowValue().Code;
+        if ($.checkedArray(keyValue)) {
+            $.modalOpen({
+                id: "details",
+                title: "查看付款明细",
+                url: "/TN_XM/TN_FK_MX/Index?keyValue=" + keyValue,
+                width: "800px",
+                height: "550px",
+                btn: null,
+                callBack: function (iframeId) {
+                    top.frames[iframeId].submitForm();
+                    //location.reload();
+                    //var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                    //top.$.jfinetab.RefreshTabFromId(parentTabId);
+                    //top.$.jfinetab.reload();
+                }
+            });
+        }
+    }
+
+
+    function btn_Sum() {
+        var ProjectNo = $("#gridList").jqGridRowValue().ProjectNo;
+        $.modalOpen({
+            id: "sum",
+            title: "查看金额汇总",
+            url: "/TN_XM/TN_HT/AmountSum?ProjectNo=" + ProjectNo,
+            width: "680px",
+            height: "550px",
+            btn: null,
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+                //location.reload();
+                //var parentTabId = top.$.jfinetab.getCurrentTabParentId();
+                //top.$.jfinetab.RefreshTabFromId(parentTabId);
+                //top.$.jfinetab.reload();
+            }
+        });
+    }
+
+    //添加附件
+    function btn_addfj() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            var parentId = top.$.jfinetab.getCurrentTabId();
+            top.$.jfinetab.addTabContent("/TN_XM/TN_HT/DetailsFJ?keyValue=" + keyValue, "上传附件", parentId + "_details", parentId);
+        }
+
+    }
+
+    //国内配套合同台账
+    function btn_XMHTTZPrint() {
+        var parentId = top.$.jfinetab.getCurrentTabId();
+        var ProjectName= $("#ProjectName").val();
+        var Name = $("#Name").val();
+        var SignDate1 = $("#SignDate1").val();
+        var SignDate2 = $("#SignDate2").val();
+        top.$.jfinetab.addTabContent("/TN_XM/TN_BB_DY/XMHTTZPrint?ProjectName=" + ProjectName + "&Name =" + Name + "&SignDate1=" + SignDate1 + "&SignDate2=" + SignDate2, "亚行项目台账", parentId + "_edit", parentId);
+
+    }
+
+
+
+    function refreshGrid() {
+        $("#gridList").trigger("reloadGrid");
+    }
+</script>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div id="itemTree" ></div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="topPanel">
+            <div class="search">
+                <table>
+                    <tr>
+                        <td style="padding-left:10px;">
+                            <div class="input-group">
+                                <input id="SignDate1" type="text" class="form-control Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="签订日期" style="width: 200px;">
+                            </div>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <div class="input-group">
+                                <input id="SignDate2" type="text" class="form-control Wdate" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="签订日期" style="width: 200px;">
+                            </div>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <div class="input-group">
+                                <input id="Name" type="text" class="form-control" placeholder="合同名称" style="width: 200px;">
+                            </div>
+                        </td>
+                        <td style="padding-left:10px;">
+                            <div class="input-group">
+                                <input id="ProjectName" type="text" class="form-control" placeholder="项目名称" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>
+                        @*<td style="padding-left:10px;">
+                            <div class="input-group">
+                                <input id="FundSource" type="text" class="form-control" placeholder="资金来源" style="width: 200px;">
+                                <span class="input-group-btn">
+                                    <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </td>*@
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="topPanel">
+            <div class="toolbar">
+                <div class="btn-group">
+                    <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+                </div>
+                <div class="btn-group">
+                    @*<a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建</a>
+                    <a id="JF-edit" class="btn btn-primary dropdown-text" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改</a>
+                    <a id="JF-delete" class="btn btn-primary dropdown-text" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                    <a id="JF-Details" class="btn btn-primary dropdown-text" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a>
+                    <a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_Items()" style="margin-left : 20px;"><i class="fa fa-plus"></i>付款</a>*@
+                    @*<a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_FKdetails()"><i class="fa fa-plus"></i>查看明细</a>
+                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a id="JF-Items" onclick="btn_Sum()" href="javascript:void()">金额汇总</a></li>
+                    </ul>*@
+                    @*<a id="JF-add" class="btn btn-primary dropdown-text" onclick="btn_addfj()"><i class="fa fa-plus"></i>添加附件</a>*@
+                    @*<a id="JF-print" class="btn btn-primary dropdown-text" onclick="btn_XMHTTZPrint()"><i class="fa fa-plus"></i>亚行项目台账</a>*@
+                </div>
+                <div id="toolbar" class="btn-group">
+                </div>
+                <script>$('#toolbar').authorizeButton()</script>
+            </div>
+
+        </div>
+        <div class="gridPanel">
+            <table id="gridList"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ui-jqgrid .table-bordered td {
+        border-left: 1px dashed #d7d7d7 !important;
+    }
+    .ui-jqgrid .table-bordered th {
+        border-left: 1px dashed #d7d7d7 !important;
+    }
+</style >

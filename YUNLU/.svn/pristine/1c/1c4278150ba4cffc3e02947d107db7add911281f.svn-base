@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{261B20B3-25E2-4A56-8540-127C25FE31F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JFine.Plugins.YUNLU</RootNamespace>
+    <AssemblyName>JFine.Plugins.YUNLU</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\JFine.Web\bin\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\JFine.Web\bin\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Busines">
+      <HintPath>..\JFine.Web\bin\JFine.Busines.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Cache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JFine.Web\bin\JFine.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Code, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JFine.Web\bin\JFine.Code.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JFine.Web\bin\JFine.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JFine.Web\bin\JFine.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="JFine.Domain">
+      <HintPath>..\JFine.Web\bin\JFine.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\JFine.Web\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\YL_AlterNotify\Controllers\YL_AlterNotifyController.cs" />
+    <Compile Include="Areas\YL_CodeProcRecord\Controllers\YL_CodeProcRecordController.cs" />
+    <Compile Include="Areas\YL_CustomerFeedback\Controllers\YL_CustomerFeedbackController.cs" />
+    <Compile Include="Areas\YL_DefectiveRepairSignUp\Controllers\YL_DefectiveRepairSignUpController.cs" />
+    <Compile Include="Areas\YL_EvaluationReport\Controllers\YL_EvaluationReportController.cs" />
+    <Compile Include="Areas\YL_IT_FirstConfirm\Controllers\YL_IT_FirstConfirmController.cs" />
+    <Compile Include="Areas\YL_IT_InspectOther\Controllers\YL_IT_InspectOtherController.cs" />
+    <Compile Include="Areas\YL_IT_InspectRoll\Controllers\YL_IT_InspectRollController.cs" />
+    <Compile Include="Areas\YL_RefineSignUp\Controllers\YL_RefineSignUpController.cs" />
+    <Compile Include="Areas\YL_SpecialPurchase\Controllers\YL_SpecialPurchaseController.cs" />
+    <Compile Include="Busines\YL_AlterNotify\YL_AlterNotifyBLL.cs" />
+    <Compile Include="Busines\YL_CodeProcRecord\YL_CodeProcRecordBLL.cs" />
+    <Compile Include="Busines\YL_CustomerFeedback\YL_CustomerFeedbackBLL.cs" />
+    <Compile Include="Busines\YL_DefectiveRepairSignUp\YL_DefectiveRepairSignUpBLL.cs" />
+    <Compile Include="Busines\YL_EvaluationReport\YL_EvaluationReportBLL.cs" />
+    <Compile Include="Busines\YL_IT_FirstConfirm\YL_IT_FirstConfirmBLL.cs" />
+    <Compile Include="Busines\YL_IT_InspectOther\YL_IT_InspectOtherBLL.cs" />
+    <Compile Include="Busines\YL_IT_InspectRoll\YL_IT_InspectRollBLL.cs" />
+    <Compile Include="Busines\YL_RefineSignUp\YL_RefineSignUpBLL.cs" />
+    <Compile Include="Busines\YL_SpecialPurchase\YL_SpecialPurchaseBLL.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Domain\IRepository\YL_AlterNotify\IYL_AlterNotifyRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_CodeProcRecord\IYL_CodeProcRecordRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_CustomerFeedback\IYL_CustomerFeedbackRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_DefectiveRepairSignUp\IYL_DefectiveRepairSignUpRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_EvaluationReport\IYL_EvaluationReportRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_IT_FirstConfirm\IYL_IT_FirstConfirmRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_IT_InspectOther\IYL_IT_InspectOtherRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_IT_InspectRoll\IYL_IT_InspectRollRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_RefineSignUp\IYL_RefineSignUpRepository.cs" />
+    <Compile Include="Domain\IRepository\YL_SpecialPurchase\IYL_SpecialPurchaseRepository.cs" />
+    <Compile Include="Domain\Models\YL_AlterNotify\YL_AlterNotifyEntity.cs" />
+    <Compile Include="Domain\Models\YL_CodeProcRecord\YL_CodeProcRecordEntity.cs" />
+    <Compile Include="Domain\Models\YL_CustomerFeedback\YL_CustomerFeedbackEntity.cs" />
+    <Compile Include="Domain\Models\YL_DefectiveRepairSignUp\YL_DefectiveRepairSignUpEntity.cs" />
+    <Compile Include="Domain\Models\YL_EvaluationReport\YL_EvaluationReportEntity.cs" />
+    <Compile Include="Domain\Models\YL_IT_FirstConfirm\YL_IT_FirstConfirmEntity.cs" />
+    <Compile Include="Domain\Models\YL_IT_InspectOther\YL_IT_InspectOtherEntity.cs" />
+    <Compile Include="Domain\Models\YL_IT_InspectRoll\YL_IT_InspectRollEntity.cs" />
+    <Compile Include="Domain\Models\YL_RefineSignUp\YL_RefineSignUpEntity.cs" />
+    <Compile Include="Domain\Models\YL_SpecialPurchase\YL_SpecialPurchaseEntity.cs" />
+    <Compile Include="Domain\Repository\YL_AlterNotify\YL_AlterNotifyRepository.cs" />
+    <Compile Include="Domain\Repository\YL_CodeProcRecord\YL_CodeProcRecordRepository.cs" />
+    <Compile Include="Domain\Repository\YL_CustomerFeedback\YL_CustomerFeedbackRepository.cs" />
+    <Compile Include="Domain\Repository\YL_DefectiveRepairSignUp\YL_DefectiveRepairSignUpRepository.cs" />
+    <Compile Include="Domain\Repository\YL_EvaluationReport\YL_EvaluationReportRepository.cs" />
+    <Compile Include="Domain\Repository\YL_IT_FirstConfirm\YL_IT_FirstConfirmRepository.cs" />
+    <Compile Include="Domain\Repository\YL_IT_InspectOther\YL_IT_InspectOtherRepository.cs" />
+    <Compile Include="Domain\Repository\YL_IT_InspectRoll\YL_IT_InspectRollRepository.cs" />
+    <Compile Include="Domain\Repository\YL_RefineSignUp\YL_RefineSignUpRepository.cs" />
+    <Compile Include="Domain\Repository\YL_SpecialPurchase\YL_SpecialPurchaseRepository.cs" />
+    <Compile Include="Mapping\YL_AlterNotify\YL_AlterNotifyMap.cs" />
+    <Compile Include="Mapping\YL_CodeProcRecord\YL_CodeProcRecordMap.cs" />
+    <Compile Include="Mapping\YL_CustomerFeedback\YL_CustomerFeedbackMap.cs" />
+    <Compile Include="Mapping\YL_DefectiveRepairSignUp\YL_DefectiveRepairSignUpMap.cs" />
+    <Compile Include="Mapping\YL_EvaluationReport\YL_EvaluationReportMap.cs" />
+    <Compile Include="Mapping\YL_IT_FirstConfirm\YL_IT_FirstConfirmMap.cs" />
+    <Compile Include="Mapping\YL_IT_InspectOther\YL_IT_InspectOtherMap.cs" />
+    <Compile Include="Mapping\YL_IT_InspectRoll\YL_IT_InspectRollMap.cs" />
+    <Compile Include="Mapping\YL_RefineSignUp\YL_RefineSignUpMap.cs" />
+    <Compile Include="Mapping\YL_SpecialPurchase\YL_SpecialPurchaseMap.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Views\Web.config" />
+    <None Include="Views\YL_AlterNotify\Details.cshtml" />
+    <None Include="Views\YL_AlterNotify\Details2.cshtml" />
+    <None Include="Views\YL_AlterNotify\Form.cshtml" />
+    <None Include="Views\YL_AlterNotify\Form2.cshtml" />
+    <None Include="Views\YL_AlterNotify\Index.cshtml" />
+    <None Include="Views\YL_AlterNotify\Index2.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Details.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Details2.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Form.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Form2.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Index.cshtml" />
+    <None Include="Views\YL_CodeProcRecord\Index2.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Details.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Details2.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Form.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Form2.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Index.cshtml" />
+    <None Include="Views\YL_CustomerFeedback\Index2.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Details.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Details2.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Form.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Form2.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Index.cshtml" />
+    <None Include="Views\YL_DefectiveRepairSignUp\Index2.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Details.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Details2.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Form.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Form2.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Index.cshtml" />
+    <None Include="Views\YL_EvaluationReport\Index2.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Details.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Details2.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Form.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Form2.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Index.cshtml" />
+    <None Include="Views\YL_IT_FirstConfirm\Index2.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Details.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Details2.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Form.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Form2.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Index.cshtml" />
+    <None Include="Views\YL_IT_InspectOther\Index2.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Details.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Details2.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Form.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Form2.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Index.cshtml" />
+    <None Include="Views\YL_IT_InspectRoll\Index2.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Details.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Details2.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Form.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Form2.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Index.cshtml" />
+    <None Include="Views\YL_RefineSignUp\Index2.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Details.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Details2.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Form.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Form2.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Index.cshtml" />
+    <None Include="Views\YL_SpecialPurchase\Index2.cshtml" />
+    <None Include="插件信息.json" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\JFine.Web.Base\JFine.Web.Base.csproj">
+      <Project>{d0b4c1e9-f9bf-4d8e-81c9-ffdd2c06ec5e}</Project>
+      <Name>JFine.Web.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir -y $(SolutionDir)\JFine.Web\Plugins\JFine.YUNLU
+mkdir -y $(SolutionDir)\JFine.Web\Plugins\JFine.YUNLU\Views
+copy $(TargetPath) $(SolutionDir)\JFine.Web\Plugins\JFine.YUNLU
+xcopy /e /r /y $(ProjectDir)\Views $(SolutionDir)\JFine.Web\Plugins\JFine.YUNLU\Views
+copy $(ProjectDir)\插件信息.json $(SolutionDir)\JFine.Web\Plugins\JFine.YUNLU</PostBuildEvent>
+  </PropertyGroup>
+</Project>

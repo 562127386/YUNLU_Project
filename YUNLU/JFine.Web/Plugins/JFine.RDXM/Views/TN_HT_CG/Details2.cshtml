@@ -1,0 +1,448 @@
+﻿
+ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2018-09-20 15:27:33
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        gridList();
+        gridList2();
+        gridList3();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/TN_XM/TN_HT_CG/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formInitialize(data);
+                }
+            });
+        }
+        refreshGrid();
+    });
+    //表格处理
+    function gridList() {
+        var $gridList = $("#gridList");
+        if (keyValue == "" || keyValue == null || keyValue == undefined) {
+            var query = {};
+            query.keyValue = "-1";
+        } else {
+            var query = {};
+            query.keyValue = keyValue;
+        }
+
+        $gridList.dataGrid({
+            height: 265,
+            postData: { queryJson: JSON.stringify(query) },
+
+            url: "/TN_XM/TN_CG_CP/GetGridJson",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+					{ label: "BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目编码", name: "ProjectNo", width: 150, align: 'left', hidden: true },
+
+					{ label: "项目名称", name: "ProjectName", width: 150, align: 'left' },
+
+                    { label: "采购合同编号", name: "CGCode", width: 150, align: 'left', hidden: true },
+
+					{ label: "采购合同", name: "CGName", width: 150, align: 'left' },
+
+					{ label: "设备包", name: "CPpackage", width: 150, align: 'left' },
+
+					{ label: "设备分类", name: "Classify", width: 150, align: 'left' },
+
+					{ label: "设备编码", name: "CPCode", width: 150, align: 'left' },
+
+					{ label: "设备名称", name: "Name", width: 150, align: 'left' },
+
+					{ label: "规格及型号", name: "Specifications", width: 150, align: 'left' },
+
+					{ label: "型号", name: "Model", width: 150, align: 'left', hidden: true },
+
+                    { label: "数量", name: "Quantity", width: 150, align: 'left' },
+
+					{ label: "单位", name: "Unit", width: 150, align: 'left' },
+
+                    { label: "税率", name: "Rate", width: 150, align: 'left' },
+
+					{ label: "税额", name: "Tax", width: 150, align: 'left', hidden: true },
+
+                    { label: "出厂价格", name: "TaxPrice", width: 150, align: 'left' },
+
+                    { label: "每一品目出厂价", name: "NoTaxTotal", width: 150, align: 'left' },
+
+					{ label: "每一品目应交税费", name: "NoTaxPrice", width: 150, align: 'left' },
+
+                    { label: "每一品目含税价格", name: "TaxTotal", width: 150, align: 'left' },
+
+					{ label: "设备状态", name: "EquipmentState", width: 150, align: 'left' },
+
+					{ label: "收货单位", name: "ReceivingUnit", width: 150, align: 'left' },
+
+					{ label: "收货地址", name: "ShippingAddress", width: 150, align: 'left' },
+
+					{ label: "收货地点", name: "PlaceOfReceipt", width: 150, align: 'left', hidden: true },
+
+					{ label: "财务组织", name: "Financial", width: 150, align: 'left' },
+
+					{ label: "客户", name: "Customer", width: 150, align: 'left' },
+
+					{ label: "扣税类别", name: "TaxCategory", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税率", name: "InvalidTaxRate", width: 150, align: 'left', hidden: true },
+
+					{ label: "不可抵扣税额", name: "InvalidTaxPrice", width: 150, align: 'left', hidden: true },
+
+					{ label: "计成本金额", name: "TotalCost", width: 150, align: 'left', hidden: true },
+
+					{ label: "备注", name: "Remark", width: 150, align: 'left' },
+
+					{ label: "入库时间", name: "StorageTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "出库时间", name: "OutboundTime", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建日期", name: "CreateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户账户", name: "CreateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "创建用户名称", name: "CreateUserName", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改时间", name: "UpdateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户", name: "UpdateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: "最后修改用户名称", name: "UpdateUserName", width: 150, align: 'left', hidden: true },
+
+            ],
+            pager: "#gridPager",
+            sortname: 'CreateDate desc',
+            viewrecords: true,
+            onSelectRow: function (ids) {
+                var rowData = $("#gridList").getRowData(ids);
+                var parentId = top.$.jfinetab.getCurrentTabId();
+                top.$.jfinetab.addTabContent("/TN_XM/TN_CG_CP/Details?keyValue=" + rowData.Id, "设备管理--查看", parentId + "_details", parentId);
+            }
+        });
+    }
+    //表格处理
+    function gridList2() {
+        var BindId = $("#Bindid").val();
+        var $gridList2 = $("#gridList2");
+        $gridList2.dataGrid({
+            height: 265,
+            postData: { queryJson: "@ViewBag.Id" },
+
+            url: "",
+            colModel: [
+
+					{ label: "主键", name: "Id", width: 100, align: 'left', hidden: true },
+
+					{ label: "BindId", name: "BindId", width: 100, align: 'left', hidden: true },
+
+                    { label: "路径", name: "Url", width: 100, align: 'left', hidden: true },
+
+					{ label: "单据号", name: "OrderNo", width: 200, align: 'left', hidden: true },
+
+					{ label: "序号", name: "SerialNumber", width: 200, align: 'left', hidden: true },
+
+					{
+					    label: "附件名称", name: "AccessoryName", width: 200, align: 'left',
+					    formatter: function (cellvalue, options, rowObject) {
+					        return '<a id="FJ" target="_blank" href="' + rowObject.Url + '">' + rowObject.AccessoryName + '</a>';
+					    }
+					},
+
+					{ label: "附件类别", name: "AccessoryType", width: 200, align: 'left' },
+
+					{ label: "上传时间", name: "UploadTime", width: 200, align: 'left' },
+
+					{ label: "文件类型", name: "FileType", width: 100, align: 'left', hidden: true }
+
+
+            ],
+            pager: "#gridPager2",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $gridList2.setGridWidth($(window).width() - 36);
+    }
+
+    function gridList3() {
+        var $gridList3 = $("#gridList3");
+        var queryJson = {};
+        queryJson.BindId = keyValue;
+
+        $gridList3.dataGrid({
+            url: "/TN_XM/TN_FK_MX/GetGridJson?queryJson=" + JSON.stringify(queryJson),
+            height: 265,
+            postData: { queryJson: queryJson },
+            colModel: [
+
+					{ label: " 主键", name: "Id", width: 150, align: 'left', hidden: true },
+
+                    { label: " BindId", name: "BindId", width: 150, align: 'left', hidden: true },
+
+					{ label: " 合同号", name: "HTCode", width: 150, align: 'left' },
+
+					{ label: " 合同名称", name: "HTName", width: 150, align: 'left' },
+
+                    { label: " 设备包", name: "PaymentCompanyId", width: 150, align: 'left' },
+
+                    { label: " 供应商", name: "PaymentCompany", width: 150, align: 'left' },
+
+                    { label: " 付款金额", name: "PaymentAmount", width: 150, align: 'left' },
+
+                    { label: " 付款日期", name: "PaidDate", width: 150, align: 'left' },
+
+                    { label: " 凭证号", name: "CredentialsNumber", width: 150, align: 'left' },
+
+                    { label: " 付款类型", name: "PayType", width: 150, align: 'left' },
+
+					{ label: " 创建日期", name: "CreateDate", width: 150, align: 'left' },
+
+					{ label: " 创建用户账户", name: "CreateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: " 创建人", name: "CreateUserName", width: 150, align: 'left' },
+
+					{ label: " 最后修改时间", name: "UpdateDate", width: 150, align: 'left', hidden: true },
+
+					{ label: " 最后修改用户", name: "UpdateUserId", width: 150, align: 'left', hidden: true },
+
+					{ label: " 最后修改用户名称", name: "UpdateUserName", width: 150, align: 'left', hidden: true },
+
+            ],
+            pager: "#gridPager3",
+            sortname: 'CreateDate desc',
+            viewrecords: true
+        });
+        $gridList3.setGridWidth($(window).width() - 36);
+    }
+
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().Id;
+        if ($.checkedArray(keyValue)) {
+            $.modalOpen({
+                id: "Details",
+                title: "查看设备管理",
+                url: "/TN_XM/TN_CG_CP/Details?keyValue=" + keyValue,
+                width: "750px",
+                height: "620px",
+                btn: null,
+            });
+        }
+    }
+    function refreshGrid() {
+        var code = $("#CPCode").html();
+        var queryJson = {};
+        queryJson.keyValue = keyValue;
+        $("#gridList2").setGridParam({ url: "/TN_XM/TN_FJ/GetGridJson?queryJson=" + JSON.stringify(queryJson) }).trigger("reloadGrid");
+    }
+</script>
+
+<form id="form1">
+    <input type="hidden" id="Id" name="Id" value="" />
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">采购合同</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                     
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form">
+								  	
+								<tr hidden >
+									<th class="formTitle"> 主键</th>
+									<td class="formValue">
+										<div id="Id" name="Id" ></div>
+									</td>
+									<th class="formTitle"> BindId</th>
+									<td class="formValue">
+										<div id="BindId" name="BindId" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 合同编码</th>
+									<td class="formValue">
+										<div id="Code" name="Code" ></div>
+									</td>
+									<th class="formTitle"> 合同名称</th>
+									<td class="formValue">
+										<div id="Name" name="Name" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 合同类型</th>
+									<td class="formValue">
+										<div id="HTType" name="HTType" ></div>
+									</td>
+									<th class="formTitle"> 采购组织</th>
+									<td class="formValue">
+										<div id="CGOrganization" name="CGOrganization" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 设备包</th>
+									<td class="formValue">
+										<div id="CPpackage" name="CPpackage" ></div>
+									</td>
+									<th class="formTitle"> 计划终止日期</th>
+									<td class="formValue">
+										<div id="EndTime" name="EndTime" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 供应商</th>
+									<td class="formValue">
+										<div id="Supplier" name="Supplier" ></div>
+									</td>
+									<th class="formTitle"> 币种</th>
+									<td class="formValue">
+										<div id="currency" name="currency" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 合同签订日期</th>
+									<td class="formValue">
+										<div id="SigningDate" name="SigningDate" ></div>
+									</td>
+									<th class="formTitle"> 部门</th>
+									<td class="formValue">
+										<div id="Department" name="Department" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 人员</th>
+									<td class="formValue">
+										<div id="Personnel" name="Personnel" ></div>
+									</td>
+									<th class="formTitle"> 交货地点</th>
+									<td class="formValue">
+										<div id="Place" name="Place" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 预付款</th>
+									<td class="formValue">
+										<div id="AdvancePayment" name="AdvancePayment" ></div>
+									</td>
+									<th class="formTitle"> 预付款限额 </th>
+									<td class="formValue">
+										<div id="Limit" name="Limit" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr>
+									<th class="formTitle"> 合同状态</th>
+									<td class="formValue">
+										<div id="HTState" name="HTState" ></div>
+									</td>
+									<th class="formTitle"> 创建时间</th>
+									<td class="formValue">
+										<div id="CreateDate" name="CreateDate" ></div>
+									</td>
+								</tr>
+					 	  	
+								<tr hidden>
+									<th class="formTitle"> 创建人ID</th>
+									<td class="formValue">
+										<div id="CreateUserId" name="CreateUserId" ></div>
+									</td>
+									<th class="formTitle"> 创建人姓名</th>
+									<td class="formValue">
+										<div id="CreateUserName" name="CreateUserName" ></div>
+									</td>
+									<th class="formTitle"> 更新时间</th>
+									<td class="formValue">
+										<div id="UpdateDate" name="UpdateDate" ></div>
+									</td>
+									<th class="formTitle"> 更新人ID</th>
+									<td class="formValue">
+										<div id="UpdateUserId" name="UpdateUserId" ></div>
+									</td>
+									<th class="formTitle"> 更新人姓名</th>
+									<td class="formValue">
+										<div id="UpdateUserName" name="UpdateUserName" ></div>
+									</td>
+								</tr>
+							</table>
+                            <!-- 产品明细 -->
+                            <div class="btn-group" id="h1">
+                                @*<a id="JF-Details" class="btn btn-primary dropdown-text" onclick="btn_details()"><i class="fa fa-search-plus"></i>查看</a>*@
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active"><a href="#tab_CPReview" data-toggle="tab">亚行设备</a></li>
+                                    <li role="presentation"><a href="#tab_HTReview" data-toggle="tab">采购合同附件</a></li>
+                                    <li role="presentation"><a href="#tab_FKReview" data-toggle="tab">付款明细</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="tab_CPReview">
+                                    <div class="gridPanel">
+                                        <table id="gridList"></table>
+                                        <div id="gridPager"></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade  " id="tab_HTReview" >
+                                    <div class="gridPanel">
+                                        <table id="gridList2"></table>
+                                        <div id="gridPager2"></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade  " id="tab_FKReview" >
+                                    <div class="gridPanel">
+                                        <table id="gridList3"></table>
+                                        <div id="gridPager3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+

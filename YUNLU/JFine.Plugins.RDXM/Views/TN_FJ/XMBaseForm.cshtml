@@ -1,0 +1,235 @@
+﻿@*------------------------------------------------------------------------------
+     *     此代码由T4模板自动生成
+    <<<<<<< .mine
+     *	   生成时间 2018-08-21 16:03:38
+    =======
+     *	   生成时间 2018-08-15 16:32:33
+    >>>>>>> .r6
+     *     ©为之团队
+     *------------------------------------------------------------------------------*@
+
+
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form2.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var code = $.request("Code");
+    $(function () {
+
+        //initControl();
+        $.ajax({
+            url: "/TN_XM/TN_FJ/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#form1").formInitialize(data);
+
+            }
+        });
+    });
+
+
+    //初始化组件
+    function initControl() {
+
+        $("#HTName").bindSelect({
+            url: "/TN_XM/TN_CP/GetTreeSelectJson?keyword=" + code,
+            id: "text",
+            search: true,
+            change: function (data) {
+
+                if (data != null && data != undefined) {
+                    $("#HTId").val(data.id);
+
+                    refreshGrid();
+                }
+
+            }
+        });
+
+
+
+        //项目节点
+        $("#Process").bindSelect({
+            url: "/SysManage/ItemsDetail/GetSelectJson",
+            id: "text",
+            param: { Code: "xmjd" }
+        });
+
+    }
+
+
+
+    function uploadFJ() {
+        $.modalOpen({
+            id: "UpLoadForm",
+            title: "上传协同任务附件",
+            url: "/SysCommon/Common/UpLoadBF?modelName=XMFJ&windowId=Form",
+            width: "600px",
+            height: "600px",
+            btn: null
+        });
+
+    }
+
+    //上传回调
+    function refreshFiles(result) {
+        $("#AccessoryName").val(result.filename_o);
+        $("#Url").val(result.path);
+        $("#OrderNo").val(code);
+        var date = new Date();
+        var myDate = date.toLocaleString();
+        $("#UploadTime").val(myDate);
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/TN_XM/TN_FJ/SaveForm" ,
+            param: postData,
+            success: function () {
+                $.currentWindow().refreshGrid();
+                $.modalClose();
+            }
+        })
+    }
+
+</script>
+
+<form id="form1">
+    <div id="jfine-form-container" class="jfine-form-container" border="0">
+        <table id="jfine-form-maintable" class="jfineui jfine-form-maintable" style="table-layout: fixed;"
+               border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody>
+                <tr id="jfine-form-titlebg" class="jfine-form-titlebg">
+                    <td>
+                        <table align="center" border="0" style="margin: 0px auto; width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td class="jfine-form-header_l">
+                                        <span class="jfine-form-logo">
+                                            <img src="/Content/images/formlogo.png" />
+                                        </span>
+                                    </td>
+                                    <td class="jfine-form-header_c">
+                                        <span class="jfine-form-header-title">上传附件</span>
+                                    </td>
+                                    <td class="jfine-form-header_r">
+                                        <div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info dropdown-text" onclick="submitForm()"><i class="fa fa-send"></i>提交</a>
+                                                <a class="btn btn-warning dropdown-text" onclick=" $.modalClose()"><i class="fa fa-minus"></i>关闭</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="jfine-form-formcontent" class="jfine-form-titlebg" style="">
+                    <td>
+                        <div style="margin-top: 10px; margin-left: 10px; margin-right: 10px;">
+                            <table class="form" style="margin-bottom: 10px;">
+
+                                <tr hidden>
+                                    <th class="formTitle"> 主键</th>
+                                    <td class="formValue">
+                                        <input id="Id" name="Id" type="text"
+                                               class="form-control  required" placeholder="请输入主键" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle"> BINDID</th>
+                                    <td class="formValue">
+                                        <input id="BINDID" name="BINDID" type="text" value="@ViewBag.Id"
+                                               class="form-control  required" placeholder="请输入BINDID" />
+                                    </td>
+                                </tr>
+
+                                <tr hidden>
+                                    <th class="formTitle" hidden> 单据号</th>
+                                    <td class="formValue" hidden>
+                                        <input id="OrderNo" name="OrderNo" type="text"
+                                               class="form-control digits required" placeholder="请输入单据号" />
+                                    </td>
+                                    <th class="formTitle"> 序号</th>
+                                    <td class="formValue">
+                                        <input id="SerialNumber" name="SerialNumber" type="text"
+                                               class="form-control  required" placeholder="请输入序号" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 项目节点</th>
+                                    <td class="formValue">
+                                        <input id="Process" name="Process" type="text"
+                                               class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd'})" placeholder="请输入附件类别" />
+                                    </td>
+                                    <th class="formTitle"> 附件类别</th>
+                                    <td class="formValue">
+                                        <input id="AccessoryType" name="AccessoryType" type="text"
+                                               class="form-control  required" placeholder="请输入附件类别" />
+                                    </td>
+
+                                </tr>
+
+
+                                <tr hidden>
+                                    <th class="formTitle"> 关联信息</th>
+                                    <td class="formValue">
+                                        <select id="HTName" name="HTName" type="text"
+                                                class="form-control  required" placeholder="请输入文件类型" />
+                                    </td>
+                                    <th class="formTitle" hidden> 合同Id</th>
+                                    <td class="formValue" hidden>
+                                        <input id="HTId" name="HTId" type="text"
+                                               class="form-control  required" placeholder="请输入文件类型" />
+                                    </td>
+                                    <th class="formTitle" hidden> 文件类型</th>
+                                    <td class="formValue" hidden>
+                                        <input id="FileType" name="FileType" type="text"  
+                                               class="form-control  required" placeholder="请输入文件类型" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 路径</th>
+                                    <td class="formValue">
+                                        <input id="Url" name="Url" type="text" readonly
+                                               class="form-control  required" placeholder="请输入上传路径" />
+                                    </td>
+                                    <th class="formTitle"> 上传时间</th>
+                                    <td class="formValue">
+                                        <input id="UploadTime" name="UploadTime" type="text" readonly
+                                               class="form-control  required" placeholder="请输入上传时间" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th class="formTitle"> 附件名称</th>
+                                    <td class="formValue">
+                                        <input id="AccessoryName" name="AccessoryName" type="text" readonly
+                                               class="form-control  required" placeholder="请输入附件名称" />
+                                    </td>
+                                    <td align="right">
+                                        <a class="btn btn-info dropdown-text" onclick="uploadFJ()"><i class="fa fa-send"></i>上传</a>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>

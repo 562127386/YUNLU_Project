@@ -1,0 +1,272 @@
+﻿
+ @*------------------------------------------------------------------------------
+ *     此代码由T4模板自动生成
+ *	   生成时间 2019-07-17 16:47:10
+ *     ©为之团队
+ *------------------------------------------------------------------------------*@
+
+ @{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+	    initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/YL_IT_InspectRoll/YL_IT_InspectRoll/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+
+	//初始化组件
+    function initControl() {
+        
+    }
+
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        $.submitForm({
+            url: "/YL_IT_InspectRoll/YL_IT_InspectRoll/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+<form id="form1">
+    <div style="margin: 10px 10px 10px 10px;">
+        <table class="form">
+			  	
+			<tr>
+                <th class="formTitle"> 主键</th>
+                <td class="formValue">
+                    <input id="Id" name="Id" type="text"
+					 class="form-control  required"  placeholder="请输入主键" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 绑定Id</th>
+                <td class="formValue">
+                    <input id="BindId" name="BindId" type="text"
+					 class="form-control  required"  placeholder="请输入绑定Id" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 巡检单号</th>
+                <td class="formValue">
+                    <input id="OrderNum" name="OrderNum" type="text"
+					 class="form-control  required"  placeholder="请输入巡检单号" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 记录时间</th>
+                <td class="formValue">
+                    <input id="RecordDate" name="RecordDate" type="text"
+					 class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入记录时间" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 记录人</th>
+                <td class="formValue">
+                    <input id="RecordMan" name="RecordMan" type="text"
+					 class="form-control  required"  placeholder="请输入记录人" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 巡检人</th>
+                <td class="formValue">
+                    <input id="InspectMan" name="InspectMan" type="text"
+					 class="form-control  required"  placeholder="请输入巡检人" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 人员资质是否合格</th>
+                <td class="formValue">
+                    <input id="IsQualify" name="IsQualify" type="text"
+					 class="form-control  required"  placeholder="请输入人员资质是否合格" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 设备编号</th>
+                <td class="formValue">
+                    <input id="DeviceCode" name="DeviceCode" type="text"
+					 class="form-control  required"  placeholder="请输入设备编号" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 设备状态</th>
+                <td class="formValue">
+                    <input id="DeviceStatus" name="DeviceStatus" type="text"
+					 class="form-control  required"  placeholder="请输入设备状态" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 产品型号</th>
+                <td class="formValue">
+                    <input id="Model" name="Model" type="text"
+					 class="form-control  required"  placeholder="请输入产品型号" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 模具状态</th>
+                <td class="formValue">
+                    <input id="MoldStatus" name="MoldStatus" type="text"
+					 class="form-control  required"  placeholder="请输入模具状态" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 文件是否齐全</th>
+                <td class="formValue">
+                    <input id="IsIntact" name="IsIntact" type="text"
+					 class="form-control  required"  placeholder="请输入文件是否齐全" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 线包尺寸标准</th>
+                <td class="formValue">
+                    <input id="RollSizeStandard" name="RollSizeStandard" type="text"
+					 class="form-control  required"  placeholder="请输入线包尺寸标准" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 线报尺寸实测</th>
+                <td class="formValue">
+                    <input id="RollSizeMeasure" name="RollSizeMeasure" type="text"
+					 class="form-control  required"  placeholder="请输入线报尺寸实测" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 圈数确认标准</th>
+                <td class="formValue">
+                    <input id="CircleStandard" name="CircleStandard" type="text"
+					 class="form-control  required"  placeholder="请输入圈数确认标准" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 圈数确认实测</th>
+                <td class="formValue">
+                    <input id="CircleMeasure" name="CircleMeasure" type="text"
+					 class="form-control  required"  placeholder="请输入圈数确认实测" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 出线长度标准</th>
+                <td class="formValue">
+                    <input id="ThreadLenStandard" name="ThreadLenStandard" type="text"
+					 class="form-control  required"  placeholder="请输入出线长度标准" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 出线长度实测</th>
+                <td class="formValue">
+                    <input id="ThreadLenMeasure" name="ThreadLenMeasure" type="text"
+					 class="form-control  required"  placeholder="请输入出线长度实测" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 张力标准</th>
+                <td class="formValue">
+                    <input id="TensionStandard" name="TensionStandard" type="text"
+					 class="form-control  required"  placeholder="请输入张力标准" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 张力实测</th>
+                <td class="formValue">
+                    <input id="TensionMeasure" name="TensionMeasure" type="text"
+					 class="form-control  required"  placeholder="请输入张力实测" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 结论</th>
+                <td class="formValue">
+                    <input id="Conculsion" name="Conculsion" type="text"
+					 class="form-control  required"  placeholder="请输入结论" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 创建日期</th>
+                <td class="formValue">
+                    <input id="CreateDate" name="CreateDate" type="text"
+					 class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入创建日期" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> </th>
+                <td class="formValue">
+                    <input id="CreateUserId" name="CreateUserId" type="text"
+					 class="form-control  required"  placeholder="请输入" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 创建人</th>
+                <td class="formValue">
+                    <input id="CreateUserName" name="CreateUserName" type="text"
+					 class="form-control  required"  placeholder="请输入创建人" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 最后修修改人</th>
+                <td class="formValue">
+                    <input id="UpdateDate" name="UpdateDate" type="text"
+					 class="form-control Wdate required" onfocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd HH:mm:ss'})" placeholder="请输入最后修修改人" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> </th>
+                <td class="formValue">
+                    <input id="UpdateUserId" name="UpdateUserId" type="text"
+					 class="form-control  required"  placeholder="请输入" />
+				</td>
+            </tr>
+ 	  	
+			<tr>
+                <th class="formTitle"> 最后修改时间</th>
+                <td class="formValue">
+                    <input id="UpdateUserName" name="UpdateUserName" type="text"
+					 class="form-control  required"  placeholder="请输入最后修改时间" />
+				</td>
+            </tr>
+   
+        </table>
+    </div>
+</form>
+
